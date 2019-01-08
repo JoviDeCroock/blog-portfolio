@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Layout from '../components/Layout'
+import SEO from '../components/seo'
 import SkillIndicator from '../components/SkillIndicator'
 
 const Hero = styled.div`
@@ -23,6 +24,7 @@ const Prelude = styled.p`
 
 export default () => (
   <Layout>
+    <SEO title="Portfolio" />
     <Hero>
       <Title>Jovi De Croock</Title>
       <SubTitle>Passionate Web and Mobile developer</SubTitle>
