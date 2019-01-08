@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, graphql, StaticQuery } from 'gatsby'
 
 import Header from './Header';
+import Footer from './Footer';
 import { rhythm, scale } from '../utils/typography'
 
 class Layout extends React.Component {
@@ -25,11 +26,7 @@ class Layout extends React.Component {
           >
             <Header {...siteMetadata} />
             {children}
-            <footer>
-              © {new Date().getFullYear()}, Built with
-              {` `}
-              <a href="https://www.gatsbyjs.org">Gatsby</a>
-            </footer>
+            <Footer />
           </div>
         )}
       />

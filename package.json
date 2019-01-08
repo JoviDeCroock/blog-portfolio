@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Jovi De Croock",
   "dependencies": {
+    "babel-plugin-styled-components": "^1.10.0",
     "gatsby": "^2.0.76",
     "gatsby-image": "^2.0.22",
     "gatsby-plugin-feed": "^2.0.8",
@@ -13,6 +14,7 @@
     "gatsby-plugin-offline": "^2.0.5",
     "gatsby-plugin-react-helmet": "^3.0.0",
     "gatsby-plugin-sharp": "^2.0.6",
+    "gatsby-plugin-styled-components": "^3.0.4",
     "gatsby-plugin-typography": "^2.2.0",
     "gatsby-remark-copy-linked-files": "^2.0.5",
     "gatsby-remark-images": "^2.0.4",
@@ -27,6 +29,7 @@
     "react-dom": "^16.5.1",
     "react-helmet": "^5.2.0",
     "react-typography": "^0.16.13",
+    "styled-components": "^4.1.3",
     "typeface-merriweather": "0.0.43",
     "typeface-montserrat": "0.0.43",
     "typography": "^0.16.17",
