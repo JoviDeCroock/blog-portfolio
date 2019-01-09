@@ -1,14 +1,21 @@
 import React from 'react'
 import { Link, graphql, StaticQuery } from 'gatsby'
+import styled from 'styled-components'
 
 import Header from './Header';
 import Footer from './Footer';
 import { rhythm, scale } from '../utils/typography'
 
+const Wrapper = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 42rem;
+  padding: 2.625rem 1.3125rem;
+`;
+
 class Layout extends React.Component {
   render() {
     const { location, title, children } = this.props
-    console.log(this.props);
     const rootPath = `${__PATH_PREFIX__}/`
     let header
 
@@ -16,18 +23,11 @@ class Layout extends React.Component {
       <StaticQuery
         query={pageQuery}
         render={({ site: { siteMetadata } }) => (
-          <div
-            style={{
-              marginLeft: `auto`,
-              marginRight: `auto`,
-              maxWidth: rhythm(24),
-              padding: `${rhythm(1.5)} ${rhythm(3 / 4)}`,
-            }}
-          >
+          <Wrapper>
             <Header {...siteMetadata} />
             {children}
             <Footer />
-          </div>
+          </Wrapper>
         )}
       />
     )

@@ -47,9 +47,9 @@ export default () => (
     <Block>
       <Title>Projects</Title>
       <ul>
-        <li>Hooked-Form</li>
-        <li>React-Angler</li>
-        <li>Worldpins</li>
+        <li>Hooked-Form - Lightweight React form library</li>
+        <li>React-Angler - React hooks toolbelt</li>
+        <li>Worldpins - GraphQL Apollo Koa React application</li>
       </ul>
     </Block>
     <Block>
@@ -61,6 +61,7 @@ export default () => (
       <SkillIndicator title="GraphQL" level={8} />
       <SkillIndicator title="React-Native" level={7.5} />
       <SkillIndicator title="SQL" level={7} />
+      <SkillIndicator title="Kotlin" level={6} />
       <SkillIndicator title="Unity" level={5.5} />
     </Block>
     <Block>
@@ -70,9 +71,6 @@ export default () => (
         <li>Psychology</li>
         <li>Music</li>
       </ul>
-    </Block>
-    <Block>
-      <Title>Links</Title>
     </Block>
   </Layout>
 )

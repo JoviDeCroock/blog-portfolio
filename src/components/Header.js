@@ -1,15 +1,26 @@
 import React from 'react'
+import styled from 'styled-components'
 import { Link } from 'gatsby'
 
+const Nav = styled.nav`
+  display: flex;
+  flex: 1;
+`;
+
+const ListItem = styled.li`
+  color: #4286F4;
+  list-style-type: none;
+  margin-right: 12px;
+`;
+
 const Header = ({ title, menuLinks }) => (
-  <nav style={{ display: 'flex', flex: 1 }}>
-    {
-      menuLinks.map(link =>
-        <li key={link.name} style={{ 'listStyleType': 'none', 'marginRight': 12 }}>
-          <Link to={link.link}>{link.name}</Link>
-        </li>)
-    }
-  </nav>
+  <Nav>
+    {menuLinks.map(link =>
+      <ListItem key={link.name}>
+        <Link to={link.link}>{link.name}</Link>
+      </ListItem>
+    )}
+  </Nav>
 )
 
 export default Header;
