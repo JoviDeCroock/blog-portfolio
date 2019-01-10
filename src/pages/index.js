@@ -20,6 +20,7 @@ const SubTitle = styled.h2``
 
 const Prelude = styled.p`
   margin: 0;
+  text-align: justify;
 `;
 
 export default () => (
