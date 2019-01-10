@@ -27,29 +27,39 @@ export default () => (
     <SEO title="Portfolio" />
     <Hero>
       <Title>Jovi De Croock</Title>
-      <SubTitle>Passionate Web and Mobile developer</SubTitle>
+        <SubTitle>
+          Passionate Web- and Mobile developer @{' '}
+          <a target="blank" href="https://codifly.be">Codifly</a>
+        </SubTitle>
       <Prelude>
-        DISCLAIMER: this is still a work in progress.
         When growing up I soon found a passion for IT, this growed into me working{' '}
         at a hardware store and eventually into finding my passion for programming.{' '}
         This passion evolved into doing IT-studies, freelancer assignments and my job.
+        <br />
+        <br />
+        Nowadays my passion greatly goes to the architecture side of programming,{' '}
+        finding elegant solutions to complex behavior is my favorite challenge.
+        <br />
+        At this point I am 23 years old and trying to learn the best practices from my{' '}
+        awesome co-workers, in the hope of being able to one day share my knowledge with{' '}
+        new juniors.
       </Prelude>
     </Hero>
     <Block>
       <Title>Experience</Title>
       <ul>
-        <li>VHTI Dendermonde - IT</li>
-        <li>HoGent - Applied IT</li>
-        <li>Codifly - JavaScript intern</li>
-        <li>Codifly - Web and Mobile developer</li>
-      </ul>
-    </Block>
-    <Block>
-      <Title>Projects</Title>
-      <ul>
-        <li>Hooked-Form - Lightweight React form library</li>
-        <li>React-Angler - React hooks toolbelt</li>
-        <li>Worldpins - GraphQL Apollo Koa React application</li>
+        <li>
+          VHTI Dendermonde - IT
+        </li>
+        <li>
+          HoGent - Applied IT
+        </li>
+        <li>
+          Codifly - JavaScript intern
+        </li>
+        <li>
+          Codifly - Web and Mobile developer
+        </li>
       </ul>
     </Block>
     <Block>
@@ -65,9 +75,24 @@ export default () => (
       <SkillIndicator title="Unity" level={5.5} />
     </Block>
     <Block>
+      <Title>Projects</Title>
+      <ul>
+        <li>Hooked-Form - Lightweight React form library</li>
+        <li>React-Angler - React hooks toolbelt</li>
+        <li>Worldpins - GraphQL Apollo Koa React application</li>
+      </ul>
+    </Block>
+    <Block>
+      <Title>Achievements</Title>
+      <ul>
+        <li>First prize at Hack The Future 2016 - Android</li>
+        <li>Helped implement a complex authorisation system</li>
+      </ul>
+    </Block>
+    <Block>
       <Title>Interests</Title>
       <ul>
-        <li>Non-fiction books (science, self-improvement,...)</li>
+        <li>Non-fiction books (programming, self-improvement,...)</li>
         <li>Psychology</li>
         <li>Music</li>
       </ul>
