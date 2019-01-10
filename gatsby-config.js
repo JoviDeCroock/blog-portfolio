@@ -3,7 +3,7 @@ module.exports = {
     title: `JoviDeC`,
     author: `Jovi De Croock`,
     description: `My Blog and Portfolio.`,
-    siteUrl: `https://gatsby-starter-blog-demo.netlify.com/`,
+    siteUrl: `https://www.jovidecroock.com`,
     menuLinks:[
       {
           name:'Portfolio',

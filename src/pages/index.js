@@ -47,7 +47,7 @@ export default () => (
       </Prelude>
     </Hero>
     <Block>
-      <Title>Experience</Title>
+      <SubTitle>Experience</SubTitle>
       <ul>
         <li>
           VHTI Dendermonde - IT
@@ -64,7 +64,7 @@ export default () => (
       </ul>
     </Block>
     <Block>
-      <Title>Skills</Title> 
+      <SubTitle>Skills</SubTitle> 
       <SkillIndicator title="Node.js" level={9} />
       <SkillIndicator title="JavaScript/TypeScript" level={8.5} />
       <SkillIndicator title="React.js" level={8.5} />
@@ -76,7 +76,7 @@ export default () => (
       <SkillIndicator title="Unity" level={5.5} />
     </Block>
     <Block>
-      <Title>Projects</Title>
+      <SubTitle>Projects</SubTitle>
       <ul>
         <li>Hooked-Form - Lightweight React form library</li>
         <li>React-Angler - React hooks toolbelt</li>
@@ -84,14 +84,14 @@ export default () => (
       </ul>
     </Block>
     <Block>
-      <Title>Achievements</Title>
+      <SubTitle>Achievements</SubTitle>
       <ul>
         <li>First prize at Hack The Future 2016 - Android</li>
         <li>Helped implement a complex authorisation system</li>
       </ul>
     </Block>
     <Block>
-      <Title>Interests</Title>
+      <SubTitle>Interests</SubTitle>
       <ul>
         <li>Non-fiction books (programming, self-improvement,...)</li>
         <li>Psychology</li>
