@@ -31,6 +31,7 @@ export default ({ title, level: finalLevel }) => (
     <Text>{title}</Text>
     <BarWrapper>
       <Spring
+        delay={500}
         from={{ level: 0 }}
         to={{ level: finalLevel }}
       >

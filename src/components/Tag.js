@@ -26,7 +26,8 @@ const subjects = {
 }
 
 export default ({ onClick, subject }) => {
-  const { color, image } = subjects[subject]
+  console.log(subject, subjects[subject]);
+  const { color } = (subjects[subject] || {})
   return (
     <Tag color={color} onClick={() => onClick(subject)}>
       {subject}
