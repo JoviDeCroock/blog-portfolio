@@ -74,6 +74,13 @@ input.
 Since this essentially is a hooks-form api I opted to make all `Field` components performant since if the user would want to de-opt,
 the user could just use the `useField` function which essentially returns the same things but without the optimizations.
 
+# Future
+
+At the point of writing this I've got a three day holiday coming up where I plan to fully test this idea, along with finishing
+up a side project and finally finishing my graphql-caching project.
+
+So there's a chanche this post might get a small follow up about some caveats I did not think about with the approach I took.
+
 # Concluding
 
 I hope I shed some light on the thoughts behind how I make decisions and as to why I wanted to do this. I hope you
