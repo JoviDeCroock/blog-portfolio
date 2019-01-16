@@ -1,8 +1,9 @@
 ---
 title: Tinkering on hooked-form
-date: '2019-01-13T21:39:03.284Z'
+date: '2019-01-15T00:56:03.284Z'
 subject: React
-readTime: 
+readTime: 5
+published: true
 ---
 
 # Introduction

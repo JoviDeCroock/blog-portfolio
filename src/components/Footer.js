@@ -1,6 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const Wrapper = styled.footer`
+  align-items: center;
+  display: flex;
+  justify-content: center;
+`;
+
 const Link = styled.a`
   color: #4286F4;
   margin-left: 6px;
@@ -8,13 +14,13 @@ const Link = styled.a`
 `;
 
 const Footer = () => (
-  <footer>
+  <Wrapper>
     <Link target="blank" href="https://www.twitter.com/jovidec">Twitter</Link>
     {' '}-{' '}
     <Link target="blank" href="https://www.github.com/jovidecroock">Github</Link>
     {' '}-{' '}
     <Link href="mailto:decroockjovi@gmail.com">Contact</Link>
-  </footer>
+  </Wrapper>
 );
 
 export default Footer;
