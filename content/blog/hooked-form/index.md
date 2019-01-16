@@ -7,12 +7,12 @@ readTime:
 
 # Introduction
 
-So as previously stated one of my side projects is _Hooked-Form_, I've bene able to put quite some
+So as previously stated one of my side projects is _Hooked-Form_, I've been able to put quite some
 work into this project.
 I like the hooks api a lot, reasoning in hooks makes everything a lot more structured in my opinion.
 That all aside it gives a big plus in bundle sizes when not needing to resort to classes.
 
-This being said i'm a true fanatic when it comes to optimising what I make, that's why I've been
+This being said I'm a true fanatic when it comes to optimising what I make, that's why I've been
 diving into the observed bits API of React itself, which pretty much came up empty handed for me.
 I'll probably attempt it again at some later stage but yes for now I think I've got what I wanted
 out of this experiment.
