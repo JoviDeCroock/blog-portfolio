@@ -88,6 +88,7 @@ export default () => (
       <ul>
         <li>First prize at Hack The Future 2016 - Android</li>
         <li>Helped implement a complex authorisation system</li>
+        <li>Tennis handicap prediction algorithm, focussed on beating bookmakers</li>
       </ul>
     </Block>
     <Block>
