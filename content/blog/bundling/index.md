@@ -3,7 +3,7 @@ title: Modern bundles
 date: '2019-01-20T00:56:03.284Z'
 subject: Bundles
 readTime: 5
-published: false
+published: true
 ---
 
 # Introduction
@@ -69,6 +69,11 @@ browsers.
 
 It serves a module build first and when the [script](https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc)
 fires it decides to throw away the `nomodule` scripts or just use those.
+
+The concern for babel-loader becoming slower could be thrown out there, this is a valid
+concern but babel has a solution for this. 
+Babel allows us to cache the transpiled directory with the `cacheDirectory` option for
+babel-loader.
 
 # Done before?
 
