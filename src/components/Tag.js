@@ -17,8 +17,11 @@ const Tag = styled.div`
 `;
 
 const subjects = {
+  Bundles: {
+    color: '#C0D3C1'
+  },
   General: {
-    color: '#EBEBEA',
+    color: '#BFB3B3',
   },
   React: {
     color: '#61DBFB',
@@ -26,7 +29,6 @@ const subjects = {
 }
 
 export default ({ onClick, subject }) => {
-  console.log(subject, subjects[subject]);
   const { color } = (subjects[subject] || {})
   return (
     <Tag color={color} onClick={() => onClick(subject)}>
