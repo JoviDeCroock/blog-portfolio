@@ -5,7 +5,8 @@ import { Link, graphql } from 'gatsby'
 import Bio from '../../components/Bio'
 import Layout from '../../components/Layout'
 import SEO from '../../components/seo'
-import Tag from '../../components/Tag';
+import Tag from '../../components/Tag'
+import ReadTime from '../../components/ReadTime'
 
 const linkStyles = {
   boxShadow: `none`,
@@ -86,7 +87,7 @@ class BlogIndex extends React.Component {
           </div>}
         {posts.map(({ node }) => {
           const { slug } = node.fields
-          const { date, subject, title } = node.frontmatter
+          const { date, subject, title, readTime } = node.frontmatter
           return (
             <div key={node.fields.slug}>
               <PostTitle>
@@ -96,6 +97,9 @@ class BlogIndex extends React.Component {
               </PostTitle>
               <Small>
                 <Tag subject={subject} onClick={this.setSubject} /> {date}
+              </Small>
+              <Small>
+                <ReadTime time={readTime} />
               </Small>
               <p dangerouslySetInnerHTML={{ __html: node.excerpt }} />
             </div>
@@ -131,6 +135,7 @@ export const pageQuery = graphql`
             date(formatString: "MMMM DD, YYYY")
             title
             subject
+            readTime
           }
         }
       }
