@@ -18,16 +18,16 @@ just compile down to es5 and support almost every browser.
 The thing that bugged me since september is that there's almost
 no need for this anymore, I could see the problem being brought up
 that people having the use case to support IE11 are in danger in
-that regard. 
+that regard.
 
 ## Inspirations
 
-Most of my inspiration some months ago came from (this article)[https://philipwalton.com/articles/deploying-es2015-code-in-production-today/]
+Most of my inspiration some months ago came from [this article](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/)
 back then i was looking really hard at this issue but didn't seem to
 find an elegant solution.
 
-Recently this topic was once more brought up in the (apollo-client
-repository)[https://github.com/apollographql/apollo-client/issues/4324#issuecomment-455332864],
+Recently this topic was once more brought up in the [apollo-client
+repository](https://github.com/apollographql/apollo-client/issues/4324#issuecomment-455332864),
 which once more brought me to reason about this topic.
 
 I soon realised that I was going about it in a way that was making everything
@@ -51,7 +51,7 @@ The only thing needing a change is the _module_ build being shipped, instead of
 making this an es5 bundle it should just be an es2015/es6 bundle.
 
 This though should be noted on the README since this affects the consumers
-of this library. 
+of this library.
 
 Not noting this could result in unwanted production only bugs.
 
@@ -71,11 +71,11 @@ It serves a module build first and when the [script](https://gist.github.com/sam
 fires it decides to throw away the `nomodule` scripts or just use those.
 
 The concern for babel-loader becoming slower could be thrown out there, this is a valid
-concern but babel has a solution for this. 
+concern but babel has a solution for this.
 Babel allows us to cache the transpiled directory with the `cacheDirectory` option for
 babel-loader.
 
-# Done before?
+# Done before
 
 If you've looked at the github issue in _apollo-client_ you'll see a talk about
 a new Meteor release using this approach.
