@@ -96,10 +96,11 @@ class BlogIndex extends React.Component {
                 </Link>
               </PostTitle>
               <Small>
-                <Tag subject={subject} onClick={this.setSubject} /> {date}
+                <Tag subject={subject} onClick={this.setSubject} />&nbsp;
+                <ReadTime time={readTime} />&nbsp;
+                {date}
               </Small>
               <Small>
-                <ReadTime time={readTime} />
               </Small>
               <p dangerouslySetInnerHTML={{ __html: node.excerpt }} />
             </div>

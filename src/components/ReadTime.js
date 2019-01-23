@@ -3,5 +3,5 @@ import styled from 'styled-components'
 import { Spring } from 'react-spring'
 
 export default ({ time }) => (
-  <span />
+  <small>{time} minutes</small>
 );
