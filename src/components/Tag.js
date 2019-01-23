@@ -23,6 +23,9 @@ const subjects = {
   General: {
     color: '#BFB3B3',
   },
+  'Open-source': {
+    color: '#f442d4'
+  },
   React: {
     color: '#61DBFB',
   }
