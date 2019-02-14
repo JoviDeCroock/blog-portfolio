@@ -64,9 +64,9 @@ You could do this but all your dependencies you are using are still transpiled d
 to ES5 (and adding them to the babel-loader/... won't "transpile it up to es2015").
 
 This means even if you as a developer want to ship your product in ES2015 it will only
-be your code combined with your dependencies in the older syntax. Since these probably
-make up more than half of your code at this point in time there's not much point in
-shipping your own code as modern.
+be your code combined with your dependencies in the older syntax. Since these 
+dependencies probably make up more than half of your code at this point in time
+there's not much benefit to be gained from shipping your own code as modern.
 
 ### Package fields
 
@@ -105,17 +105,24 @@ these things.
 ### Consumer mindset
 
 This is what troubles me the most, we would have to signify to library consumers that
-the browsers they support should be part of the build step.
+the browsers they support should be part of the build step, which in theory is
+already the case but not for thirth party dependencies.
 
 This adds a significant amount of complexity to the initial setup of an application,
 ofcourse library authors can disclose that they are shipping ES2015/ES5 and include
 what should be added to the bundler config, but do we really want to go this far?
+We take away the ease of mind of the consumer that thinks it will just work and add
+this extra on top of it all. Allthough, in my opinion most people who just want it
+to work aren't heavily into optimising their app and could use the `browser` or `main`
+field instead. Which in turn opts them out of tree-shaking, so that's not really
+what we want.
 
 You could argue we need a step back to move forward but I am afraid things could just
-stay this way when the "nevergreen" browsers dissapear. 
+stay this way (with the added complexity on loaders etc) when the "nevergreen"
+browsers dissapear. 
 However this change enables us to rapidly move forward when they really do dissapear,
-by then most libraries will be shipping ES2015 and the need to disclose it will have
-dropped.
+by then most libraries will be shipping ES2015 and the need to disclose the level of
+transpilation will have dropped.
 
 ### Polyfilling
 
@@ -131,14 +138,20 @@ Something that could be introduced is smart-detection, which would detect what i
 used in your codebase and polyfill for that or polyfill by looking at your
 `browserslist` in the preset-env.
 
+Polyfilling at runtime, for example when IE11 is your browser and send other polyfills
+is not doable. Making a seperate bundle with polyfills for nevergreen/evergreen is
+doable.
+
 #### Libraries
 
 Remember me saying library authors can disclose what polyfills are needed? Well this
 revolves around that part.
 
-If we'd have a plugin that would cross our code and tell us what polyfills are needed
-above on one side ES5 and on the other ES2015 we would grant the possibility to
-accurately polyfill.
+If we'd have a plugin that would traverse our code and tell us what polyfills are
+needed when it is ES5 or when it is ES2015 would enable more fine-grained polyfilling.
+
+You would disclose your lowest target and it could accurately include/exclude certain
+polyfills, which in turn reduces your bundle size again.
 
 ## POC
 
@@ -149,8 +162,9 @@ bundles are included in a `script type="module"` and the legacy in a
 
 [POC](https://www.github.com/jovidecroock/POC-ModulerLegacyBuild)
 
-Personally my two cents after making the above work is that we have endless
-possibilities in terms of supporting all browsers and shipping ES2015 to the majority.
+Personally, my two cents after making the above work is that we have endless
+possibilities in terms of supporting legacy browsers aswell as ship ES2015 to the
+evergreen browsers.
 
 ## Closing thoughts
 
@@ -161,7 +175,6 @@ huge change to our current way of working that I really don't know where to star
 
 Essentially I would have no issue working together with OSS repositories on this and
 help implement it.
-
 
 A good point of entry for libraries would be [microbundle](https://www.github.com/developit/microbundle),
 a lot of libraries use this to bundle their code.
@@ -175,7 +188,11 @@ This idea initially started thanks to [benjamn](https://twitter.com/benjamn) in 
 ## Sources
 
 [Where it began](https://github.com/developit/microbundle/issues/304)
+
 [Consuming ES2015](https://babeljs.io/blog/2018/06/26/on-consuming-and-publishing-es2015+-packages)
+
 [Deploying ES2015](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/)
+
 [Rethink bundling](https://www.contentful.com/blog/2017/04/04/es6-modules-support-lands-in-browsers-is-it-time-to-rethink-bundling/)
+
 [caniuse](https://caniuse.com/)
