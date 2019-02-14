@@ -29,7 +29,7 @@ export default () => (
     <Hero>
       <Title>Jovi De Croock</Title>
         <SubTitle>
-          Passionate Web- and Mobile dev @{' '}
+          Passionate Web and Mobile engineer @{' '}
           <a target="blank" href="https://codifly.be">Codifly</a>
         </SubTitle>
       <Prelude>
