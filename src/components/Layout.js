@@ -1,10 +1,9 @@
 import React from 'react'
-import { Link, graphql, StaticQuery } from 'gatsby'
+import { graphql, StaticQuery } from 'gatsby'
 import styled from 'styled-components'
 
-import Header from './Header';
-import Footer from './Footer';
-import { rhythm, scale } from '../utils/typography'
+import Header from './Header'
+import Footer from './Footer'
 
 const Wrapper = styled.div`
   margin-left: auto;
@@ -15,9 +14,7 @@ const Wrapper = styled.div`
 
 class Layout extends React.Component {
   render() {
-    const { location, title, children } = this.props
-    const rootPath = `${__PATH_PREFIX__}/`
-    let header
+    const { children } = this.props
 
     return (
       <StaticQuery
