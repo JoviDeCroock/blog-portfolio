@@ -113,8 +113,6 @@ class BlogIndex extends React.Component {
 
 export default BlogIndex
 
-// filter: { frontmatter: { subject: { in: ["React"] } } }
-
 export const pageQuery = graphql`
   query {
     site {

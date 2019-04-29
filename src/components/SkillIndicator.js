@@ -6,7 +6,7 @@ const BarWrapper = styled.div`
   border: 1px solid black;
   border-radius: 10px;
   height: 12px;
-  width: 100%
+  width: 100%;
 `
 
 const Indicator = styled.div`
