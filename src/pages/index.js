@@ -81,7 +81,7 @@ export default () => (
       <ul>
         <li>Hooked-Form - Lightweight React form library</li>
         <li>React-Angler - React hooks toolbelt</li>
-        <li>Worldpins - GraphQL Apollo Koa React application <a target="blank" href="htts://www.worldpins.tk">Link</a></li>
+        <li>Worldpins - GraphQL Apollo Koa React application <a target="blank" href="https://www.worldpins.tk/home">Link</a></li>
       </ul>
     </Block>
     <Block>
