@@ -6,7 +6,7 @@ import SkillIndicator from '../components/SkillIndicator'
 
 const Hero = styled.div`
   background: white;
-  width: 100%
+  width: 100%;
 `;
 
 const Block = styled.div``
@@ -68,6 +68,7 @@ export default () => (
       <SkillIndicator title="Node.js" level={9} />
       <SkillIndicator title="JavaScript/TypeScript" level={8.5} />
       <SkillIndicator title="React.js" level={8.5} />
+      <SkillIndicator title="Preact" level={8.5} />
       <SkillIndicator title="Apollo" level={8} />
       <SkillIndicator title="GraphQL" level={8} />
       <SkillIndicator title="React-Native" level={7.5} />
@@ -80,7 +81,7 @@ export default () => (
       <ul>
         <li>Hooked-Form - Lightweight React form library</li>
         <li>React-Angler - React hooks toolbelt</li>
-        <li>Worldpins - GraphQL Apollo Koa React application</li>
+        <li>Worldpins - GraphQL Apollo Koa React application <a target="blank" href="htts://www.worldpins.tk">Link</a></li>
       </ul>
     </Block>
     <Block>
