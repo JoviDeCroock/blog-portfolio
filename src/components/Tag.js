@@ -17,7 +17,7 @@ const Tag = styled.div`
 `;
 
 const subjects = {
-  Bundles: {
+  Performance: {
     color: '#C0D3C1'
   },
   General: {

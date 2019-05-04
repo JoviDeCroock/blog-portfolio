@@ -77,11 +77,20 @@ export default () => (
       <SkillIndicator title="Unity" level={5.5} />
     </Block>
     <Block>
-      <SubTitle>Projects</SubTitle>
+      <SubTitle>Open source</SubTitle>
       <ul>
-        <li>Hooked-Form - Lightweight React form library</li>
-        <li>React-Angler - React hooks toolbelt</li>
-        <li>Worldpins - GraphQL Apollo Koa React application <a target="blank" href="htts://www.worldpins.tk">Link</a></li>
+        <li><a target="blank" href="https://github.com/developit/preact">Preact</a> maintainer</li>
+        <li><a target="blank" href="https://github.com/apollographql/apollo-link">Apollo-link</a> maintainer</li>
+      </ul>
+    </Block>
+    <Block>
+      <SubTitle>Projects I made</SubTitle>
+      <ul>
+        <li><a target="blank" href="https://github.com/JoviDeCroock/hooked-form">Hooked-form</a> - Lightweight React form library</li>
+        <li><a target="blank" href="https://github.com/JoviDeCroock/react-angler">React-angler</a> - React hooks toolbelt</li>
+        <li><a target="blank" href="htts://www.worldpins.tk">Worldpins</a> - GraphQL Apollo Koa React application</li>
+        <li><a target="blank" href="https://github.com/JoviDeCroock/webpack-module-nomodule-plugin">module-nomodule webpack plugin</a></li>
+        <li><a target="blank" href="https://github.com/JoviDeCroock/webpack-syntax-resolver-plugin">syntax resolver webpack plugin</a></li>
       </ul>
     </Block>
     <Block>
