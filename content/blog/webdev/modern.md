@@ -1,7 +1,7 @@
 ---
 title: Modern bundling (part 1)
 date: '2019-02-14T16:00:03.284Z'
-subject: Bundles
+subject: Performance
 readTime: 6
 published: true
 ---

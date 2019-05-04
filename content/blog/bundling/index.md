@@ -1,7 +1,7 @@
 ---
 title: Modern bundles
 date: '2019-01-20T00:56:03.284Z'
-subject: Bundles
+subject: Performance
 readTime: 5
 published: true
 ---
