@@ -10,7 +10,7 @@ As I was recently seeing some fuzz on twitter about this I decided to give my ho
 opinion on the matter.
 
 As you might already have noticed I'm into all things performance and bundle size, don't
-get me wrong I'm not going to be saying that performance etc are useless to look at.
+get me wrong I'm not going to be saying that performance etc are the only thing you need to look at.
 I'll just give you my take on it.
 
 ## Audience
