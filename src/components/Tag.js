@@ -10,7 +10,7 @@ const Tag = styled.div`
   height: 25px;
   text-align: center;
   transition: transform .4s;
-  width: 75px;
+  width: 100px;
   :hover {
     transform: scale(1.1);
   }
