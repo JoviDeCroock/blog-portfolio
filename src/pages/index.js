@@ -29,8 +29,7 @@ export default () => (
     <Hero>
       <Title>Jovi De Croock</Title>
         <SubTitle>
-          Passionate Web and Mobile engineer @{' '}
-          <a target="blank" href="https://codifly.be">Codifly</a>
+          Passionate Web and Mobile engineer
         </SubTitle>
       <Prelude>
         When growing up I soon found a passion for IT, this growed into me working{' '}
@@ -56,10 +55,10 @@ export default () => (
           HoGent - Applied IT
         </li>
         <li>
-          Codifly - JavaScript intern
+          <a target="blank" href="https://codifly.be">Codifly</a> - Web and Mobile engineer
         </li>
         <li>
-          Codifly - Web and Mobile developer
+          Coming soon - Software engineer
         </li>
       </ul>
     </Block>
@@ -77,14 +76,15 @@ export default () => (
       <SkillIndicator title="Unity" level={5.5} />
     </Block>
     <Block>
-      <SubTitle>Open source</SubTitle>
+      <SubTitle>Open source I contribute to</SubTitle>
       <ul>
-        <li><a target="blank" href="https://github.com/developit/preact">Preact</a> maintainer</li>
-        <li><a target="blank" href="https://github.com/apollographql/apollo-link">Apollo-link</a> maintainer</li>
+        <li><a target="blank" href="https://github.com/developit/preact">Preact</a> maintainer (core team)</li>
+        <li><a target="blank" href="https://github.com/apollographql/apollo-link">Apollo-link</a> collaborator</li>
+        <li><a target="blank" href="https://github.com/formidablelabs/urql">Urql</a> contributor</li>
       </ul>
     </Block>
     <Block>
-      <SubTitle>Projects I made</SubTitle>
+      <SubTitle>Projects by me</SubTitle>
       <ul>
         <li><a target="blank" href="https://github.com/JoviDeCroock/hooked-form">Hooked-form</a> - Lightweight React form library</li>
         <li><a target="blank" href="https://github.com/JoviDeCroock/react-angler">React-angler</a> - React hooks toolbelt</li>
