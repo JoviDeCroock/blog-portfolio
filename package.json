@@ -28,6 +28,7 @@
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "react-helmet": "5.2.0",
+    "react-intersection-observer": "8.23.0",
     "react-spring": "^7.2.8",
     "react-typography": "0.16.19",
     "styled-components": "4.2.0",
