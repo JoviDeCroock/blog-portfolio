@@ -12,24 +12,18 @@ const Wrapper = styled.div`
   padding: 2.625rem 1.3125rem;
 `;
 
-class Layout extends React.Component {
-  render() {
-    const { children } = this.props
-
-    return (
-      <StaticQuery
-        query={pageQuery}
-        render={({ site: { siteMetadata } }) => (
-          <Wrapper>
-            <Header {...siteMetadata} />
-            {children}
-            <Footer />
-          </Wrapper>
-        )}
-      />
-    )
-  }
-}
+const Layout = ({ children }) => (
+  <StaticQuery
+    query={pageQuery}
+    render={({ site: { siteMetadata } }) => (
+      <Wrapper>
+        <Header {...siteMetadata} />
+        {children}
+        <Footer />
+      </Wrapper>
+    )}
+  />
+)
 
 export default Layout
 

@@ -1,5 +1,5 @@
 import React from 'react'
 
-export default ({ time }) => (
-  <small>{time} minutes</small>
-);
+const ReadTime = ({ time }) => <small>{time} minutes</small>
+
+export default ReadTime;

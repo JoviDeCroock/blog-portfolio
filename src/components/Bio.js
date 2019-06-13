@@ -22,33 +22,31 @@ const imageStyles = {
   borderRadius: `100%`,
 };
 
-function Bio() {
-  return (
-    <StaticQuery
-      query={bioQuery}
-      render={({
-        avatar: { childImageSharp: { fixed } },
-        site: { siteMetadata: { author, social } } }
-      ) => (
-        <Wrapper>
-          <Image
-            fixed={fixed}
-            alt={author}
-            style={imageStyles}
-          />
-          <BioText>
-            Written by <strong>{author}</strong> who lives and works in Belgium
-            building mainly in React(-native) and Node.js.
-            {` `}
-            <TwitterLink href={`https://twitter.com/${social.twitter}`}>
-              You should follow me on Twitter
-            </TwitterLink>
-          </BioText>
-        </Wrapper>
-      )}
-    />
-  )
-}
+const Bio = () => (
+  <StaticQuery
+    query={bioQuery}
+    render={({
+      avatar: { childImageSharp: { fixed } },
+      site: { siteMetadata: { author, social } } }
+    ) => (
+      <Wrapper>
+        <Image
+          fixed={fixed}
+          alt={author}
+          style={imageStyles}
+        />
+        <BioText>
+          Written by <strong>{author}</strong> who lives and works in Belgium
+          building mainly in React(-native) and Node.js.
+          {` `}
+          <TwitterLink href={`https://twitter.com/${social.twitter}`}>
+            You should follow me on Twitter
+          </TwitterLink>
+        </BioText>
+      </Wrapper>
+    )}
+  />
+)
 
 const bioQuery = graphql`
   query BioQuery {
