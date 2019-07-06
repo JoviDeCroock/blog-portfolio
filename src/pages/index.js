@@ -37,8 +37,8 @@ export default () => (
         This passion evolved into doing IT-studies, freelancer assignments and my job.
         <br />
         <br />
-        Nowadays my passion greatly goes to the architecture side of programming,{' '}
-        finding elegant solutions to complex behavior is my favorite challenge.
+        Nowadays my passion greatly goes to the architectural side of programming.{' '}
+        Finding elegant solutions to complex behavior is my favorite challenge.
         <br />
         At this point I am 23 years old and trying to learn the best practices from my{' '}
         awesome co-workers, in the hope of being able to one day share my knowledge with{' '}
@@ -58,7 +58,7 @@ export default () => (
           <a target="blank" href="https://codifly.be">Codifly</a> - Web and Mobile engineer
         </li>
         <li>
-          Coming soon - Software engineer
+          <a target="blank" href="https://formidable.com/">Formidable</a> - Software engineer
         </li>
       </ul>
     </Block>
@@ -88,7 +88,7 @@ export default () => (
       <ul>
         <li><a target="blank" href="https://github.com/JoviDeCroock/hooked-form">Hooked-form</a> - Lightweight React form library</li>
         <li><a target="blank" href="https://github.com/JoviDeCroock/react-angler">React-angler</a> - React hooks toolbelt</li>
-        <li><a target="blank" href="htts://www.worldpins.tk">Worldpins</a> - GraphQL Apollo Koa React application</li>
+        <li><a target="blank" href="https://github.com/worldpins">Worldpins</a> - GraphQL Apollo Koa React application</li>
         <li><a target="blank" href="https://github.com/JoviDeCroock/webpack-module-nomodule-plugin">module-nomodule webpack plugin</a></li>
         <li><a target="blank" href="https://github.com/JoviDeCroock/webpack-syntax-resolver-plugin">syntax resolver webpack plugin</a></li>
       </ul>
