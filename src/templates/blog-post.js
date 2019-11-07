@@ -9,7 +9,7 @@ import { rhythm, scale } from '../utils/typography'
 
 const BlogPost = styled.div`
   text-align: justify;
-`;
+`
 
 class BlogPostTemplate extends React.Component {
   render() {

@@ -7,11 +7,11 @@ const Wrapper = styled.div`
   display: flex;
   margin-top: 24px;
   margin-bottom: 24px;
-`;
+`
 
 const BioText = styled.p`
   margin: 0;
-`;
+`
 
 const TwitterLink = styled.a``
 
@@ -20,21 +20,21 @@ const imageStyles = {
   marginBottom: 0,
   minWidth: 50,
   borderRadius: `100%`,
-};
+}
 
 const Bio = () => (
   <StaticQuery
     query={bioQuery}
     render={({
-      avatar: { childImageSharp: { fixed } },
-      site: { siteMetadata: { author, social } } }
-    ) => (
+      avatar: {
+        childImageSharp: { fixed },
+      },
+      site: {
+        siteMetadata: { author, social },
+      },
+    }) => (
       <Wrapper>
-        <Image
-          fixed={fixed}
-          alt={author}
-          style={imageStyles}
-        />
+        <Image fixed={fixed} alt={author} style={imageStyles} />
         <BioText>
           Written by <strong>{author}</strong> who lives and works in Belgium
           building mainly in React(-native) and Node.js.

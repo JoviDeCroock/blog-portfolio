@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Spring } from 'react-spring'
-import { InView } from 'react-intersection-observer'
+import { useInView } from 'react-intersection-observer'
 
 const BarWrapper = styled.div`
   border: 1px solid black;
@@ -11,7 +11,7 @@ const BarWrapper = styled.div`
 `
 
 const Indicator = styled.div`
-  background-color: #4286F4;
+  background-color: #4286f4;
   border: 1px solid transparent;
   border-radius: 10px;
   height: 100%;
@@ -23,33 +23,26 @@ const Text = styled.p`
   margin-left: 6px;
 `
 
-const Wrapper = styled(InView)`
+const Wrapper = styled.div`
   margin-bottom: 4px;
 `
 
 const SkillIndicator = ({ title, level: finalLevel }) => {
-  const [show, setShow] = React.useState(false);
-
-  const onChange = React.useCallback(inView => {
-    if (inView) {
-      setShow(() => inView);
-    }
-  }, [])
-
+  const [ref, inView] = useInView({ triggerOnce: true })
   return (
-    <Wrapper onChange={onChange}>
+    <Wrapper ref={ref}>
       <Text>{title}</Text>
       <BarWrapper>
         <Spring
           delay={300}
           from={{ level: 0 }}
-          to={{ level: show ? finalLevel : 0 }}
+          to={{ level: inView ? finalLevel : 0 }}
         >
-          {({ level}) => <Indicator level={level} />}
+          {({ level }) => <Indicator level={level} />}
         </Spring>
       </BarWrapper>
     </Wrapper>
   )
 }
 
-export default React.memo(SkillIndicator);
+export default React.memo(SkillIndicator)

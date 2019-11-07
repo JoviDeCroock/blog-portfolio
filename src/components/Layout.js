@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   margin-right: auto;
   max-width: 42rem;
   padding: 2.625rem 1.3125rem;
-`;
+`
 
 const Layout = ({ children }) => (
   <StaticQuery
@@ -39,4 +39,4 @@ const pageQuery = graphql`
       }
     }
   }
-`;
+`

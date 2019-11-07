@@ -11,7 +11,7 @@ import ReadTime from '../../components/ReadTime'
 const linkStyles = {
   boxShadow: `none`,
   color: '#4286F4',
-};
+}
 
 const PostTitle = styled.h3`
   margin-bottom: 0.4375rem;
@@ -25,9 +25,8 @@ const Small = styled.small`
   display: flex;
   > * {
     margin-right: 12px;
-
   }
-`;
+`
 
 const CurrentFilters = styled.p`
   margin: 0;
@@ -40,14 +39,14 @@ const ResetFilterText = styled.p`
   :hover {
     text-decoration: underline;
   }
-`;
+`
 
 class BlogIndex extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = { filter: 'ALL' }
-    this.setSubject = this.setSubject.bind(this);
-    this.resetFilter = this.resetFilter.bind(this);
+    this.setSubject = this.setSubject.bind(this)
+    this.resetFilter = this.resetFilter.bind(this)
   }
 
   resetFilter() {
@@ -55,7 +54,7 @@ class BlogIndex extends React.Component {
   }
 
   setSubject(subject) {
-    const currentFilter = this.state.filter === 'ALL' ? [] : this.state.filter;
+    const currentFilter = this.state.filter === 'ALL' ? [] : this.state.filter
     if (!currentFilter.includes(subject)) {
       this.setState({ filter: [...currentFilter, subject] })
     }
@@ -63,15 +62,19 @@ class BlogIndex extends React.Component {
 
   render() {
     const { data } = this.props
-    const { filter } = this.state;
+    const { filter } = this.state
     const siteTitle = data.site.siteMetadata.title
-    let posts;
+    let posts
     if (filter === 'ALL') {
       posts = data.allMarkdownRemark.edges
     } else {
-      posts = data.allMarkdownRemark.edges.filter((
-        { node: { frontmatter: { subject } } }
-      ) => filter.includes(subject));
+      posts = data.allMarkdownRemark.edges.filter(
+        ({
+          node: {
+            frontmatter: { subject },
+          },
+        }) => filter.includes(subject)
+      )
     }
     return (
       <Layout location={this.props.location} title={siteTitle}>
@@ -80,11 +83,16 @@ class BlogIndex extends React.Component {
           keywords={[`blog`, `jovidecroock`, `jovidec`, `react`, `node`]}
         />
         <Bio />
-        {filter !== 'ALL'&&
+        {filter !== 'ALL' && (
           <div>
-            <CurrentFilters>Current filter: {filter.map((f) => f)}</CurrentFilters>
-            <ResetFilterText onClick={this.resetFilter}>Reset Filters</ResetFilterText>
-          </div>}
+            <CurrentFilters>
+              Current filter: {filter.map(f => f)}
+            </CurrentFilters>
+            <ResetFilterText onClick={this.resetFilter}>
+              Reset Filters
+            </ResetFilterText>
+          </div>
+        )}
         {posts.map(({ node }) => {
           const { slug } = node.fields
           const { date, subject, title, readTime } = node.frontmatter
@@ -96,12 +104,13 @@ class BlogIndex extends React.Component {
                 </Link>
               </PostTitle>
               <Small>
-                <Tag subject={subject} onClick={this.setSubject} />&nbsp;
-                <ReadTime time={readTime} />&nbsp;
+                <Tag subject={subject} onClick={this.setSubject} />
+                &nbsp;
+                <ReadTime time={readTime} />
+                &nbsp;
                 {date}
               </Small>
-              <Small>
-              </Small>
+              <Small />
               <p dangerouslySetInnerHTML={{ __html: node.excerpt }} />
             </div>
           )
