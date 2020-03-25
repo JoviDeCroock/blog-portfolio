@@ -9,7 +9,15 @@ const Hero = styled.div`
   width: 100%;
 `
 
-const Block = styled.div``
+const ListItem = styled.li`
+  font-size: 18px;
+  margin-bottom: 8px;
+  margin-top: 8px;
+`;
+
+const Block = styled.div`
+  margin-bottom: 32px;
+`;
 
 const Title = styled.h1`
   margin-top: 28px;
@@ -19,9 +27,17 @@ const Title = styled.h1`
 const SubTitle = styled.h2``
 
 const Prelude = styled.p`
+  font-size: 18px;
   margin: 0;
   text-align: justify;
 `
+
+export const Link = styled.a`
+  color: #4286f4;
+  &:visited {
+    color: #4286f4;
+  }
+`;
 
 export default () => (
   <Layout>
@@ -48,20 +64,20 @@ export default () => (
     <Block>
       <SubTitle>Experience</SubTitle>
       <ul>
-        <li>VHTI Dendermonde - IT</li>
-        <li>HoGent - Applied IT</li>
-        <li>
-          <a target="blank" href="https://codifly.be">
+        <ListItem>VHTI Dendermonde - IT</ListItem>
+        <ListItem>HoGent - Applied IT</ListItem>
+        <ListItem>
+          <Link target="blank" href="https://codifly.be">
             Codifly
-          </a>{' '}
-          - Web and Mobile engineer
-        </li>
-        <li>
-          <a target="blank" href="https://formidable.com/">
+          </Link>
+          &nbsp;- Web and Mobile engineer
+        </ListItem>
+        <ListItem>
+          <Link target="blank" href="https://formidable.com/">
             Formidable
-          </a>{' '}
-          - Software engineer
-        </li>
+          </Link>
+          &nbsp;- Software engineer
+        </ListItem>
       </ul>
     </Block>
     <Block>
@@ -78,69 +94,69 @@ export default () => (
     <Block>
       <SubTitle>Open source I contribute to</SubTitle>
       <ul>
-        <li>
-          <a target="blank" href="https://github.com/developit/preact">
+        <ListItem>
+          <Link target="blank" href="https://github.com/developit/preact">
             Preact
-          </a>{' '}
-          maintainer (core team)
-        </li>
-        <li>
-          <a target="blank" href="https://github.com/formidablelabs/urql">
+          </Link>
+          &nbsp;maintainer (core team)
+        </ListItem>
+        <ListItem>
+          <Link target="blank" href="https://github.com/formidablelabs/urql">
             Urql
-          </a>{' '}
-          maintainer (core team)
-        </li>
+          </Link>
+          &nbsp;maintainer (core team)
+        </ListItem>
       </ul>
     </Block>
     <Block>
       <SubTitle>Projects by me</SubTitle>
       <ul>
-        <li>
-          <a target="blank" href="https://github.com/JoviDeCroock/hooked-form">
+        <ListItem>
+          <Link target="blank" href="https://github.com/JoviDeCroock/hooked-form">
             Hooked-form
-          </a>{' '}
-          - Lightweight React form library
-        </li>
-        <li>
-          <a target="blank" href="https://github.com/worldpins">
+          </Link>
+          &nbsp;- Lightweight React form library
+        </ListItem>
+        <ListItem>
+          <Link target="blank" href="https://github.com/worldpins">
             Worldpins
-          </a>{' '}
-          - GraphQL Apollo Koa React application
-        </li>
-        <li>
-          <a
+          </Link>
+          &nbsp;- GraphQL Apollo Koa React application
+        </ListItem>
+        <ListItem>
+          <Link
             target="blank"
             href="https://github.com/JoviDeCroock/webpack-module-nomodule-plugin"
           >
             module-nomodule webpack plugin
-          </a>
-        </li>
-        <li>
-          <a
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link
             target="blank"
             href="https://github.com/JoviDeCroock/webpack-syntax-resolver-plugin"
           >
             syntax resolver webpack plugin
-          </a>
-        </li>
+          </Link>
+        </ListItem>
       </ul>
     </Block>
     <Block>
       <SubTitle>Achievements</SubTitle>
       <ul>
-        <li>First prize at Hack The Future 2016 - Android</li>
-        <li>Helped implement a complex authorisation system</li>
-        <li>
+        <ListItem>First prize at Hack The Future 2016 - Android</ListItem>
+        <ListItem>Helped implement a complex authorisation system</ListItem>
+        <ListItem>
           Tennis handicap prediction algorithm, focussed on beating bookmakers
-        </li>
+        </ListItem>
       </ul>
     </Block>
     <Block>
       <SubTitle>Interests</SubTitle>
       <ul>
-        <li>Non-fiction books (programming, self-improvement,...)</li>
-        <li>Psychology</li>
-        <li>Music</li>
+        <ListItem>Non-fiction books (programming, self-improvement,...)</ListItem>
+        <ListItem>Psychology</ListItem>
+        <ListItem>Music</ListItem>
       </ul>
     </Block>
   </Layout>

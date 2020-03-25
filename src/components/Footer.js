@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from '../pages';
 
 const Wrapper = styled.footer`
   align-items: center;
@@ -7,24 +8,18 @@ const Wrapper = styled.footer`
   justify-content: center;
 `
 
-const Link = styled.a`
-  color: #4286f4;
-  margin-left: 6px;
-  margin-right: 6px;
-`
-
 const Footer = () => (
   <Wrapper>
     <Link target="blank" href="https://www.twitter.com/jovidec">
       Twitter
     </Link>
-    {' '}-{' '}
+    &nbsp;-&nbsp;
     <Link target="blank" href="https://www.github.com/jovidecroock">
       Github
     </Link>
-    {' '}-{' '}
+    &nbsp;-&nbsp;
     <Link href="mailto:decroockjovi@gmail.com">Contact</Link>
-    {' '}-{' '}
+    &nbsp;-&nbsp;
     <Link target="blank" href="https://dev.to/jovidecroock">
       Blog
     </Link>
