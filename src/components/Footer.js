@@ -17,12 +17,17 @@ const Footer = () => (
   <Wrapper>
     <Link target="blank" href="https://www.twitter.com/jovidec">
       Twitter
-    </Link>{' '}
-    -{' '}
+    </Link>
+    {' '}-{' '}
     <Link target="blank" href="https://www.github.com/jovidecroock">
       Github
-    </Link>{' '}
-    - <Link href="mailto:decroockjovi@gmail.com">Contact</Link>
+    </Link>
+    {' '}-{' '}
+    <Link href="mailto:decroockjovi@gmail.com">Contact</Link>
+    {' '}-{' '}
+    <Link target="blank" href="https://dev.to/jovidecroock">
+      Blog
+    </Link>
   </Wrapper>
 )
 

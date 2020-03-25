@@ -1,8 +1,6 @@
 import React from 'react'
-import { graphql, StaticQuery } from 'gatsby'
 import styled from 'styled-components'
 
-import Header from './Header'
 import Footer from './Footer'
 
 const Wrapper = styled.div`
@@ -13,30 +11,10 @@ const Wrapper = styled.div`
 `
 
 const Layout = ({ children }) => (
-  <StaticQuery
-    query={pageQuery}
-    render={({ site: { siteMetadata } }) => (
-      <Wrapper>
-        {false && <Header {...siteMetadata} />}
-        {children}
-        <Footer />
-      </Wrapper>
-    )}
-  />
+  <Wrapper>
+    {children}
+    <Footer />
+  </Wrapper>
 )
 
 export default Layout
-
-const pageQuery = graphql`
-  query SiteTitleQuery {
-    site {
-      siteMetadata {
-        title
-        menuLinks {
-          name
-          link
-        }
-      }
-    }
-  }
-`

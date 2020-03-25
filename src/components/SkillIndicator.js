@@ -18,11 +18,13 @@ const Indicator = styled.div`
 
 const Text = styled.p`
   margin: 0;
+  margin-bottom: 4px;
   margin-left: 6px;
 `
 
 const Wrapper = styled.div`
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+  margin-top: 8px;
 `
 
 const SkillIndicator = ({ title, level }) => (
