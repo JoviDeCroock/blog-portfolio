@@ -2,11 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link, graphql } from 'gatsby'
 
-import Bio from '../Bio'
-import Layout from '../Layout'
-import SEO from '../seo'
-import Tag from '../Tag'
-import ReadTime from '../ReadTime'
+import Bio from '../src/components/Bio'
+import Layout from '../src/components/Layout'
+import SEO from '../src/components/seo'
+import Tag from '../src/components/Tag'
+import ReadTime from '../src/components/ReadTime'
 
 const linkStyles = {
   boxShadow: `none`,
