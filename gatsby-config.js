@@ -2,17 +2,17 @@ module.exports = {
   siteMetadata: {
     title: `JoviDeC`,
     author: `Jovi De Croock`,
-    description: `My Blog and Portfolio.`,
+    description: `My Portfolio.`,
     siteUrl: `https://www.jovidecroock.com`,
     menuLinks:[
       {
           name:'Portfolio',
           link:'/'
       },
-      {
-          name:'Blog',
-          link:'/blog'
-      }
+      // {
+      //     name:'Blog',
+      //     link:'/blog'
+      // }
     ],
     social: {
       twitter: `joviDec`,
