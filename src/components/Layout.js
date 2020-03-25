@@ -17,7 +17,7 @@ const Layout = ({ children }) => (
     query={pageQuery}
     render={({ site: { siteMetadata } }) => (
       <Wrapper>
-        <Header {...siteMetadata} />
+        {false && <Header {...siteMetadata} />}
         {children}
         <Footer />
       </Wrapper>
