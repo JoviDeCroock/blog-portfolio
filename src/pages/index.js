@@ -11,8 +11,8 @@ const Hero = styled.div`
 
 const ListItem = styled.li`
   font-size: 18px;
-  margin-bottom: 8px;
-  margin-top: 8px;
+  margin-bottom: 12px;
+  margin-top: 12px;
 `;
 
 const Block = styled.div`
@@ -22,20 +22,20 @@ const Block = styled.div`
 const Title = styled.h1`
   margin-top: 28px;
   text-decoration: underline;
-`
+`;
 
-const SubTitle = styled.h2``
+const SubTitle = styled.h2``;
 
 const Prelude = styled.p`
   font-size: 18px;
   margin: 0;
   text-align: justify;
-`
+`;
 
 export const Link = styled.a`
-  color: #4286f4;
+  color: #0c5bdb;
   &:visited {
-    color: #4286f4;
+    color: #0c5bdb;
   }
 `;
 

@@ -1,12 +1,13 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
+
 import { Link } from '../pages';
 
 const Wrapper = styled.footer`
   align-items: center;
   display: flex;
   justify-content: center;
-`
+`;
 
 const Footer = () => (
   <Wrapper>
@@ -24,6 +25,6 @@ const Footer = () => (
       Blog
     </Link>
   </Wrapper>
-)
+);
 
-export default Footer
+export default Footer;
