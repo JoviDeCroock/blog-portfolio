@@ -46,7 +46,7 @@ export default () => (
       <Title>Jovi De Croock</Title>
       <SubTitle>Passionate Web and Mobile engineer</SubTitle>
       <Prelude>
-        When growing up I soon found a passion for IT, this grew into me
+        When growing up I discovered a passion for IT, this grew into me
         working at a hardware store and eventually into finding my passion for
         programming. This passion turnmed me to study software engineering, freelancer
         assignments and my job.
@@ -54,11 +54,13 @@ export default () => (
         <br />
         Nowadays my passion mainly goes to the architectural side of
         programming. Finding elegant solutions to complex behavior is my
-        favorite challenge.
+        favorite challenge. Another thing I find a deep interest in is
+        optimising performance.
+        <br />
         <br />
         At this point I am 24 years old and trying to learn the best practices
         from my awesome co-workers, in the hope of being able to one day share
-        my knowledge with new hires.
+        my knowledge with everyone.
       </Prelude>
     </Hero>
     <Block>
@@ -95,7 +97,7 @@ export default () => (
       <SubTitle>Open source I contribute to</SubTitle>
       <ul>
         <ListItem>
-          <Link target="blank" href="https://github.com/developit/preact">
+          <Link target="blank" href="https://github.com/preactjs/preact">
             Preact
           </Link>
           &nbsp;maintainer (core team)
