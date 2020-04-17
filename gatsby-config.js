@@ -39,6 +39,7 @@ module.exports = {
         cache_busting_mode: 'none'
       },
     },
+    'gatsby-plugin-hooked-head',
     `gatsby-plugin-offline`,
     'gatsby-plugin-no-javascript',
   ],

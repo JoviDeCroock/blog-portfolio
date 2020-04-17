@@ -5481,6 +5481,11 @@ gatsby-page-utils@^0.0.28:
     micromatch "^3.1.10"
     slash "^3.0.0"
 
+gatsby-plugin-hooked-head@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-hooked-head/-/gatsby-plugin-hooked-head-0.1.1.tgz#87233f9a9aafb842ebe89db3003f2eadce2779b8"
+  integrity sha512-u/mqjnZeg14G/732I1GHvwQUd8f3GwpeMWb2LcJyhKue0JeLk4zvn/TIlrZ2pJ8zDxDFhCQrGu4mD/auofS60g==
+
 gatsby-plugin-manifest@2.2.26:
   version "2.2.26"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-manifest/-/gatsby-plugin-manifest-2.2.26.tgz#040a7dc2ab54e64cc97481adfb498e5dc8caade4"
