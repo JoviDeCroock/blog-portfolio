@@ -1,62 +1,30 @@
 import React from 'react';
-import Helmet from 'react-helmet';
 import { StaticQuery, graphql } from 'gatsby';
+import { useLang, useTitleTemplate, useTitle, useMeta } from 'hooked-head';
 
 const SEO = ({ description, lang, meta, keywords, title }) => (
   <StaticQuery
     query={detailsQuery}
     render={data => {
-      const metaDescription = description || data.site.siteMetadata.description
-      return (
-        <Helmet
-          htmlAttributes={{ lang }}
-          title={title}
-          titleTemplate={`%s | ${data.site.siteMetadata.title}`}
-          meta={[
-            {
-              name: `description`,
-              content: metaDescription,
-            },
-            {
-              property: `og:title`,
-              content: title,
-            },
-            {
-              property: `og:description`,
-              content: metaDescription,
-            },
-            {
-              property: `og:type`,
-              content: `website`,
-            },
-            {
-              name: `twitter:card`,
-              content: `summary`,
-            },
-            {
-              name: `twitter:creator`,
-              content: data.site.siteMetadata.author,
-            },
-            {
-              name: `twitter:title`,
-              content: title,
-            },
-            {
-              name: `twitter:description`,
-              content: metaDescription,
-            },
-          ]
-            .concat(
-              keywords.length > 0
-                ? {
-                    name: `keywords`,
-                    content: keywords.join(`, `),
-                  }
-                : []
-            )
-            .concat(meta)}
-        />
-      )
+      const metaDescription = description || data.site.siteMetadata.description;
+      useLang(lang);
+
+      useTitleTemplate(data.site.siteMetadata.title);
+      useTitle(title);
+
+      useMeta({ name: 'author', content: data.site.siteMetadata.author });
+      useMeta({ name: 'description', content: metaDescription });
+
+      useMeta({ name: 'twitter:card', content: 'summary' });
+      useMeta({ name: 'twitter:creator', content: data.site.siteMetadata.author });
+      useMeta({ name: 'twitter:title', content: title });
+      useMeta({ name: 'twitter:description', content: metaDescription });
+
+      useMeta({ property: 'og:title', content: title });
+      useMeta({ property: 'og:type', content: 'website' });
+      useMeta({ property: 'og:description', content: metaDescription });
+
+      return null;
     }}
   />
 );
