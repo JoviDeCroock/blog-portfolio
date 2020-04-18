@@ -44,7 +44,7 @@ export default () => (
     <SEO title="Portfolio" />
     <Hero>
       <Title>Jovi De Croock</Title>
-      <SubTitle>Passionate Web and Mobile engineer</SubTitle>
+      <SubTitle>Passionate Software Engineer</SubTitle>
       <Prelude>
         When growing up I discovered a passion for IT, this grew into me
         working at a hardware store and eventually into finding my passion for
@@ -86,12 +86,10 @@ export default () => (
       <SubTitle>Skills</SubTitle>
       <SkillIndicator title="Node.js" level={9} />
       <SkillIndicator title="JavaScript/TypeScript" level={9} />
-      <SkillIndicator title="React | Preact" level={8.5} />
-      <SkillIndicator title="Apollo | Urql" level={8} />
+      <SkillIndicator title="(P)React" level={8.5} />
       <SkillIndicator title="GraphQL" level={8} />
       <SkillIndicator title="React-Native" level={7.5} />
       <SkillIndicator title="SQL" level={7} />
-      <SkillIndicator title="Kotlin" level={6} />
     </Block>
     <Block>
       <SubTitle>Open source I contribute to</SubTitle>
@@ -120,6 +118,12 @@ export default () => (
           &nbsp;- Lightweight React form library
         </ListItem>
         <ListItem>
+          <Link target="blank" href="https://github.com/JoviDeCroock/hooked-head">
+            Hooked-form
+          </Link>
+          &nbsp;- Lightweight (P)React head library
+        </ListItem>
+        <ListItem>
           <Link target="blank" href="https://github.com/worldpins">
             Worldpins
           </Link>
@@ -146,6 +150,7 @@ export default () => (
     <Block>
       <SubTitle>Achievements</SubTitle>
       <ul>
+        <ListItem>Google Open Source Peer Bonus - Q4 2019</ListItem>
         <ListItem>First prize at Hack The Future 2016 - Android</ListItem>
         <ListItem>Helped implement a complex authorisation system</ListItem>
         <ListItem>
