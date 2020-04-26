@@ -5688,6 +5688,11 @@ gatsby-page-utils@^0.1.4:
     lodash "^4.17.15"
     micromatch "^3.1.10"
 
+gatsby-plugin-hooked-head@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-hooked-head/-/gatsby-plugin-hooked-head-0.1.1.tgz#87233f9a9aafb842ebe89db3003f2eadce2779b8"
+  integrity sha512-u/mqjnZeg14G/732I1GHvwQUd8f3GwpeMWb2LcJyhKue0JeLk4zvn/TIlrZ2pJ8zDxDFhCQrGu4mD/auofS60g==
+
 gatsby-plugin-manifest@2.3.7:
   version "2.3.7"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-manifest/-/gatsby-plugin-manifest-2.3.7.tgz#f4fdb4dc04a4dec2b669f5e49c959e7e687cf7c7"
