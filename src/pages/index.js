@@ -119,7 +119,7 @@ export default () => (
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/JoviDeCroock/hooked-head">
-            Hooked-form
+            Hooked-head
           </Link>
           &nbsp;- Lightweight (P)React head library
         </ListItem>
