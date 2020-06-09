@@ -112,6 +112,12 @@ export default () => (
       <SubTitle>Projects by me</SubTitle>
       <ul>
         <ListItem>
+          <Link target="blank" href="https://github.com/JoviDeCroock/prefresh">
+            Prefresh
+          </Link>
+          &nbsp;- Fast-refresh for Preact
+        </ListItem>
+        <ListItem>
           <Link target="blank" href="https://github.com/JoviDeCroock/hooked-form">
             Hooked-form
           </Link>
