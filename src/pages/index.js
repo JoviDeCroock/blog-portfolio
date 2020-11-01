@@ -58,7 +58,7 @@ export default () => (
         optimising performance.
         <br />
         <br />
-        At this point I am 24 years old and trying to learn the best practices
+        At this point I am 25 years old and trying to learn the best practices
         from my awesome co-workers, in the hope of being able to one day share
         my knowledge with everyone.
       </Prelude>
@@ -92,7 +92,7 @@ export default () => (
       <SkillIndicator title="SQL" level={7} />
     </Block>
     <Block>
-      <SubTitle>Open source I contribute to</SubTitle>
+      <SubTitle>Open source projects I help maintain</SubTitle>
       <ul>
         <ListItem>
           <Link target="blank" href="https://github.com/preactjs/preact">
@@ -122,6 +122,12 @@ export default () => (
             Hooked-form
           </Link>
           &nbsp;- Lightweight React form library
+        </ListItem>
+        <ListItem>
+          <Link target="blank" href="https://github.com/JoviDeCroock/pranimate">
+            pranimate
+          </Link>
+          &nbsp;- Lightweight Animations for Preact
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/JoviDeCroock/hooked-head">
@@ -157,11 +163,11 @@ export default () => (
       <SubTitle>Achievements</SubTitle>
       <ul>
         <ListItem>Google Open Source Peer Bonus - Q4 2019</ListItem>
-        <ListItem>First prize at Hack The Future 2016 - Android</ListItem>
-        <ListItem>Helped implement a complex authorisation system</ListItem>
+        <ListItem>Helped implement a complex entity-level authorisation system</ListItem>
         <ListItem>
           Tennis handicap prediction algorithm, focussed on beating bookmakers
         </ListItem>
+        <ListItem>First prize at Hack The Future 2016 - Android</ListItem>
       </ul>
     </Block>
     <Block>
