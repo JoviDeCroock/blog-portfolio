@@ -130,8 +130,8 @@ export default () => (
           &nbsp;- Lightweight Animations for Preact
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://github.com/JoviDeCroock/hooked-head">
-            Hooked-head
+          <Link target="blank" href="https://github.com/JoviDeCroock/hookfd">
+            Hoofd
           </Link>
           &nbsp;- Lightweight (P)React head library
         </ListItem>
