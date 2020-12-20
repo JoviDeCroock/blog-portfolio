@@ -12,6 +12,11 @@ export default function HTML(props) {
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
         <script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "e032b43ad8dd4e7797f9dc4d2afbce64"}`}
+        />
+        <script
           dangerouslySetInnerHTML={{ __html: `
             if ('serviceWorker' in navigator) {
               window.addEventListener('load', function() {
