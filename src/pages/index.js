@@ -101,6 +101,12 @@ export default () => (
           &nbsp;maintainer (core team)
         </ListItem>
         <ListItem>
+          <Link target="blank" href="https://github.com/preactjs/wmr">
+            wmr
+          </Link>
+          &nbsp;maintainer (core team)
+        </ListItem>
+        <ListItem>
           <Link target="blank" href="https://github.com/formidablelabs/urql">
             Urql
           </Link>
@@ -130,7 +136,7 @@ export default () => (
           &nbsp;- Lightweight Animations for Preact
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://github.com/JoviDeCroock/hookfd">
+          <Link target="blank" href="https://github.com/JoviDeCroock/hoofd">
             Hoofd
           </Link>
           &nbsp;- Lightweight (P)React head library
