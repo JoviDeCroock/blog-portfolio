@@ -78,7 +78,7 @@ export default () => (
           <Link target="blank" href="https://formidable.com/">
             Formidable
           </Link>
-          &nbsp;- Software engineer
+          &nbsp;- Senior software engineer - Tech lead
         </ListItem>
       </ul>
     </Block>
