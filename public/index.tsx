@@ -25,7 +25,7 @@ export function App() {
 }
 
 if (typeof window !== 'undefined') {
-  hydrate(<App />, document.getElementById('root'))
+  hydrate(<App />, document.body)
 }
 
 export async function prerender(data) {
@@ -34,6 +34,7 @@ export async function prerender(data) {
 
   const res = await ssr(<App {...data} />)
   res.html = `<style id="_goober"> ${extractCss()}</style>${res.html}`;
+  res.html = `${res.html}<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e032b43ad8dd4e7797f9dc4d2afbce64"}'></script>`;
 
   const head = toStatic()
   const elements = new Set([
