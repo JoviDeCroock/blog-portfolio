@@ -79,9 +79,11 @@ export default () => (
       <SubTitle>Skills</SubTitle>
       <SkillIndicator title="Node.js" level={9} />
       <SkillIndicator title="JavaScript/TypeScript" level={9} />
-      <SkillIndicator title="(P)React" level={8.5} />
-      <SkillIndicator title="GraphQL" level={8} />
+      <SkillIndicator title="(P)React" level={9.5} />
+      <SkillIndicator title="GraphQL" level={9} />
+      <SkillIndicator title="Terraform" level={8} />
       <SkillIndicator title="React-Native" level={7.5} />
+      <SkillIndicator title="AWS" level={7} />
       <SkillIndicator title="SQL" level={7} />
     </Block>
     <Block>
