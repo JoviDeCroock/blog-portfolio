@@ -33,7 +33,11 @@ if (typeof window !== 'undefined') {
 }
 
 export async function prerender(data) {
+  const { default: ssr } = await import('preact-iso/prerender');
+  const { extractCss } = await import('goober');
+
   const res = await ssr(<App {...data} />)
+  res.html = `<style id="_goober"> ${extractCss()}</style>${res.html}`;
 
   const head = toStatic()
   const elements = new Set([
