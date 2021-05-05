@@ -4,6 +4,7 @@ import {
   LocationProvider,
   Router,
   hydrate,
+  prerender as ssr
 } from 'preact-iso'
 import { toStatic } from 'hoofd/preact'
 import Home from './pages/Home'
@@ -24,22 +25,19 @@ export function App() {
   )
 }
 
-if (typeof window !== 'undefined') {
-  hydrate(<App />, document.body)
-}
+hydrate(<App />)
 
 export async function prerender(data) {
-  const { default: ssr } = await import('preact-iso/prerender');
   const { extractCss } = await import('goober');
 
   const res = await ssr(<App {...data} />)
-  res.html = `<style id="_goober"> ${extractCss()}</style>${res.html}`;
-  res.html = `${res.html}<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e032b43ad8dd4e7797f9dc4d2afbce64"}'></script>`;
 
   const head = toStatic()
   const elements = new Set([
     ...head.links.map(props => ({ type: 'link', props })),
     ...head.metas.map(props => ({ type: 'meta', props })),
+    `<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e032b43ad8dd4e7797f9dc4d2afbce64"}'></script>`,
+    `<style id="_goober">${extractCss()}</style>`
   ])
 
   return {
@@ -53,4 +51,4 @@ export async function prerender(data) {
 }
 
 // @ts-ignore
-if (module.hot) module.hot.accept(u => hydrate(<u.module.App />, document.getElementById('root')))
+if (module.hot) module.hot.accept(u => hydrate(<u.module.App />))
