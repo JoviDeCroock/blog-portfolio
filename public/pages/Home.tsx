@@ -1,47 +1,40 @@
-import React from 'react'
-import styled from 'styled-components'
+import { styled } from 'goober'
 import Layout from '../components/Layout'
-import SEO from '../components/seo'
 import SkillIndicator from '../components/SkillIndicator'
+import { Link } from '../components/Link'
+import SEO from '../components/Seo'
 
-const Hero = styled.div`
+const Hero = styled('div')`
   background: white;
   width: 100%;
 `
 
-const ListItem = styled.li`
+const ListItem = styled('li')`
   font-size: 18px;
   margin-bottom: 12px;
   margin-top: 12px;
 `;
 
-const Block = styled.div`
+const Block = styled('div')`
   margin-bottom: 32px;
 `;
 
-const Title = styled.h1`
+const Title = styled('h1')`
   margin-top: 28px;
   text-decoration: underline;
 `;
 
-const SubTitle = styled.h2``;
+const SubTitle = styled('h2')``;
 
-const Prelude = styled.p`
+const Prelude = styled('p')`
   font-size: 18px;
   margin: 0;
   text-align: justify;
 `;
 
-export const Link = styled.a`
-  color: #0c5bdb;
-  &:visited {
-    color: #0c5bdb;
-  }
-`;
-
 export default () => (
   <Layout>
-    <SEO title="Portfolio" />
+    <SEO />
     <Hero>
       <Title>Jovi De Croock</Title>
       <SubTitle>Passionate Software Engineer</SubTitle>

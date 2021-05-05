@@ -1,9 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'goober';
 
 import Footer from './Footer';
 
-const Wrapper = styled.div`
+const Wrapper = styled('div')`
   margin-left: auto;
   margin-right: auto;
   max-width: 42rem;

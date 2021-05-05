@@ -1,14 +1,15 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'goober';
 
-import { Link } from '../pages';
+import { Link } from './Link';
 
-const Wrapper = styled.footer`
+const Wrapper = styled('footer')`
   align-items: center;
   display: flex;
   justify-content: center;
 `;
 
+/** TODO: &nbsp; isn't working in htm */
 const Footer = () => (
   <Wrapper>
     <Link target="blank" href="https://www.twitter.com/jovidec">
