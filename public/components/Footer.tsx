@@ -1,5 +1,4 @@
 import { styled } from 'goober'
-
 import { Link } from './Link'
 
 const Wrapper = styled('footer')`

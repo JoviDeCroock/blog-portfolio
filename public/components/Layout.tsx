@@ -1,5 +1,4 @@
 import { styled } from 'goober'
-
 import Footer from './Footer'
 
 const Wrapper = styled('div')`
