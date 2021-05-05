@@ -3,13 +3,11 @@ import { setup } from 'goober'
 import {
   LocationProvider,
   Router,
-  ErrorBoundary,
   hydrate,
-  prerender as ssr,
 } from 'preact-iso'
+import { toStatic } from 'hoofd/preact'
 import Home from './pages/Home'
 import NotFound from './pages/404'
-import { toStatic } from 'hoofd/preact'
 
 setup(h)
 
@@ -17,12 +15,10 @@ export function App() {
   return (
     <LocationProvider>
       <div className="app">
-        <ErrorBoundary>
-          <Router>
-            <Home path="/" />
-            <NotFound default />
-          </Router>
-        </ErrorBoundary>
+        <Router>
+          <Home path="/" />
+          <NotFound default />
+        </Router>
       </div>
     </LocationProvider>
   )
@@ -56,4 +52,4 @@ export async function prerender(data) {
 }
 
 // @ts-ignore
-if (module.hot) module.hot.accept(u => hydrate(<u.module.App />, document.body))
+if (module.hot) module.hot.accept(u => hydrate(<u.module.App />, document.getElementById('root')))
