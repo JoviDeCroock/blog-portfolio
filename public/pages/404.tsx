@@ -1,5 +1,5 @@
-import Layout from '../components/Layout';
-import SEO from '../components/Seo';
+import Layout from '../components/Layout'
+import SEO from '../components/Seo'
 
 const NotFoundPage = () => (
   <Layout>
@@ -10,6 +10,6 @@ const NotFoundPage = () => (
       you now?
     </p>
   </Layout>
-);
+)
 
-export default NotFoundPage;
+export default NotFoundPage

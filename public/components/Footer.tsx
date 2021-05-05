@@ -1,13 +1,12 @@
-import React from 'react';
-import { styled } from 'goober';
+import { styled } from 'goober'
 
-import { Link } from './Link';
+import { Link } from './Link'
 
 const Wrapper = styled('footer')`
   align-items: center;
   display: flex;
   justify-content: center;
-`;
+`
 
 /** TODO: &nbsp; isn't working in htm */
 const Footer = () => (
@@ -26,6 +25,6 @@ const Footer = () => (
       Blog
     </Link>
   </Wrapper>
-);
+)
 
-export default Footer;
+export default Footer

@@ -13,24 +13,24 @@ const ListItem = styled('li')`
   font-size: 18px;
   margin-bottom: 12px;
   margin-top: 12px;
-`;
+`
 
 const Block = styled('div')`
   margin-bottom: 32px;
-`;
+`
 
 const Title = styled('h1')`
   margin-top: 28px;
   text-decoration: underline;
-`;
+`
 
-const SubTitle = styled('h2')``;
+const SubTitle = styled('h2')``
 
 const Prelude = styled('p')`
   font-size: 18px;
   margin: 0;
   text-align: justify;
-`;
+`
 
 export default () => (
   <Layout>
@@ -39,10 +39,10 @@ export default () => (
       <Title>Jovi De Croock</Title>
       <SubTitle>Passionate Software Engineer</SubTitle>
       <Prelude>
-        When growing up I discovered a passion for IT, this grew into me
-        working at a hardware store and eventually into finding my passion for
-        programming. This passion turnmed me to study software engineering, freelancer
-        assignments and my job.
+        When growing up I discovered a passion for IT, this grew into me working
+        at a hardware store and eventually into finding my passion for
+        programming. This passion turnmed me to study software engineering,
+        freelancer assignments and my job.
         <br />
         <br />
         Nowadays my passion mainly goes to the architectural side of
@@ -117,7 +117,10 @@ export default () => (
           &nbsp;- Fast-refresh for Preact
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://github.com/JoviDeCroock/hooked-form">
+          <Link
+            target="blank"
+            href="https://github.com/JoviDeCroock/hooked-form"
+          >
             Hooked-form
           </Link>
           &nbsp;- Lightweight React form library
@@ -162,7 +165,9 @@ export default () => (
       <SubTitle>Achievements</SubTitle>
       <ul>
         <ListItem>Google Open Source Peer Bonus - Q4 2019</ListItem>
-        <ListItem>Helped implement a complex entity-level authorisation system</ListItem>
+        <ListItem>
+          Helped implement a complex entity-level authorisation system
+        </ListItem>
         <ListItem>
           Tennis handicap prediction algorithm, focussed on beating bookmakers
         </ListItem>
@@ -172,7 +177,9 @@ export default () => (
     <Block>
       <SubTitle>Interests</SubTitle>
       <ul>
-        <ListItem>Non-fiction books (programming, self-improvement,...)</ListItem>
+        <ListItem>
+          Non-fiction books (programming, self-improvement,...)
+        </ListItem>
         <ListItem>Psychology</ListItem>
         <ListItem>Music</ListItem>
       </ul>

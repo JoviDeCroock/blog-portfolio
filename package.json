@@ -7,13 +7,12 @@
   "license": "MIT",
   "scripts": {
     "dev": "wmr",
-    "format": "prettier --trailing-comma es5 --no-semi --single-quote --write 'src/**/*.js' 'src/**/*.md'",
+    "format": "prettier --trailing-comma es5 --no-semi --single-quote --write 'public/**/*.tsx'",
     "build": "wmr build --prerender"
   },
   "dependencies": {
     "goober": "^2.0.37",
     "hoofd": "^1.2.2",
-    "hooked-head": "0.4.0",
     "preact": "^10.5.13",
     "preact-iso": "^2.0.0",
     "preact-render-to-string": "^5.1.19"
