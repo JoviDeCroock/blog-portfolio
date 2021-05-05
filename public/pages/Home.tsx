@@ -1,65 +1,58 @@
-import React from 'react'
-import styled from 'styled-components'
+import { styled } from 'goober'
 import Layout from '../components/Layout'
-import SEO from '../components/seo'
 import SkillIndicator from '../components/SkillIndicator'
+import { Link } from '../components/Link'
+import SEO from '../components/Seo'
 
-const Hero = styled.div`
+const Hero = styled('div')`
   background: white;
   width: 100%;
 `
 
-const ListItem = styled.li`
+const ListItem = styled('li')`
   font-size: 18px;
   margin-bottom: 12px;
   margin-top: 12px;
-`;
+`
 
-const Block = styled.div`
+const Block = styled('div')`
   margin-bottom: 32px;
-`;
+`
 
-const Title = styled.h1`
+const Title = styled('h1')`
   margin-top: 28px;
   text-decoration: underline;
-`;
+`
 
-const SubTitle = styled.h2``;
+const SubTitle = styled('h2')``
 
-const Prelude = styled.p`
+const Prelude = styled('p')`
   font-size: 18px;
   margin: 0;
   text-align: justify;
-`;
-
-export const Link = styled.a`
-  color: #0c5bdb;
-  &:visited {
-    color: #0c5bdb;
-  }
-`;
+`
 
 export default () => (
   <Layout>
-    <SEO title="Portfolio" />
+    <SEO />
     <Hero>
       <Title>Jovi De Croock</Title>
       <SubTitle>Passionate Software Engineer</SubTitle>
       <Prelude>
-        When growing up I discovered a passion for IT, this grew into me
-        working at a hardware store and eventually into finding my passion for
-        programming. This passion turnmed me to study software engineering, freelancer
-        assignments and my job.
+        When growing up I discovered a passion for IT, this grew into me working{" "}
+        at a hardware store and eventually into finding my passion for{" "}
+        programming. This passion turnmed me to study software engineering,{" "}
+        freelancer assignments and my job.
         <br />
         <br />
-        Nowadays my passion mainly goes to the architectural side of
-        programming. Finding elegant solutions to complex behavior is my
-        favorite challenge. Another thing I find a deep interest in is
+        Nowadays my passion mainly goes to the architectural side of{" "}
+        programming. Finding elegant solutions to complex behavior is my{" "}
+        favorite challenge. Another thing I find a deep interest in is{" "}
         optimising performance.
         <br />
         <br />
-        At this point I am 25 years old and trying to learn the best practices
-        from my awesome co-workers, in the hope of being able to one day share
+        At this point I am 25 years old and trying to learn the best practices{" "}
+        from my awesome co-workers, in the hope of being able to one day share{" "}
         my knowledge with everyone.
       </Prelude>
     </Hero>
@@ -72,13 +65,13 @@ export default () => (
           <Link target="blank" href="https://codifly.be">
             Codifly
           </Link>
-          &nbsp;- Web and Mobile engineer
+          {" "}- Web and Mobile engineer
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://formidable.com/">
             Formidable
           </Link>
-          &nbsp;- Senior software engineer - Tech lead
+          {" "}- Senior software engineer - Tech lead
         </ListItem>
       </ul>
     </Block>
@@ -86,9 +79,11 @@ export default () => (
       <SubTitle>Skills</SubTitle>
       <SkillIndicator title="Node.js" level={9} />
       <SkillIndicator title="JavaScript/TypeScript" level={9} />
-      <SkillIndicator title="(P)React" level={8.5} />
-      <SkillIndicator title="GraphQL" level={8} />
+      <SkillIndicator title="(P)React" level={9.5} />
+      <SkillIndicator title="GraphQL" level={9} />
+      <SkillIndicator title="Terraform" level={8} />
       <SkillIndicator title="React-Native" level={7.5} />
+      <SkillIndicator title="AWS" level={7} />
       <SkillIndicator title="SQL" level={7} />
     </Block>
     <Block>
@@ -98,19 +93,19 @@ export default () => (
           <Link target="blank" href="https://github.com/preactjs/preact">
             Preact
           </Link>
-          &nbsp;maintainer (core team)
+          {" "}maintainer (core team)
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/preactjs/wmr">
             wmr
           </Link>
-          &nbsp;maintainer (core team)
+          {" "}maintainer (core team)
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/formidablelabs/urql">
             Urql
           </Link>
-          &nbsp;maintainer (core team)
+          {" "}maintainer (core team)
         </ListItem>
       </ul>
     </Block>
@@ -121,31 +116,34 @@ export default () => (
           <Link target="blank" href="https://github.com/JoviDeCroock/prefresh">
             Prefresh
           </Link>
-          &nbsp;- Fast-refresh for Preact
+          {" "}- Fast-refresh for Preact
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://github.com/JoviDeCroock/hooked-form">
+          <Link
+            target="blank"
+            href="https://github.com/JoviDeCroock/hooked-form"
+          >
             Hooked-form
           </Link>
-          &nbsp;- Lightweight React form library
+          {" "}- Lightweight React form library
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/JoviDeCroock/pranimate">
             pranimate
           </Link>
-          &nbsp;- Lightweight Animations for Preact
+          {" "}- Lightweight Animations for Preact
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/JoviDeCroock/hoofd">
             Hoofd
           </Link>
-          &nbsp;- Lightweight (P)React head library
+          {" "}- Lightweight (P)React head library
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/worldpins">
             Worldpins
           </Link>
-          &nbsp;- GraphQL Apollo Koa React application
+          {" "}- GraphQL Apollo Koa React application
         </ListItem>
         <ListItem>
           <Link
@@ -169,7 +167,9 @@ export default () => (
       <SubTitle>Achievements</SubTitle>
       <ul>
         <ListItem>Google Open Source Peer Bonus - Q4 2019</ListItem>
-        <ListItem>Helped implement a complex entity-level authorisation system</ListItem>
+        <ListItem>
+          Helped implement a complex entity-level authorisation system
+        </ListItem>
         <ListItem>
           Tennis handicap prediction algorithm, focussed on beating bookmakers
         </ListItem>
@@ -179,7 +179,9 @@ export default () => (
     <Block>
       <SubTitle>Interests</SubTitle>
       <ul>
-        <ListItem>Non-fiction books (programming, self-improvement,...)</ListItem>
+        <ListItem>
+          Non-fiction books (programming, self-improvement,...)
+        </ListItem>
         <ListItem>Psychology</ListItem>
         <ListItem>Music</ListItem>
       </ul>

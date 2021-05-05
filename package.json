@@ -1,42 +1,26 @@
 {
-  "name": "jovidecroock",
+  "name": "portfolio",
   "private": true,
-  "description": "My own portfolio",
-  "version": "1.0.0",
   "author": "Jovi De Croock",
+  "description": "My own portfolio",
+  "homepage": "https://jovidecroock.com/",
+  "license": "MIT",
+  "scripts": {
+    "dev": "wmr",
+    "format": "prettier --trailing-comma es5 --no-semi --single-quote --write 'public/**/*.tsx'",
+    "build": "wmr build --prerender"
+  },
   "dependencies": {
-    "babel-plugin-styled-components": "1.10.7",
-    "gatsby": "2.20.36",
-    "gatsby-image": "2.3.5",
-    "gatsby-plugin-hooked-head": "^0.1.1",
-    "gatsby-plugin-manifest": "2.3.7",
-    "gatsby-plugin-no-javascript": "2.0.5",
-    "gatsby-plugin-offline": "2.0.25",
-    "gatsby-plugin-styled-components": "3.2.4",
-    "gatsby-remark-images": "2.0.4",
-    "gatsby-remark-responsive-iframe": "2.3.4",
-    "gatsby-remark-smartypants": "2.2.4",
-    "gatsby-source-filesystem": "2.2.5",
-    "gatsby-transformer-remark": "2.7.5",
-    "hooked-head": "0.4.0",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "styled-components": "4.4.1"
+    "goober": "^2.0.37",
+    "hoofd": "^1.2.2",
+    "preact": "^10.5.13",
+    "preact-iso": "^2.0.0",
+    "preact-render-to-string": "^5.1.19"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.11.1",
-    "prettier": "^1.14.2"
-  },
-  "license": "MIT",
-  "main": "n/a",
-  "scripts": {
-    "dev": "gatsby develop",
-    "lint": "eslint --ext .js,.jsx --ignore-pattern public .",
-    "format": "prettier --trailing-comma es5 --no-semi --single-quote --write 'src/**/*.js' 'src/**/*.md'",
-    "develop": "gatsby develop",
-    "start": "npm run develop",
-    "build": "gatsby build"
-  },
-  "homepage": "https://jovidecroock.com/"
+    "prettier": "^1.14.2",
+    "wmr": "^2.0.0"
+  }
 }

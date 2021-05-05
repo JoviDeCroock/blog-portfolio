@@ -54,9 +54,9 @@ typings/
 # dotenv environment variables file
 .env
 
-# gatsby files
+# WMR
 .cache/
-public
+dist
 
 # Mac files
 .DS_Store
