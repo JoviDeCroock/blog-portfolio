@@ -65,13 +65,13 @@ export default () => (
           <Link target="blank" href="https://codifly.be">
             Codifly
           </Link>
-          &nbsp;- Web and Mobile engineer
+          {" "}- Web and Mobile engineer
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://formidable.com/">
             Formidable
           </Link>
-          &nbsp;- Senior software engineer - Tech lead
+          {" "}- Senior software engineer - Tech lead
         </ListItem>
       </ul>
     </Block>
@@ -91,19 +91,19 @@ export default () => (
           <Link target="blank" href="https://github.com/preactjs/preact">
             Preact
           </Link>
-          &nbsp;maintainer (core team)
+          {" "}maintainer (core team)
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/preactjs/wmr">
             wmr
           </Link>
-          &nbsp;maintainer (core team)
+          {" "}maintainer (core team)
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/formidablelabs/urql">
             Urql
           </Link>
-          &nbsp;maintainer (core team)
+          {" "}maintainer (core team)
         </ListItem>
       </ul>
     </Block>
@@ -114,7 +114,7 @@ export default () => (
           <Link target="blank" href="https://github.com/JoviDeCroock/prefresh">
             Prefresh
           </Link>
-          &nbsp;- Fast-refresh for Preact
+          {" "}- Fast-refresh for Preact
         </ListItem>
         <ListItem>
           <Link
@@ -123,25 +123,25 @@ export default () => (
           >
             Hooked-form
           </Link>
-          &nbsp;- Lightweight React form library
+          {" "}- Lightweight React form library
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/JoviDeCroock/pranimate">
             pranimate
           </Link>
-          &nbsp;- Lightweight Animations for Preact
+          {" "}- Lightweight Animations for Preact
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/JoviDeCroock/hoofd">
             Hoofd
           </Link>
-          &nbsp;- Lightweight (P)React head library
+          {" "}- Lightweight (P)React head library
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/worldpins">
             Worldpins
           </Link>
-          &nbsp;- GraphQL Apollo Koa React application
+          {" "}- GraphQL Apollo Koa React application
         </ListItem>
         <ListItem>
           <Link
