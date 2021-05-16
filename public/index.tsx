@@ -1,7 +1,6 @@
 import { h } from 'preact'
 import { setup } from 'goober'
-import { LocationProvider, Router, hydrate, prerender as ssr } from 'preact-iso'
-import { toStatic } from 'hoofd/preact'
+import { LocationProvider, Router, hydrate } from 'preact-iso'
 import Home from './pages/Home'
 import NotFound from './pages/404'
 
@@ -23,6 +22,8 @@ export function App() {
 hydrate(<App />)
 
 export async function prerender(data) {
+  const { toStatic } = await import('hoofd/preact')
+  const { prerender as ssr } = await import('preact-iso')
   const { extractCss } = await import('goober')
 
   const res = await ssr(<App {...data} />)
