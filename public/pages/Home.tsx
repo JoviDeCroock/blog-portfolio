@@ -39,20 +39,20 @@ export default () => (
       <Title>Jovi De Croock</Title>
       <SubTitle>Passionate Software Engineer</SubTitle>
       <Prelude>
-        When growing up I discovered a passion for IT, this grew into me working{" "}
-        at a hardware store and eventually into finding my passion for{" "}
-        programming. This passion turnmed me to study software engineering,{" "}
+        When growing up I discovered a passion for IT, this grew into me working{' '}
+        at a hardware store and eventually into finding my passion for{' '}
+        programming. This passion turnmed me to study software engineering,{' '}
         freelancer assignments and my job.
         <br />
         <br />
-        Nowadays my passion mainly goes to the architectural side of{" "}
-        programming. Finding elegant solutions to complex behavior is my{" "}
-        favorite challenge. Another thing I find a deep interest in is{" "}
+        Nowadays my passion mainly goes to the architectural side of{' '}
+        programming. Finding elegant solutions to complex behavior is my{' '}
+        favorite challenge. Another thing I find a deep interest in is{' '}
         optimising performance.
         <br />
         <br />
-        At this point I am 25 years old and trying to learn the best practices{" "}
-        from my awesome co-workers, in the hope of being able to one day share{" "}
+        At this point I am 25 years old and trying to learn the best practices{' '}
+        from my awesome co-workers, in the hope of being able to one day share{' '}
         my knowledge with everyone.
       </Prelude>
     </Hero>
@@ -64,14 +64,14 @@ export default () => (
         <ListItem>
           <Link target="blank" href="https://codifly.be">
             Codifly
-          </Link>
-          {" "}- Web and Mobile engineer
+          </Link>{' '}
+          - Web and Mobile engineer
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://formidable.com/">
             Formidable
-          </Link>
-          {" "}- Senior software engineer - Tech lead
+          </Link>{' '}
+          - Senior software engineer - Tech lead
         </ListItem>
       </ul>
     </Block>
@@ -92,20 +92,20 @@ export default () => (
         <ListItem>
           <Link target="blank" href="https://github.com/preactjs/preact">
             Preact
-          </Link>
-          {" "}maintainer (core team)
+          </Link>{' '}
+          maintainer (core team)
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/preactjs/wmr">
             wmr
-          </Link>
-          {" "}maintainer (core team)
+          </Link>{' '}
+          maintainer (core team)
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/formidablelabs/urql">
             Urql
-          </Link>
-          {" "}maintainer (core team)
+          </Link>{' '}
+          maintainer (core team)
         </ListItem>
       </ul>
     </Block>
@@ -115,8 +115,8 @@ export default () => (
         <ListItem>
           <Link target="blank" href="https://github.com/JoviDeCroock/prefresh">
             Prefresh
-          </Link>
-          {" "}- Fast-refresh for Preact
+          </Link>{' '}
+          - Fast-refresh for Preact
         </ListItem>
         <ListItem>
           <Link
@@ -124,26 +124,26 @@ export default () => (
             href="https://github.com/JoviDeCroock/hooked-form"
           >
             Hooked-form
-          </Link>
-          {" "}- Lightweight React form library
+          </Link>{' '}
+          - Lightweight React form library
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/JoviDeCroock/pranimate">
             pranimate
-          </Link>
-          {" "}- Lightweight Animations for Preact
+          </Link>{' '}
+          - Lightweight Animations for Preact
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/JoviDeCroock/hoofd">
             Hoofd
-          </Link>
-          {" "}- Lightweight (P)React head library
+          </Link>{' '}
+          - Lightweight (P)React head library
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/worldpins">
             Worldpins
-          </Link>
-          {" "}- GraphQL Apollo Koa React application
+          </Link>{' '}
+          - GraphQL Apollo Koa React application
         </ListItem>
         <ListItem>
           <Link

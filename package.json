@@ -1,26 +1,36 @@
 {
-  "name": "portfolio",
-  "private": true,
-  "author": "Jovi De Croock",
-  "description": "My own portfolio",
-  "homepage": "https://jovidecroock.com/",
-  "license": "MIT",
-  "scripts": {
-    "dev": "wmr",
-    "format": "prettier --trailing-comma es5 --no-semi --single-quote --write 'public/**/*.tsx'",
-    "build": "wmr build --prerender"
-  },
-  "dependencies": {
-    "goober": "^2.0.37",
-    "hoofd": "^1.2.2",
-    "preact": "^10.5.13",
-    "preact-iso": "^2.0.0",
-    "preact-render-to-string": "^5.1.19"
-  },
-  "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-plugin-react": "^7.11.1",
-    "prettier": "^1.14.2",
-    "wmr": "^2.0.0"
+ "name": "portfolio",
+ "private": true,
+ "author": "Jovi De Croock",
+ "description": "My own portfolio",
+ "homepage": "https://jovidecroock.com/",
+ "license": "MIT",
+ "scripts": {
+  "dev": "wmr",
+  "format": "prettier --write public/**/*.tsx",
+  "build": "wmr build --prerender"
+ },
+ "dependencies": {
+  "goober": "^2.0.37",
+  "hoofd": "^1.2.2",
+  "preact": "^10.5.13",
+  "preact-iso": "^2.0.0",
+  "preact-render-to-string": "^5.1.19"
+ },
+ "devDependencies": {
+  "husky": "^6.0.0",
+  "lint-staged": "^11.0.0",
+  "prettier": "^1.14.2",
+  "wmr": "^2.0.0"
+ },
+ "lint-staged": {
+  "public/**/.tsx": [
+   "prettier --write"
+  ]
+ },
+ "husky": {
+  "hooks": {
+   "pre-commit": "lint-staged"
   }
+ }
 }

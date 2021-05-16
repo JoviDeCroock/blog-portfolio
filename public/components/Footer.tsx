@@ -9,7 +9,7 @@ const Wrapper = styled('footer')`
 
 const FooterLink = styled(Link)`
   margin: 0 6px;
-`;
+`
 
 const Footer = () => (
   <Wrapper>
@@ -20,9 +20,7 @@ const Footer = () => (
     <FooterLink target="blank" href="https://www.github.com/jovidecroock">
       Github
     </FooterLink>
-    -
-    <FooterLink href="mailto:decroockjovi@gmail.com">Contact</FooterLink>
-    -
+    -<FooterLink href="mailto:decroockjovi@gmail.com">Contact</FooterLink>-
     <FooterLink target="blank" href="https://dev.to/jovidecroock">
       Blog
     </FooterLink>

@@ -1,11 +1,6 @@
 import { h } from 'preact'
 import { setup } from 'goober'
-import {
-  LocationProvider,
-  Router,
-  hydrate,
-  prerender as ssr
-} from 'preact-iso'
+import { LocationProvider, Router, hydrate, prerender as ssr } from 'preact-iso'
 import { toStatic } from 'hoofd/preact'
 import Home from './pages/Home'
 import NotFound from './pages/404'
@@ -28,7 +23,7 @@ export function App() {
 hydrate(<App />)
 
 export async function prerender(data) {
-  const { extractCss } = await import('goober');
+  const { extractCss } = await import('goober')
 
   const res = await ssr(<App {...data} />)
 
@@ -37,7 +32,7 @@ export async function prerender(data) {
     ...head.links.map(props => ({ type: 'link', props })),
     ...head.metas.map(props => ({ type: 'meta', props })),
     `<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e032b43ad8dd4e7797f9dc4d2afbce64"}'></script>`,
-    `<style id="_goober">${extractCss()}</style>`
+    `<style id="_goober">${extractCss()}</style>`,
   ])
 
   return {
