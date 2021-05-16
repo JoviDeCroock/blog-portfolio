@@ -23,7 +23,7 @@ hydrate(<App />)
 
 export async function prerender(data) {
   const { toStatic } = await import('hoofd/preact')
-  const { prerender as ssr } = await import('preact-iso')
+  const { prerender: ssr } = await import('preact-iso')
   const { extractCss } = await import('goober')
 
   const res = await ssr(<App {...data} />)
