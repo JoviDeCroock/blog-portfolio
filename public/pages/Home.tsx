@@ -73,6 +73,12 @@ export default () => (
           </Link>{' '}
           - Senior software engineer - Tech lead
         </ListItem>
+        <ListItem>
+          <Link target="blank" href="https://graphcdn.io/">
+            GraphCDN
+          </Link>{' '}
+          - Staff Software Engineer
+        </ListItem>
       </ul>
     </Block>
     <Block>
