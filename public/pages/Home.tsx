@@ -51,7 +51,7 @@ export default () => (
         optimising performance.
         <br />
         <br />
-        At this point I am 25 years old and trying to learn the best practices{' '}
+        At this point I am 26 years old and trying to learn the best practices{' '}
         from my awesome co-workers, in the hope of being able to one day share{' '}
         my knowledge with everyone.
       </Prelude>
@@ -102,12 +102,6 @@ export default () => (
           maintainer (core team)
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://github.com/preactjs/wmr">
-            wmr
-          </Link>{' '}
-          maintainer (core team)
-        </ListItem>
-        <ListItem>
           <Link target="blank" href="https://github.com/formidablelabs/urql">
             Urql
           </Link>{' '}
@@ -119,7 +113,7 @@ export default () => (
       <SubTitle>Projects by me</SubTitle>
       <ul>
         <ListItem>
-          <Link target="blank" href="https://github.com/JoviDeCroock/prefresh">
+          <Link target="blank" href="https://github.com/preactjs/prefresh">
             Prefresh
           </Link>{' '}
           - Fast-refresh for Preact
@@ -134,10 +128,10 @@ export default () => (
           - Lightweight React form library
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://github.com/JoviDeCroock/pranimate">
-            pranimate
+          <Link target="blank" href="https://github.com/JoviDeCroock/use-web-animation">
+            use-web-animation
           </Link>{' '}
-          - Lightweight Animations for Preact
+          - Lightweight library leveraging web-animations
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/JoviDeCroock/hoofd">
@@ -157,14 +151,6 @@ export default () => (
             href="https://github.com/JoviDeCroock/webpack-module-nomodule-plugin"
           >
             module-nomodule webpack plugin
-          </Link>
-        </ListItem>
-        <ListItem>
-          <Link
-            target="blank"
-            href="https://github.com/JoviDeCroock/webpack-syntax-resolver-plugin"
-          >
-            syntax resolver webpack plugin
           </Link>
         </ListItem>
       </ul>
