@@ -59,7 +59,7 @@ export default () => (
     <Block>
       <SubTitle>Experience</SubTitle>
       <ul>
-        <ListItem>VHTI Dendermonde - IT</ListItem>
+        <ListItem>VHTI Dendermonde - Hardware</ListItem>
         <ListItem>HoGent - Applied IT</ListItem>
         <ListItem>
           <Link target="blank" href="https://codifly.be">
