@@ -1,3 +1,5 @@
+import StateEquality from '../../components/vdom-compilers/State-Equality.tsx'
+
 export const documentProps = {
   title: 'Virtual Dom and compilers',
   description: 'As one of the core maintainers of Preact I think a lot about VDOM and how to optimize...',
@@ -16,6 +18,8 @@ a component will switch the border-color for a bit so we can see how many times 
 
 When we look at the example of `setState` we have a few advantages with using simple values like a string/number/... as
 opposed to an object or array. It's much easier for a library to assess whether these are equal
+
+<StateEquality />
 
 ## Strict equality
 
