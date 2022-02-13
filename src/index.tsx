@@ -12,6 +12,14 @@ const GlobalStyles = createGlobalStyles`
     box-sizing: border-box;
   }
 
+  blockquote {
+    display: flex;
+    text-align: center;
+    border-left: 1px solid grey;
+    margin-left: 24px;
+    padding-left: 12px;
+  }
+
   html, body {
     padding: 0;
     margin: 0;
