@@ -1,0 +1,26 @@
+export const documentProps = {
+  title: 'Virtual Dom and compilers',
+  description: 'As one of the core maintainers of Preact I think a lot about VDOM and how to optimize...',
+  path: '/vdom-compilers'
+};
+
+# Virtual Dom and compilers
+
+As one of the core maintainers of Preact I think a lot about VDOM and how to optimize, there are a lot of
+optmizations that are easy to miss in Virtual DOM. We often get told to leverage `shouldComponentUpdate` or `memo`.
+These are a few of the more obvious optmizations as they are explicitly documented and we can reaon about them while
+we explicitly use them. Let's look at a few of the less obvious ones, in the examples we'll notice that a rerender of
+a component will switch the border-color for a bit so we can see how many times everything rerenders.
+
+## Equal state
+
+When we look at the example of `setState` we have a few advantages with using simple values like a string/number/... as
+opposed to an object or array. It's much easier for a library to assess whether these are equal
+
+## Strict equality
+
+... yes...
+
+## Partial hydration
+
+This is one that we spent quite some time on in Preact...

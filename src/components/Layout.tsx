@@ -1,4 +1,5 @@
 import { styled } from 'goober'
+import { VNode } from 'preact'
 import Footer from './Footer'
 import { Link } from './Text'
 
@@ -14,8 +15,9 @@ const Nav = styled('nav')`
   margin-right: auto;
   display: flex;
   justify-content: space-between;
-  padding: 2.625rem 1.3125rem;
+  padding: 0.5rem;
   max-width: 10rem;
+  border-bottom: 1px solid black;
 `
 
 const Header = () => (
@@ -29,10 +31,14 @@ const Header = () => (
   </Nav>
 )
 
-const Layout = ({ children }) => (
+export type LayoutProps = {
+  children?: VNode;
+}
+
+const Layout = (props: LayoutProps) => (
   <Wrapper>
     <Header />
-    {children}
+    {props.children}
     <Footer />
   </Wrapper>
 )
