@@ -9,7 +9,6 @@ const Hero = styled('div')`
 `
 
 const ListItem = styled('li')`
-  font-size: 18px;
   margin-bottom: 12px;
   margin-top: 12px;
 `

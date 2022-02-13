@@ -27,6 +27,15 @@ const GlobalStyles = createGlobalStyles`
     margin-bottom: 0.5em;
     line-height: 1;
   }
+
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5em;
+  }
+
+  p, a, li {
+    font-size: 1rem;
+  }
 `
 
 setup(h)

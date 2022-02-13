@@ -17,9 +17,8 @@ const Summary = styled('div')`
 `
 
 const TitleLink = styled(Link)`
-  font-size: 2rem;
+  font-size: 2.5rem;
   text-decoration: underline;
-  margin-bottom: 0.5rem;
   font-weight: bold;
 `
 
