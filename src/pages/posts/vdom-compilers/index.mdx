@@ -54,7 +54,9 @@ const Counter = () => {
     <div>
       <p>Count: {count}</p>
       <div style="display:flex;">
-        <button onClick={() => setCount((c) => c - 1)}>-1</button>
+        <button onClick={() => setCount((c) => c - 1)}>
+          -1
+        </button>
         <button onClick={() => setCount((c) => c + 1)}>
           +1
         </button>
@@ -68,7 +70,11 @@ const Layout = (props) => {
 
   return (
     <main>
-      <button onClick={() => setDarkMode((dark) => !dark)}>set {darkMode ? "Light" : "Dark"} Mode</button>
+      <button
+        onClick={() => setDarkMode((dark) => !dark)}
+      >
+        set {darkMode ? "Light" : "Dark"} Mode
+      </button>
       {props.children}
     </main>
   )
