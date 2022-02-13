@@ -1,23 +1,29 @@
 import { useLink } from 'hoofd/preact'
 import Layout from '../../components/Layout'
-import Ramblings, {
-  documentProps as ramblingDocumentProps,
+import SEO from '../../components/Seo'
+import VdomOptimizations, {
+  documentProps as vdomDocumentProps,
 } from './vdom-compilers/index.mdx'
 
 export default [
   {
-    ...ramblingDocumentProps,
+    ...vdomDocumentProps,
     Component: () => {
       useLink({
         rel: 'stylesheet',
         href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github-dark.min.css'
       })
+
       return (
         <Layout>
-          <Ramblings />
+          <SEO
+            title={vdomDocumentProps.title}
+            description={vdomDocumentProps.description}
+          />
+          <VdomOptimizations />
         </Layout>
       )
     },
-    path: '/blog' + ramblingDocumentProps.path,
+    path: '/blog' + vdomDocumentProps.path,
   },
 ]

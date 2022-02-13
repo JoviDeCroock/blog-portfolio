@@ -19,7 +19,10 @@ const Block = styled('div')`
 
 export default () => (
   <Layout>
-    <SEO />
+    <SEO
+      title='Portfolio'
+      description='About my career up to now and my skills.'
+    />
     <Hero>
       <Title>Jovi De Croock</Title>
       <SubTitle>Software Engineer</SubTitle>
