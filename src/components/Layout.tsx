@@ -7,38 +7,48 @@ const Wrapper = styled('div')`
   margin-left: auto;
   margin-right: auto;
   max-width: 42rem;
-  padding: 2.625rem 1.3125rem;
+  padding: 2rem 1.3125rem;
+
+  /* Sticky footer */
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+`
+
+const Main = styled('main')`
+  /* Sticky footer */
+  flex: 1;
 `
 
 const Nav = styled('nav')`
   margin-left: auto;
   margin-right: auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 3rem;
   padding: 0.5rem;
-  max-width: 10rem;
-  border-bottom: 1px solid black;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 1rem;
 `
 
 const Header = () => (
-  <Nav>
-    <Link href="/">
-      Home
-    </Link>
-    <Link href="/blog">
-      Blog
-    </Link>
-  </Nav>
+  <header>
+    <Nav>
+      <Link href="/">Home</Link>
+      <Link href="/blog">Blog</Link>
+    </Nav>
+  </header>
 )
 
 export type LayoutProps = {
-  children?: VNode;
+  children?: VNode
 }
 
 const Layout = (props: LayoutProps) => (
   <Wrapper>
     <Header />
-    {props.children}
+    <Main>{props.children}</Main>
     <Footer />
   </Wrapper>
 )

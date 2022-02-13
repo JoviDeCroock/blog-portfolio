@@ -11,7 +11,7 @@ const Block = styled('main')`
 `
 
 const Summary = styled('div')`
-  padding: 1rem;
+  padding: 1rem 0;
   display: flex;
   flex-direction: column;
 `
@@ -20,13 +20,14 @@ const TitleLink = styled(Link)`
   font-size: 2rem;
   text-decoration: underline;
   margin-bottom: 0.5rem;
+  font-weight: bold;
 `
 
 export default () => (
   <Layout>
     <Title>Blog</Title>
     <Block>
-      {posts.map(post => (
+      {posts.map((post) => (
         <Summary>
           <TitleLink href={post.path}>{post.title}</TitleLink>
           <Prelude>{post.description}</Prelude>

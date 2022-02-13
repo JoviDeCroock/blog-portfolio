@@ -2,7 +2,8 @@ import { styled } from 'goober'
 
 export const Title = styled('h1')`
   margin-top: 28px;
-  text-decoration: underline;
+  font-size: 3rem;
+  margin-bottom: 0em;
 `
 
 export const SubTitle = styled('h2')``
@@ -10,7 +11,6 @@ export const SubTitle = styled('h2')``
 export const Prelude = styled('p')`
   font-size: 18px;
   margin: 0;
-  text-align: justify;
 `
 
 export const Link = styled('a')`
