@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks'
-import { RerenderTracker, DOMMutationTracker } from './common'
+import { RerenderTracker } from './common'
 
 const Counter = () => {
   const [count, setCount] = useState(0)
@@ -23,9 +23,7 @@ const Counter = () => {
 const App = () => {
   return (
     <div style="border: 1px solid black; padding: 4px 8px">
-      <DOMMutationTracker>
-        <Counter />
-      </DOMMutationTracker>
+      <Counter />
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks'
-import { RerenderTracker, DOMMutationTracker } from './common'
+import { RerenderTracker } from './common'
 
 const Counter = (props) => {
   const [count, setCount] = useState(0)
