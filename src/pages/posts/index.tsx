@@ -1,5 +1,7 @@
 import Layout from '../../components/Layout'
-import Ramblings, { documentProps as ramblingDocumentProps } from './vdom-compilers/index.mdx'
+import Ramblings, {
+  documentProps as ramblingDocumentProps,
+} from './vdom-compilers/index.mdx'
 
 export default [
   {
@@ -10,5 +12,5 @@ export default [
       </Layout>
     ),
     path: '/blog' + ramblingDocumentProps.path,
-  }
+  },
 ]

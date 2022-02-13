@@ -28,8 +28,8 @@
   "vite": "^2.8.1"
  },
  "lint-staged": {
-  "public/**/.tsx": [
-   "prettier --write"
+  "src/**/.tsx": [
+    "prettier --write"
   ]
  },
  "husky": {
