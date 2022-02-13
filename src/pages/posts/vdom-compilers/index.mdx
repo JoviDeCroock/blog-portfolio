@@ -1,0 +1,156 @@
+import StateEquality from './State-Equality.tsx'
+import StrictEquality from './Strict-Equality.tsx'
+
+export const documentProps = {
+  title: 'Virtual Dom optimizations',
+  description:
+    'As one of the core maintainers of Preact I think a lot about VDOM and how to optimize the common actions of library-consumers.',
+  path: '/vdom-compilers',
+  tags: ['vdom', 'front-end']
+}
+
+# Virtual Dom optimizations
+
+As one of the core maintainers of Preact I think a lot about Virtual DOM and how to optimize it, there are a lot of
+optmizations that are easy to miss in Virtual DOM. We often get told to leverage `shouldComponentUpdate` or `memo` to
+avoid excessive rerendering of a component.
+These are a few of the more obvious optmizations as they are explicitly documented and we can reaon about them while
+we explicitly use them. However the Virtual DOM leverages a lot more subtile optimizations that most might not be aware of.
+Let's look at a few of the less obvious ones, in the examples we'll notice that the rerenders
+are counted for the functional components.
+
+## Equal state
+
+When we look at the example of `setState` we have a few advantages with using simple values like a string/number/... as
+opposed to an object or array. It's much easier for a library to assess whether these are equal and if they are eqaul given
+that we expect component functions to be pure we can assume the output to be the same as before.
+
+In the following example we have a counter component that has a minimum value of 0 and a maximum value of 10, when we reach these
+it will color red, the buttons are still pressable but the state will remain 0 or 10 respectively which means our virtual dom is smart
+enough to bail out of this render.
+
+<StateEquality />
+
+This is an optimization that will often be seen when we bail out of `<input>` updates when we are applying rules like `max-length` in our
+component code. This optimization is hard to explicitly leverage but you can use it to skip some updates or atleast it's good to be aware
+why a mutation on an object or array is not resulting in your component updating.
+
+## Strict equality
+
+This optimization is a bit trickier so bear with me on this one, the strict-equality or child-equality bailout is a very neat assumptions
+that Virtual DOM libraries can make and is very related to passing in props to a component.
+
+Let's start by approaching this from the theoretical perspective and then look at an example, when we produce Virtual DOM Nodes by means of the
+`createElement` or `jsx` function we get an in-memory representation of a piece of your UI.
+
+> Your transpiler (ESBuild/Babel/...) will transform your JSX into these function calls.
+
+When these visual representations don't change it's essentially useless to run our diff algorithm for the unchanged subtree. This means that if
+we pass in `children` to a component that the diff of those children can be skipped if the update is internal to that component alone.
+
+```jsx
+const Counter = () => {
+  const [count, setCount] = useState(0)
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <div style="display:flex;">
+        <button onClick={() => setCount((c) => c - 1)}>
+          -1
+        </button>
+        <button onClick={() => setCount((c) => c + 1)}>
+          +1
+        </button>
+      </div>
+    </div>
+  )
+}
+
+const Layout = (props) => {
+  const [darkMode, setDarkMode] = useState(false)
+
+  return (
+    <main>
+      <button
+        onClick={() => setDarkMode((dark) => !dark)}
+      >
+        set {darkMode ? "Light" : "Dark"} Mode
+      </button>
+      {props.children}
+    </main>
+  )
+}
+
+const App = () => (
+  <Layout>
+    <Counter />
+    <Counter />
+  </Layout>
+)
+```
+
+In the above example, when we toggle our dark-mode we can safely assume that it didn't impact any of the `children` contained in
+`Layout` that came from `App`. This because the Virtual DOM nodes we are passing in stay the same as `App` is not re-rendering, a
+rerender stemming from `App` here would rerender everything.
+
+Have a play with it yourself!
+
+<StrictEquality />
+
+This optimization becomes especially helpful when we consider the case of `context` we can isolate the `Provider` and its state update
+to be isolated rather than a top-down render, with sufficient knowledge about the isolation of the leaves getting updated by the context
+you can use this optimization for that as well. This all depends on how expensive the components are that are getting updated and as always
+I would love to emphasize that making it work should always take priority 😅
+
+## Partial hydration
+
+I must say this is one of the things I'm particularly proud of and just happy that we as an ecosystem are investing time in these principles,
+there are some good articles on hydration and the different perspectives on how a server-side renderd app should be hydrated. I love
+to refer to the [Islands architecture blog post by Jason Miller](https://jasonformat.com/islands-architecture/).
+
+I like to think of this as we defer hydrating the DOM for pieces we don't need, currently in Preact we have a heuristic for this with the help
+of `lazy` and `Suspense`. It's a fairly unknown and undocumented optimization as it currently resides in `/compat` but we are actively exploring
+how to best leverage this.
+
+When we are Server-Side rendering we can't just stop at a `lazy` piece of code, we'll render this immediately in the produced DOM string. We'll send
+this string down to the DOM which in-turn makes us download the initial JS-bundle, that JS-bundle will initiate the hydration process. The initial JS-bundle
+will most likely be lacking a few pieces of code due to us `lazily importing` them.
+
+Consider the following code
+
+```jsx
+import { Suspense, lazy, hydrate } from 'preact/compat';
+
+const TodoList = lazy(() => import('./pages/TodoList'))
+
+const App = () => {
+  return (
+    <div>
+      <Header />
+      <Suspense>
+        <TodoList />
+      </Suspense>
+      <Footer />
+    </div>
+  )
+}
+
+hydrate(<App />, document.body)
+```
+
+When we get this initial dom-string it will include the list of todo's, however the initial bundle on the client will contain the `App` and `preact/compat`,
+when we start the hydration process to attach our `event-listeners`, ... we'll be able to successfully hydrate the `App`, `Header` and `Footer` however, when
+we reach the `TodoList` we encounter code that is yet to be downloaded so we mark this root as "not-hydrated" and leave the DOM intact, now when that bundle finishes
+downloading we can continue hydrating the app. The benefit here is that the application is interactable before all of the JS is available in the browser!
+
+I've personally explored this in the following [repo](https://github.com/JoviDeCroock/realworld) this server-side renders the realworld application
+and uses `Suspense` boundaries to defer the hydration of bits that aren't loaded yet.
+
+## Concluding
+
+There are a lot of things we can do to keep our applications fast but as always every paradigm has its limitations and strengths. At the end of the day
+I hope these practices can help prevent or help identify performance improvements you can make in your apps.
+
+If any of these optimizations spoke to you feel free to discuss them on [Twitter](https://twitter.com/JoviDeC) would
+love to hear where you think libraries like `Preact` could improve.

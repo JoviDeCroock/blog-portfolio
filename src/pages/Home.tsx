@@ -1,7 +1,5 @@
 import { styled } from 'goober'
-import Layout from '../components/Layout'
-import SkillIndicator from '../components/SkillIndicator'
-import { Link } from '../components/Link'
+import { Link, Prelude, SubTitle, Title } from '../components/Text'
 import SEO from '../components/Seo'
 
 const Hero = styled('div')`
@@ -10,7 +8,6 @@ const Hero = styled('div')`
 `
 
 const ListItem = styled('li')`
-  font-size: 18px;
   margin-bottom: 12px;
   margin-top: 12px;
 `
@@ -19,41 +16,30 @@ const Block = styled('div')`
   margin-bottom: 32px;
 `
 
-const Title = styled('h1')`
-  margin-top: 28px;
-  text-decoration: underline;
-`
-
-const SubTitle = styled('h2')``
-
-const Prelude = styled('p')`
-  font-size: 18px;
-  margin: 0;
-  text-align: justify;
-`
-
 export default () => (
-  <Layout>
-    <SEO />
+  <>
+    <SEO
+      title='Portfolio'
+      description='About my career up to now and my skills.'
+    />
     <Hero>
       <Title>Jovi De Croock</Title>
-      <SubTitle>Passionate Software Engineer</SubTitle>
+      <SubTitle>Software Engineer</SubTitle>
       <Prelude>
         When growing up I discovered a passion for IT, this grew into me working{' '}
         at a hardware store and eventually into finding my passion for{' '}
-        programming. This passion turnmed me to study software engineering,{' '}
-        freelancer assignments and my job.
+        programming. This passion turned me to study software engineering, find
+        freelancer assignments and eventually my first job.
         <br />
         <br />
-        Nowadays my passion mainly goes to the architectural side of{' '}
-        programming. Finding elegant solutions to complex behavior is my{' '}
+        Nowadays I find myself enjoying work on both front-end as well as
+        back-end systems. Finding elegant solutions to complex behavior is my{' '}
         favorite challenge. Another thing I find a deep interest in is{' '}
         optimising performance.
         <br />
-        <br />
-        At this point I am 26 years old and trying to learn the best practices{' '}
-        from my awesome co-workers, in the hope of being able to one day share{' '}
-        my knowledge with everyone.
+        <br />A second passion that has grown over the years is open-source, I
+        love working in the open and I love collaborating with others to solve
+        problems.
       </Prelude>
     </Hero>
     <Block>
@@ -84,11 +70,11 @@ export default () => (
     <Block>
       <SubTitle>Skills</SubTitle>
       <SkillIndicator title="(P)React" level={9.5} />
+      <SkillIndicator title="GraphQL" level={9.5} />
       <SkillIndicator title="Node.js" level={9} />
       <SkillIndicator title="TypeScript" level={9} />
-      <SkillIndicator title="GraphQL" level={9} />
-      <SkillIndicator title="Terraform" level={8} />
       <SkillIndicator title="React-Native" level={7.5} />
+      <SkillIndicator title="Terraform" level={7} />
       <SkillIndicator title="AWS" level={7} />
       <SkillIndicator title="SQL" level={7} />
     </Block>
@@ -119,39 +105,10 @@ export default () => (
           - Fast-refresh for Preact
         </ListItem>
         <ListItem>
-          <Link
-            target="blank"
-            href="https://github.com/JoviDeCroock/hooked-form"
-          >
-            Hooked-form
-          </Link>{' '}
-          - Lightweight React form library
-        </ListItem>
-        <ListItem>
-          <Link target="blank" href="https://github.com/JoviDeCroock/use-web-animation">
-            use-web-animation
-          </Link>{' '}
-          - Lightweight library leveraging web-animations
-        </ListItem>
-        <ListItem>
           <Link target="blank" href="https://github.com/JoviDeCroock/hoofd">
             Hoofd
           </Link>{' '}
           - Lightweight (P)React head library
-        </ListItem>
-        <ListItem>
-          <Link target="blank" href="https://github.com/worldpins">
-            Worldpins
-          </Link>{' '}
-          - GraphQL Apollo Koa React application
-        </ListItem>
-        <ListItem>
-          <Link
-            target="blank"
-            href="https://github.com/JoviDeCroock/webpack-module-nomodule-plugin"
-          >
-            module-nomodule webpack plugin
-          </Link>
         </ListItem>
       </ul>
     </Block>
@@ -171,12 +128,45 @@ export default () => (
     <Block>
       <SubTitle>Interests</SubTitle>
       <ul>
-        <ListItem>
-          Non-fiction books (programming, self-improvement,...)
-        </ListItem>
         <ListItem>Psychology</ListItem>
+        <ListItem>Philosophy</ListItem>
         <ListItem>Music</ListItem>
       </ul>
     </Block>
-  </Layout>
+  </>
+)
+
+const BarWrapper = styled('div')`
+  border: 1px solid black;
+  border-radius: 10px;
+  height: 12px;
+  width: 100%;
+`
+
+const Indicator = styled('div')`
+  background-color: #4286f4;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  height: 100%;
+  width: ${({ level }: { level: number }) => level * 10}%;
+`
+
+const Text = styled('p')`
+  margin: 0;
+  margin-bottom: 4px;
+  margin-left: 6px;
+`
+
+const Wrapper = styled('div')`
+  margin-bottom: 8px;
+  margin-top: 8px;
+`
+
+const SkillIndicator = ({ title, level }: { title: string; level: number }) => (
+  <Wrapper>
+    <Text>{title}</Text>
+    <BarWrapper>
+      <Indicator level={level} />
+    </BarWrapper>
+  </Wrapper>
 )

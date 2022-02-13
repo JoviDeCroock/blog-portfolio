@@ -1,5 +1,5 @@
 import { styled } from 'goober'
-import { Link } from './Link'
+import { Link } from './Text'
 
 const Wrapper = styled('footer')`
   align-items: center;
@@ -22,7 +22,7 @@ const Footer = () => (
     </FooterLink>
     -<FooterLink href="mailto:decroockjovi@gmail.com">Contact</FooterLink>-
     <FooterLink target="blank" href="https://dev.to/jovidecroock">
-      Blog
+      Dev.to
     </FooterLink>
   </Wrapper>
 )
