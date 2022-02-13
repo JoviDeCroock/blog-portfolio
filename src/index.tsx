@@ -1,4 +1,5 @@
 import { h, render } from 'preact'
+import 'highlight-updates/preact'
 import { setup } from 'goober'
 import { createGlobalStyles } from 'goober/global'
 import { LocationProvider, Router } from 'preact-iso'

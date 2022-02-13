@@ -946,6 +946,11 @@ hast-util-whitespace@^2.0.0:
   resolved "https://registry.yarnpkg.com/hast-util-whitespace/-/hast-util-whitespace-2.0.0.tgz#4fc1086467cc1ef5ba20673cb6b03cec3a970f1c"
   integrity sha512-Pkw+xBHuV6xFeJprJe2BBEoDV+AvQySaz3pPDRUs5PNZEMQjpXJJueqrpcHIXxnWTcAGi/UOCgVShlkY6kLoqg==
 
+highlight-updates@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/highlight-updates/-/highlight-updates-0.0.6.tgz#6a527fe2f889734fe1cf1d97c4f820ccfbab845a"
+  integrity sha512-z6wDSdybyl+7fElOe1mep7J7wzgc7G8OVBG+NrHx+hbf4ebh/C9mWY82niqc/AC0DDQ+CGlN4miCNllOQkEKvA==
+
 highlight.js@~11.4.0:
   version "11.4.0"
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-11.4.0.tgz#34ceadd49e1596ee5aba3d99346cdfd4845ee05a"
