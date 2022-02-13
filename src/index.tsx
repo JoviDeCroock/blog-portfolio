@@ -52,19 +52,17 @@ setup(h)
 export function App() {
   return (
     <LocationProvider>
-      <div className="app">
-        <GlobalStyles />
-        <Layout>
-          <Router>
-            <Home path="/" />
-            <Blog path="/blog" />
-            {posts.map((post) => (
-              <post.Component path={post.path} />
-            ))}
-            <NotFound default />
-          </Router>
-        </Layout>
-      </div>
+      <GlobalStyles />
+      <Layout>
+        <Router>
+          <Home path="/" />
+          <Blog path="/blog" />
+          {posts.map((post) => (
+            <post.Component path={post.path} />
+          ))}
+          <NotFound default />
+        </Router>
+      </Layout>
     </LocationProvider>
   )
 }
