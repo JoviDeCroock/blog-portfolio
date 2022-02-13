@@ -15,8 +15,9 @@ As one of the core maintainers of Preact I think a lot about Virtual DOM and how
 optmizations that are easy to miss in Virtual DOM. We often get told to leverage `shouldComponentUpdate` or `memo` to
 avoid excessive rerendering of a component.
 These are a few of the more obvious optmizations as they are explicitly documented and we can reaon about them while
-we explicitly use them. Let's look at a few of the less obvious ones, in the examples we'll notice that the rerenders
-are counted and that we list out the DOM-attribute changes in a list.
+we explicitly use them. However the Virtual DOM leverages a lot more subtile optimizations that most might not be aware of.
+Let's look at a few of the less obvious ones, in the examples we'll notice that the rerenders
+are counted for the functional components.
 
 ## Equal state
 
