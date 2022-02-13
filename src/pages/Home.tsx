@@ -79,7 +79,7 @@ export default () => (
       <SkillIndicator title="SQL" level={7} />
     </Block>
     <Block>
-      <SubTitle>Open source projects I help maintain</SubTitle>
+      <SubTitle>Open source projects</SubTitle>
       <ul>
         <ListItem>
           <Link target="blank" href="https://github.com/preactjs/preact">
@@ -93,11 +93,6 @@ export default () => (
           </Link>{' '}
           maintainer (core team)
         </ListItem>
-      </ul>
-    </Block>
-    <Block>
-      <SubTitle>Projects by me</SubTitle>
-      <ul>
         <ListItem>
           <Link target="blank" href="https://github.com/preactjs/prefresh">
             Prefresh
