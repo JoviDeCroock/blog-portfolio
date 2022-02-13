@@ -7,7 +7,6 @@ export const DOMMutationTracker = (props) => {
 
   useEffect(() => {
     const config = { attributes: true, subtree: true }
-    console.log('dom mutation observer1', wrapper.current)
 
     const onMutate = (mutationsList) => {
       for (const mutation of mutationsList) {
@@ -54,7 +53,7 @@ export const RerenderTracker = (props) => {
   const rerenders = useRef(-1)
   rerenders.current++
   return (
-    <p>
+    <p style={{ fontWeight: 600, textDecoration: 'underline' }}>
       {props.name} rerenders: {rerenders.current}
     </p>
   )
