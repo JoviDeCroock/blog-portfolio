@@ -11,6 +11,22 @@ const GlobalStyles = createGlobalStyles`
   *, *::before, *::after {
     box-sizing: border-box;
   }
+
+  html, body {
+    padding: 0;
+    margin: 0;
+  }
+
+  body {
+    font-family: system-ui;
+    line-height: 1.5;
+  }
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5em;
+    line-height: 1;
+  }
 `
 
 setup(h)
