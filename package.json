@@ -9,7 +9,7 @@
  "scripts": {
   "prepare": "husky install",
   "dev": "vite",
-  "build": "vite build --prerender"
+  "build": "vite build"
  },
  "dependencies": {
   "@mdx-js/rollup": "^2.0.0",
