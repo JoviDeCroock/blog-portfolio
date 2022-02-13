@@ -27,18 +27,18 @@ export default () => (
       <Prelude>
         When growing up I discovered a passion for IT, this grew into me working{' '}
         at a hardware store and eventually into finding my passion for{' '}
-        programming. This passion turned me to study software engineering,{' '}
-        find freelancer assignments and eventually my first job.
+        programming. This passion turned me to study software engineering, find
+        freelancer assignments and eventually my first job.
         <br />
         <br />
-        Nowadays I find myself enjoying work on both front-end as well as back-end{' '}
-        systems. Finding elegant solutions to complex behavior is my{' '}
+        Nowadays I find myself enjoying work on both front-end as well as
+        back-end systems. Finding elegant solutions to complex behavior is my{' '}
         favorite challenge. Another thing I find a deep interest in is{' '}
         optimising performance.
         <br />
-        <br />
-        A second passion that has grown over the years is open-source, I love working in{' '}
-        the open and I love collaborating with others to solve problems.
+        <br />A second passion that has grown over the years is open-source, I
+        love working in the open and I love collaborating with others to solve
+        problems.
       </Prelude>
     </Hero>
     <Block>
@@ -158,7 +158,7 @@ const Text = styled('p')`
 
 const Wrapper = styled('div')`
   margin-bottom: 8px;
-  ma;rgin-top: 8px;
+  margin-top: 8px;
 `
 
 const SkillIndicator = ({ title, level }: { title: string; level: number }) => (
