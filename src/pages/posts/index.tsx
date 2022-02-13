@@ -1,5 +1,5 @@
 import Layout from '../../components/Layout'
-import Ramblings, { documentProps as ramblingDocumentProps } from './vdom-compilers.mdx'
+import Ramblings, { documentProps as ramblingDocumentProps } from './vdom-compilers/index.mdx'
 
 export default [
   {
