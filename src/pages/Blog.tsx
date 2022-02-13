@@ -25,6 +25,10 @@ const TitleLink = styled(Link)`
 export default () => (
   <Layout>
     <Title>Blog</Title>
+    <Prelude>
+      My thoughts in a semi-raw form, a lot of these posts contain what goes around
+      in my mind throughout a day.
+    </Prelude>
     <Block>
       {posts.map((post) => (
         <Summary>
