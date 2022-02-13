@@ -1,5 +1,4 @@
 import { styled } from 'goober'
-import Layout from '../components/Layout'
 import SEO from '../components/Seo'
 import { Link, Prelude, Title } from '../components/Text'
 import posts from './posts'
@@ -24,7 +23,7 @@ const TitleLink = styled(Link)`
 `
 
 export default () => (
-  <Layout>
+  <>
     <SEO
       title='Blog'
       description='Posts about my work and thoughts.'
@@ -42,5 +41,5 @@ export default () => (
         </Summary>
       ))}
     </Block>
-  </Layout>
+  </>
 )

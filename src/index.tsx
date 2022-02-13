@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import Blog from './pages/Blog'
 import posts from './pages/posts'
 import NotFound from './pages/404'
+import Layout from './components/Layout'
 
 const GlobalStyles = createGlobalStyles`
   *, *::before, *::after {
@@ -53,14 +54,16 @@ export function App() {
     <LocationProvider>
       <div className="app">
         <GlobalStyles />
-        <Router>
-          <Home path="/" />
-          <Blog path="/blog" />
-          {posts.map((post) => (
-            <post.Component path={post.path} />
-          ))}
-          <NotFound default />
-        </Router>
+        <Layout>
+          <Router>
+            <Home path="/" />
+            <Blog path="/blog" />
+            {posts.map((post) => (
+              <post.Component path={post.path} />
+            ))}
+            <NotFound default />
+          </Router>
+        </Layout>
       </div>
     </LocationProvider>
   )

@@ -1,5 +1,4 @@
 import { useLink } from 'hoofd/preact'
-import Layout from '../../components/Layout'
 import SEO from '../../components/Seo'
 import VdomOptimizations, {
   documentProps as vdomDocumentProps,
@@ -15,13 +14,13 @@ export default [
       })
 
       return (
-        <Layout>
+        <>
           <SEO
             title={vdomDocumentProps.title}
             description={vdomDocumentProps.description}
           />
           <VdomOptimizations />
-        </Layout>
+        </>
       )
     },
     path: '/blog' + vdomDocumentProps.path,

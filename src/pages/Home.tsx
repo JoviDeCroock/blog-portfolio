@@ -1,5 +1,4 @@
 import { styled } from 'goober'
-import Layout from '../components/Layout'
 import { Link, Prelude, SubTitle, Title } from '../components/Text'
 import SEO from '../components/Seo'
 
@@ -18,7 +17,7 @@ const Block = styled('div')`
 `
 
 export default () => (
-  <Layout>
+  <>
     <SEO
       title='Portfolio'
       description='About my career up to now and my skills.'
@@ -134,7 +133,7 @@ export default () => (
         <ListItem>Music</ListItem>
       </ul>
     </Block>
-  </Layout>
+  </>
 )
 
 const BarWrapper = styled('div')`
