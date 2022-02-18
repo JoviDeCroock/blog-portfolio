@@ -1,5 +1,6 @@
-import { useRef, useState } from "preact/hooks";
+// @ts-ignore
 import { Highlighter } from 'highlight-updates/preact'
+import { useRef, useState } from "preact/hooks";
 import { RerenderTracker } from './common'
 
 const Issue = () => {
