@@ -1,0 +1,80 @@
+import Uncontrolled from './Uncontrolled.tsx'
+import Issue from './Issue.tsx'
+
+export const documentProps = {
+  title: 'Controlled inputs',
+  description:
+    'Controlled and uncontrolled inputs have always been a big subject, what does it actually mean, to be (un)controlled?',
+  path: '/controlled-inputs',
+  tags: ['vdom', 'front-end']
+}
+
+# Controlled inputs
+
+In the HTML world we don't really have a notion of controlled components, as this control is performed by JavaScript,
+this is an important thing to note while employing these concepts.
+
+The following is just an `<input>` rendered by Preact, no state, no effects, just an initial value. Notice
+how it's already interactable and will never cause a rerender in the component.
+
+<Uncontrolled />
+
+We are typing and no updates are being performed because this is all happening in HTML, the button underneath
+has a click-handler that will look at the `ref` on this input and print out the value, notice how the represented
+value in our component is being updated as well? An uncontrolled components syncs this up for us.
+
+## Uncontrolled issues
+
+You might ask yourself where this need for controlled components comes from, validation and code manipulation
+of the value are some of the main contenders, let's look how this becomes an issue in VDOM-land.
+
+> We use `onInput` as that performs changes in real time while `onChange` is actually debounced by default, in React
+  they patch this by changing `onChange` to behave like `onInput`.
+
+```js
+const Input = () => {
+  const [value, setValue] = useState('')
+
+  const onInput = (e) => {
+    if (e.currentTarget.value.length > 3) return;
+    setValue(e.currentTarget.value)
+  }
+
+  return <input value={value} onInput={onInput} />
+}
+```
+<Issue />
+
+We can see that even when we type more than 3 characters the input does not reflect this, you clearly see that the nodes
+stop rerendering in VDOM and that when you click the button the state and ref value are very different.
+As alluded to in the above, this is because we never enter our render loop again, even if we set the state to be the same
+value it was before it will bail out due to equal state and the HTML node will update internally.
+
+## Going controlled
+
+The above is one of the main pain points that we see when performing control from the VDOM world over an input, we don't really
+control it at this point as we have no way to "know what happened", this is an issue in Preact 10 but got implemented in Preact 11.
+
+Conceptually what we needed was a way to reset the value after an event handler so when a diff is happening we store the previous value
+on the DOM-node, next we wrap the event-handlers and perform the user-code and afterwards check whether the value has changed versus the
+previous value.
+
+```js
+const eventHandler = (e) => {
+  userSuppliedOnInput(e);
+  if (isInput && this.prevValue !== this.value) {
+    this.value = this.prevValue
+  }
+}
+```
+
+This means that we have stopped the automatic updating of the value happening by the DOM and replaced it back to the old value, now whether or not
+the VDOM triggers a diff due to a state-update the value will be the expected one, this due to only two scenario's being possible:
+
+- the user has updated state in the `onInput` --> triggers a diff with an updated `value` property --> the VDOM will update the DOM in the subsequent render
+- the user has bailed out of an update --> the value remains the same as it was before
+
+This is a little caveat while our deterministic VDOM sometimes gives us some issues from a library point of view, I'd love to give a shoutout to
+[react-hook-form](https://react-hook-form.com/) for doing an amazing job at using uncontrolled inputs!
+
+For the curious here is [the PR introducing controlled inputs for Preact 11](https://github.com/preactjs/preact/pull/3251)
