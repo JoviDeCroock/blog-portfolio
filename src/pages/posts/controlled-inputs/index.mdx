@@ -1,5 +1,6 @@
 import Uncontrolled from './Uncontrolled.tsx'
 import Issue from './Issue.tsx'
+import Solution from './Solution.tsx'
 
 export const documentProps = {
   title: 'Controlled inputs',
@@ -82,3 +83,32 @@ This is a little caveat while our deterministic VDOM sometimes gives us some iss
 [react-hook-form](https://react-hook-form.com/) for doing an amazing job at using uncontrolled inputs!
 
 For the curious here is [the PR introducing controlled inputs for Preact 11](https://github.com/preactjs/preact/pull/3251)
+
+As a bonus, we could have probably have asked for a user-land implementation where people leverage a component like this:
+
+```js
+const Input = () => {
+  const [value, setValue] = useState('')
+  const inputRef = useRef()
+
+  const onInput = (e) => {
+    if (e.currentTarget.value.length <= 3) {
+      setValue(e.currentTarget.value)
+    }
+    inputRef.current.value = value;
+  }
+
+  return <input ref={inputRef} value={value} onInput={onInput} />
+}
+```
+<Solution />
+
+here we manually do the resetting that is now happening in the background for Preact!
+
+## Concluding
+
+Hope this sheds some light in my personal liking of `uncontrolled inputs`, it's a good feature
+for complex validation but there are solutions to implement this in user-land, uncontrolled
+gives us a lot of performance improvements as we can skip the whole diff for a value update.
+
+Feel free to hit me up on [Twitter](https://twitter.com/JoviDeC) about this!
