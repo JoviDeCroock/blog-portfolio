@@ -13,7 +13,8 @@ export const documentProps = {
 # Controlled inputs
 
 In the HTML world we don't really have a notion of controlled components, as this control is performed by JavaScript,
-this is an important thing to note while employing these concepts.
+this is an important thing to note while employing these concepts. A controlled input implies that we completely control
+the state in JavaScript with our rendering library.
 
 The following is just an `<input>` rendered by Preact, no state, no effects, just an initial value. Notice
 how it's already interactable and will never cause a rerender in the component.
@@ -108,8 +109,9 @@ issue in Preact X
 
 ## Concluding
 
-Hope this sheds some light in my personal liking of `uncontrolled inputs`, it's a good feature
-for complex validation but there are solutions to implement this in user-land, uncontrolled
-gives us a lot of performance improvements as we can skip the whole diff for a value update.
+Hope this can shed some light as to why I prefer `uncontrolled inputs` for both performance reasons
+as well as it being built-in for the DOM. Implementing complex validation can be a bit tricky with
+uncontrolled inputs but as shown in `react-hook-form` it's very much possible. With uncontrolled
+components we opt-out of the front-end diffing and fully rely on the DOM logic.
 
 Feel free to hit me up on [Twitter](https://twitter.com/JoviDeC) about this!
