@@ -47,6 +47,8 @@ const Input = () => {
 ```
 <Issue />
 
+> A diff is Preact looking at the difference between the old and new state and update the DOM accordingly
+
 We can see that even when we type more than 3 characters the input does not reflect this, you clearly see that the nodes
 stop rerendering in VDOM and that when you click the button the state and ref value are very different.
 This is happening because we never enter our diff, entering our diff happens as the result of a state-update, in this case a call to `setValue`.
@@ -104,8 +106,7 @@ const Input = () => {
 ```
 <Solution />
 
-here we manually do the resetting that is now happening in the background for Preact! This could help someone out running into this
-issue in Preact X
+here we manually do the resetting that is now happening in the background for Preact!
 
 ## Concluding
 
