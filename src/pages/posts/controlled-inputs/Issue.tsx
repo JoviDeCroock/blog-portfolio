@@ -20,13 +20,15 @@ const Issue = () => {
   }
 
   return (
-    <Highlighter>
-      <RerenderTracker name='input' />
-      <input ref={inputRef} value={value} onInput={onInput} />
-      <button onClick={printValue}>
-        Console log value of input
-      </button>
-    </Highlighter>
+    <div style="border: 1px solid black; padding: 4px 8px">
+      <Highlighter>
+        <RerenderTracker name='input' />
+        <input ref={inputRef} value={value} onInput={onInput} />
+        <button onClick={printValue}>
+          Console log value of input
+        </button>
+      </Highlighter>
+    </div>
   )
 }
 
