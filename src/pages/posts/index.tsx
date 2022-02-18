@@ -1,9 +1,11 @@
 import { useLink } from 'hoofd/preact'
 import SEO from '../../components/Seo'
 import VdomOptimizations, {
+  // @ts-ignore
   documentProps as vdomDocumentProps,
 } from './vdom-compilers/index.mdx'
 import ControlledInputs, {
+  // @ts-ignore
   documentProps as inputsDocumentProps,
 } from './controlled-inputs/index.mdx'
 
