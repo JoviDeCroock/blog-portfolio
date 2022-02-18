@@ -11,7 +11,11 @@ const Issue = () => {
     if (e.currentTarget.value.length <= 3) {
       setValue(e.currentTarget.value)
     }
+    const start = inputRef.current.selectionStart;
+    const end = inputRef.current.selectionEnd;
+    const diffLength = Math.abs(e.currentTarget.value.length - value.length)
     inputRef.current.value = value;
+    inputRef.current.setSelectionRange(start - diffLength, end - diffLength);
   }
 
   return (
