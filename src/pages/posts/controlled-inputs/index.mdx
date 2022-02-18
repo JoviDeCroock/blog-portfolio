@@ -47,8 +47,12 @@ const Input = () => {
 
 We can see that even when we type more than 3 characters the input does not reflect this, you clearly see that the nodes
 stop rerendering in VDOM and that when you click the button the state and ref value are very different.
-As alluded to in the above, this is because we never enter our render loop again, even if we set the state to be the same
-value it was before it will bail out due to equal state and the HTML node will update internally.
+This is happening because we never enter our diff, entering our diff happens as the result of a state-update, in this case a call to `setValue`.
+In the above we could replace `return` with a `setValue(value)` but that would still suffer from the same issue as we would bail out of diffing
+due to equal state, oh damn you perforance optimizations!
+
+This means that as long as we have no state-change we transition back to an uncontrolled component, our diffing is what actually performs the
+control of the DOM-node.
 
 ## Going controlled
 
