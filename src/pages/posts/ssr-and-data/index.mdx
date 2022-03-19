@@ -1,0 +1,58 @@
+export const documentProps = {
+  title: 'Data requirements and the complexity in SSR',
+  description: '',
+  path: '/data-requirements-ssr',
+  tags: ['vdom', 'front-end', 'server-side-rendering']
+}
+
+# Data requirements in SSR
+
+In our front-ends you'll often hear us refer to server-side rendering to increase performance,
+please crawlers and making the app work without JavaScript. To achieve this we go through
+some lengths, frameworks like `Next`, `Gatsby`,... aim to make this easier and they do but
+what makes all of this so hard that we need these?
+
+## Client-side
+
+When we are on the client we'll often declare our data-requirements in `componentDidMount` or a `useEffect`
+(pick your poison), we'll `await` the `Promise` and set it in our state, that's the simplest case we have to
+visualize data located in an API inside of our API. Notice how all the rendering just continues, a placeholder
+is where that data is supposed to be and the world just seemingly stands still until the API response has been delivered.
+When the data arrives we call `setState` and our Virtual-DOM library will know that it's time to show some new things on screen,
+these new things could in turn have their own data-requirements and we could be creating a waterfall of spinners.
+
+## Not only magicians create suspense...
+
+The Suspense was killing me too waiting for this part. For those who don't know the concept of `Suspense` it is essentially
+a way to abstract the loading states that we enter in the above. We call our `Promise` and store it in state, rather than
+checking whether we are still `fetching` inside of our `render` function we use the `throw` keyword from JS and rather than
+throwing an error we `throw` that `Promise` up, when a `Suspense` boundary catches this it will render a loading state.
+
+> TODO: add `Suspense` example (not preact compat)
+
+In the above you see us fetching data and on resolve the `fallback` UI dissapears and we render the intended display of todo's.
+This abstraction however does more, when we have a waterfall, we can stay in the `fallback` state without any problem as the
+subsequent loading state will `throw` up and it can be caught in a new boundary or the same one making the loading state
+consistent until all data loads in.
+
+## Server-side
+
+When we approach the concept of server-side rendering we'll often refer to stringifying the HTML and sending it to the client,
+rendering to string as it stands is a synchronous process where we don't invoke lifecycles and just call `render` until we have
+passed through the whole tree. It's important to take this single pass in consideration when we consider the 'world standing still'
+when we consider resolving data on the client, a server-side render does not support doing multiple passes through the data. Which
+means we'll be rendering the loading spinners rather than our data.
+
+> TODO: add example of stringifying some VDOM with loading states
+
+We don't invoke lifecycles, effects, ... during a server-side render as we won't react to state-updates anyway, also how would the
+render to string process even know when all data is resolved? Popular frameworks have introduced concepts like `getServerSideProps`
+which allows us to run a function when the page renders and resolve the data-requirements, this gives us observability into the
+data actually finishing the loading state and is actually great as we execute 1 `Promise` and then 1 `render-to-string`, no waterfalls, ...
+This concept however gives us 1 more thing to think about, how great would it be if we could just leverage the virtual-dom to define our
+data requirements and it would automatically work? Well it's possible, a few years ago Formidable came with a library named `react-ssr-prepass`
+which essentially leverages the concept of `Suspense` throwing Promises up the tree to resolve data.
+
+This means that we would invoke `prepass` and then go on to `render-to-string`, as long as we don't reach the end of the tree (due to Promises
+being thrown) prepass would know it has not resolved all the data requirements. This brings one important pitfall to be aware of, the
+waterfalls that could be acceptable on the client will be causing a _huge delay_ in the HTML skeleton arriving
