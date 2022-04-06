@@ -71,8 +71,9 @@ consistent until all data loads in.
 When we approach the concept of server-side rendering we'll often refer to stringifying the HTML and sending it to the client,
 rendering to string as it stands is a synchronous process where we don't invoke lifecycles and just call `render` until we have
 passed through the whole tree. It's important to take this single pass in consideration when we consider the 'world standing still'
-when we consider resolving data on the client, a server-side render does not support doing multiple passes through the data. Which
-means we'll be rendering the loading spinners rather than our data.
+while we resolve data on the client. A server-side render does not support doing multiple passes through the data, which
+means we'll be rendering the loading spinners rather than our data as while the world stands still we'll take the string-snapshot
+and sent it to the client.
 
 ```js
 import { useState, useEffect } from 'preact/hooks'
@@ -116,7 +117,7 @@ const stringifiedHTML = renderToString(<App />)
 ```
 <RenderToString />
 
-We don't invoke lifecycles, effects, ... during a server-side render as we won't react to state-updates anyway, also how would the
+We don't invoke lifecycles, effects, ... during a render-to-string as we won't react to state-updates anyway, also how would the
 render to string process even know when all data is resolved? Popular frameworks have introduced concepts like `getServerSideProps`
 which allows us to run a function when the page renders and resolve the data-requirements, this gives us observability into the
 data actually finishing the loading state and is actually great as we execute 1 `Promise` and then 1 `render-to-string`, no waterfalls, ...
@@ -131,5 +132,10 @@ we'll need a client/... that supports caching the responses we get during the `p
 we'll need to be able to synchronously retrieve the data. We will also need to be able to send the data back to the client so the data-cache can be hydrated
 and the dom-hydration can complete elegantly.
 
-At the time of writing React has given us React 18 which brings support for asynchronous `renderToString`, however I thought it was still valuable to
-give some insight into the considerations these Virtual DOM libraries have to take when approaching data-requirements.
+At the time of writing React has given us React 18 which brings support for asynchronous `renderToString`, do note that this async `renderToString` won't resolve
+data either, it will render the `Suspense` fallback instead.
+
+## Concluding
+
+I do hope this gives some insight into the trouble front-end frameworks have gone through when we reason about server-side renders and data, this post
+deliberately leaves out client-side data-hydration as there is also a lot to write about that as well.
