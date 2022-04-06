@@ -10,10 +10,11 @@ export const documentProps = {
 
 # Data requirements in SSR
 
-In our front-ends you'll often hear us refer to server-side rendering to increase performance,
-please crawlers, and making the app work without JavaScript. To achieve this we go through
-quite a bit of trouble. frameworks like `Next`, `Gatsby`,... aim to make alleviate this concern from us
-and don't get me wrong, they do a great job, but what makes all of this so hard that we need these?
+In our front-ends we'll refer to server-side rendering to increase performance,
+please crawlers, and making the app work without JavaScript enabled on the client.
+To achieve this we go through quite a bit of trouble. frameworks like `Next`, `Gatsby`,...
+aim to make alleviate this concern from us and don't get me wrong, they do a great job,
+but what makes all of this so hard that we need these?
 
 ## Client-side
 
@@ -61,7 +62,7 @@ render(<Suspense fallback={<p>Loading...</p>}><App /></Suspense>)
 
 <Suspense />
 
-In the above you see us fetching data and on resolve the `fallback` UI dissapears and we render the intended display of todo's.
+In the above we can see that we fetch data and when it resolves the `fallback` UI dissapears and we render the intended display of todo's.
 This abstraction however does more, when we have a waterfall, we can stay in the `fallback` state without any problem as the
 subsequent loading state will `throw` up and it can be caught in a new boundary or the same one making the loading state
 consistent until all data loads in.
