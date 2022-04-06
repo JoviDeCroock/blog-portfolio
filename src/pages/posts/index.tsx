@@ -14,26 +14,26 @@ import SSR, {
 } from './ssr-and-data/index.mdx'
 
 export default [
-  // {
-  //   ...ssrsDocumentProps,
-  //   Component: () => {
-  //     useLink({
-  //       rel: 'stylesheet',
-  //       href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github-dark.min.css'
-  //     })
+  {
+    ...ssrsDocumentProps,
+    Component: () => {
+      useLink({
+        rel: 'stylesheet',
+        href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github-dark.min.css'
+      })
 
-  //     return (
-  //       <>
-  //         <SEO
-  //           title={ssrsDocumentProps.title}
-  //           description={ssrsDocumentProps.description}
-  //         />
-  //         <SSR />
-  //       </>
-  //     )
-  //   },
-  //   path: '/blog' + ssrsDocumentProps.path,
-  // },
+      return (
+        <>
+          <SEO
+            title={ssrsDocumentProps.title}
+            description={ssrsDocumentProps.description}
+          />
+          <SSR />
+        </>
+      )
+    },
+    path: '/blog' + ssrsDocumentProps.path,
+  },
   {
     ...inputsDocumentProps,
     Component: () => {
