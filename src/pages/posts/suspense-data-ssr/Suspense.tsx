@@ -12,7 +12,6 @@ const getData = () => {
 
   return new Promise(res => {
     setTimeout(() => {
-      console.log('resolving');
       res(globData = [{ id: 1, name: 'Jovi De Croock' }]);
     }, 2000);
   });
@@ -55,7 +54,7 @@ const App = () => {
   }, [])
 
   return (
-    <iframe style={{ width: '100%', height: 36 }} ref={iframe} />
+    <iframe title='suspense-example' style={{ width: '100%', height: 36 }} ref={iframe} />
   )
 }
 
