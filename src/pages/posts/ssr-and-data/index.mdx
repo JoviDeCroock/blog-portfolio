@@ -31,7 +31,6 @@ a way to abstract the loading states that we enter in the above. We call our `Pr
 checking whether we are still `fetching` inside of our `render` function we use the `throw` keyword from JS and rather than
 throwing an error we `throw` that `Promise` up, when a `Suspense` boundary catches this it will render a loading state.
 
-> TODO: create dedicated realm for this so we don't pollute the global Preact scope
 ```js
 let globData;
 const getData = () => {
