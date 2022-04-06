@@ -10,12 +10,12 @@ import ControlledInputs, {
 } from './controlled-inputs/index.mdx'
 import SSR, {
   // @ts-ignore
-  documentProps as ssrsDocumentProps,
-} from './ssr-and-data/index.mdx'
+  documentProps as suspenseDataDocumentProps,
+} from './suspense-data-ssr/index.mdx'
 
 export default [
   {
-    ...ssrsDocumentProps,
+    ...suspenseDataDocumentProps,
     Component: () => {
       useLink({
         rel: 'stylesheet',
@@ -25,14 +25,14 @@ export default [
       return (
         <>
           <SEO
-            title={ssrsDocumentProps.title}
-            description={ssrsDocumentProps.description}
+            title={suspenseDataDocumentProps.title}
+            description={suspenseDataDocumentProps.description}
           />
           <SSR />
         </>
       )
     },
-    path: '/blog' + ssrsDocumentProps.path,
+    path: '/blog' + suspenseDataDocumentProps.path,
   },
   {
     ...inputsDocumentProps,
