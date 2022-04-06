@@ -10,30 +10,30 @@ import ControlledInputs, {
 } from './controlled-inputs/index.mdx'
 import SSR, {
   // @ts-ignore
-  documentProps as ssrsDocumentProps,
-} from './ssr-and-data/index.mdx'
+  documentProps as suspenseDataDocumentProps,
+} from './suspense-data-ssr/index.mdx'
 
 export default [
-  // {
-  //   ...ssrsDocumentProps,
-  //   Component: () => {
-  //     useLink({
-  //       rel: 'stylesheet',
-  //       href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github-dark.min.css'
-  //     })
+  {
+    ...suspenseDataDocumentProps,
+    Component: () => {
+      useLink({
+        rel: 'stylesheet',
+        href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github-dark.min.css'
+      })
 
-  //     return (
-  //       <>
-  //         <SEO
-  //           title={ssrsDocumentProps.title}
-  //           description={ssrsDocumentProps.description}
-  //         />
-  //         <SSR />
-  //       </>
-  //     )
-  //   },
-  //   path: '/blog' + ssrsDocumentProps.path,
-  // },
+      return (
+        <>
+          <SEO
+            title={suspenseDataDocumentProps.title}
+            description={suspenseDataDocumentProps.description}
+          />
+          <SSR />
+        </>
+      )
+    },
+    path: '/blog' + suspenseDataDocumentProps.path,
+  },
   {
     ...inputsDocumentProps,
     Component: () => {

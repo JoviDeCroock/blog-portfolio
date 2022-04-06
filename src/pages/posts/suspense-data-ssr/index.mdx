@@ -2,18 +2,19 @@ import RenderToString from './RenderToString.tsx'
 import Suspense from './Suspense.tsx'
 
 export const documentProps = {
-  title: 'Data requirements and the complexity in SSR',
-  description: 'How do we handle Asynchronous data in a situation where it feels the runtime is idle.',
-  path: '/data-requirements-ssr',
-  tags: ['vdom', 'front-end', 'server-side-rendering']
+  title: 'Suspense, data and SSR',
+  description: 'How do we handle Asynchronous data in a situation where it feels the runtime is idle, how does Suspense tie into this and extending into ssr.',
+  path: '/suspense-data-ssr',
+  tags: ['vdom', 'suspense', 'front-end', 'server-side-rendering']
 }
 
 # Data requirements in SSR
 
-In our front-ends you'll often hear us refer to server-side rendering to increase performance,
-please crawlers, and making the app work without JavaScript. To achieve this we go through
-quite a bit of trouble. frameworks like `Next`, `Gatsby`,... aim to make alleviate this concern from us
-and don't get me wrong, they do a great job, but what makes all of this so hard that we need these?
+In our front-ends we'll refer to server-side rendering to increase performance,
+please crawlers, and making the app work without JavaScript enabled on the client.
+To achieve this we go through quite a bit of trouble. frameworks like `Next`, `Gatsby`,...
+aim to make alleviate this concern from us and don't get me wrong, they do a great job,
+but what makes all of this so hard that we need these?
 
 ## Client-side
 
@@ -31,14 +32,13 @@ a way to abstract the loading states that we enter in the above. We call our `Pr
 checking whether we are still `fetching` inside of our `render` function we use the `throw` keyword from JS and rather than
 throwing an error we `throw` that `Promise` up, when a `Suspense` boundary catches this it will render a loading state.
 
-> TODO: create dedicated realm for this so we don't pollute the global Preact scope
 ```js
 let globData;
 const getData = () => {
   if (globData) return globData;
   return new Promise(res => {
     setTimeout(() => {
-      res([{ id: 1, name: 'Jovi De Croock' }])
+      res(globData = [{ id: 1, name: 'Jovi De Croock' }])
     }, 500);
   })
 }
@@ -62,7 +62,7 @@ render(<Suspense fallback={<p>Loading...</p>}><App /></Suspense>)
 
 <Suspense />
 
-In the above you see us fetching data and on resolve the `fallback` UI dissapears and we render the intended display of todo's.
+In the above we can see that we fetch data and when it resolves the `fallback` UI dissapears and we render the intended display of todo's.
 This abstraction however does more, when we have a waterfall, we can stay in the `fallback` state without any problem as the
 subsequent loading state will `throw` up and it can be caught in a new boundary or the same one making the loading state
 consistent until all data loads in.
@@ -72,8 +72,9 @@ consistent until all data loads in.
 When we approach the concept of server-side rendering we'll often refer to stringifying the HTML and sending it to the client,
 rendering to string as it stands is a synchronous process where we don't invoke lifecycles and just call `render` until we have
 passed through the whole tree. It's important to take this single pass in consideration when we consider the 'world standing still'
-when we consider resolving data on the client, a server-side render does not support doing multiple passes through the data. Which
-means we'll be rendering the loading spinners rather than our data.
+while we resolve data on the client. A server-side render does not support doing multiple passes through the data, which
+means we'll be rendering the loading spinners rather than our data as while the world stands still we'll take the string-snapshot
+and sent it to the client.
 
 ```js
 import { useState, useEffect } from 'preact/hooks'
@@ -117,7 +118,7 @@ const stringifiedHTML = renderToString(<App />)
 ```
 <RenderToString />
 
-We don't invoke lifecycles, effects, ... during a server-side render as we won't react to state-updates anyway, also how would the
+We don't invoke lifecycles, effects, ... during a render-to-string as we won't react to state-updates anyway, also how would the
 render to string process even know when all data is resolved? Popular frameworks have introduced concepts like `getServerSideProps`
 which allows us to run a function when the page renders and resolve the data-requirements, this gives us observability into the
 data actually finishing the loading state and is actually great as we execute 1 `Promise` and then 1 `render-to-string`, no waterfalls, ...
@@ -132,5 +133,10 @@ we'll need a client/... that supports caching the responses we get during the `p
 we'll need to be able to synchronously retrieve the data. We will also need to be able to send the data back to the client so the data-cache can be hydrated
 and the dom-hydration can complete elegantly.
 
-At the time of writing React has given us React 18 which brings support for asynchronous `renderToString`, however I thought it was still valuable to
-give some insight into the considerations these Virtual DOM libraries have to take when approaching data-requirements.
+At the time of writing React has given us React 18 which brings support for asynchronous `renderToString`, do note that this async `renderToString` won't resolve
+data either, it will render the `Suspense` fallback instead.
+
+## Concluding
+
+I do hope this gives some insight into the trouble front-end frameworks have gone through when we reason about server-side renders and data, this post
+deliberately leaves out client-side data-hydration as there is also a lot to write about that as well.
