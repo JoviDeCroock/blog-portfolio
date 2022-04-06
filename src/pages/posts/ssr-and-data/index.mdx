@@ -1,3 +1,6 @@
+import RenderToString from './RenderToString.tsx'
+import Suspense from './Suspense.tsx'
+
 export const documentProps = {
   title: 'Data requirements and the complexity in SSR',
   description: 'How do we handle Asynchronous data in a situation where it feels the runtime is idle.',
@@ -30,9 +33,6 @@ throwing an error we `throw` that `Promise` up, when a `Suspense` boundary catch
 
 > TODO: create dedicated realm for this so we don't pollute the global Preact scope
 ```js
-import { Suspense } from 'preact/compat'
-import { useState } from 'preact/hooks'
-
 let globData;
 const getData = () => {
   if (globData) return globData;
@@ -40,8 +40,8 @@ const getData = () => {
     setTimeout(() => {
       res([{ id: 1, name: 'Jovi De Croock' }])
     }, 500);
-  }
-})
+  })
+}
 
 const App = () => {
   const [data, setData] = useState(getData)
@@ -56,7 +56,11 @@ const App = () => {
     </div>
   )
 }
+
+render(<Suspense fallback={<p>Loading...</p>}><App /></Suspense>)
 ```
+
+<Suspense />
 
 In the above you see us fetching data and on resolve the `fallback` UI dissapears and we render the intended display of todo's.
 This abstraction however does more, when we have a waterfall, we can stay in the `fallback` state without any problem as the
@@ -81,31 +85,37 @@ const getData = () => new Promise(res => {
   }, 500);
 })
 
-const App = () => {
-  const [loading, setLoading] = useState(false)
-  const [data, setData] = useState([])
-
-  useEffect(() => {
-    getData().then(data => {
-      setData(data)
-      setLoading(false)
-    })
-  }, [])
-
-  if (loading) {
-    return <p>loading...</p>
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+      isLoading: true
+    }
   }
 
-  return (
-    <div>
-      {data.map(person => <span key={person.id}>{person.name}</span>)}
-    </div>
-  )
+  componentDidMount() {
+    getData().then(data => {
+      this.setState({ isLoading: false, data })
+    })
+  }
+
+  render(props, { isLoading, data }) {
+    if (isLoading) {
+      return <p>loading...</p>
+    }
+
+    return (
+      <div>
+        {data.map(person => <span key={person.id}>{person.name}</span>)}
+      </div>
+    )
+  }
 }
 
 const stringifiedHTML = renderToString(<App />)
-// Append result to DOM.
 ```
+<RenderToString />
 
 We don't invoke lifecycles, effects, ... during a server-side render as we won't react to state-updates anyway, also how would the
 render to string process even know when all data is resolved? Popular frameworks have introduced concepts like `getServerSideProps`
