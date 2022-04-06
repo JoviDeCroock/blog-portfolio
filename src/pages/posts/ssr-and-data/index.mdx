@@ -38,7 +38,7 @@ const getData = () => {
   if (globData) return globData;
   return new Promise(res => {
     setTimeout(() => {
-      res([{ id: 1, name: 'Jovi De Croock' }])
+      res(globData = [{ id: 1, name: 'Jovi De Croock' }])
     }, 500);
   })
 }
