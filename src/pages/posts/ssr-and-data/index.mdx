@@ -1,6 +1,6 @@
 export const documentProps = {
   title: 'Data requirements and the complexity in SSR',
-  description: '',
+  description: 'How do we handle Asynchronous data in a situation where it feels the runtime is idle.',
   path: '/data-requirements-ssr',
   tags: ['vdom', 'front-end', 'server-side-rendering']
 }
@@ -8,9 +8,9 @@ export const documentProps = {
 # Data requirements in SSR
 
 In our front-ends you'll often hear us refer to server-side rendering to increase performance,
-please crawlers and making the app work without JavaScript. To achieve this we go through
-some lengths, frameworks like `Next`, `Gatsby`,... aim to make this easier and they do but
-what makes all of this so hard that we need these?
+please crawlers, and making the app work without JavaScript. To achieve this we go through
+quite a bit of trouble. frameworks like `Next`, `Gatsby`,... aim to make alleviate this concern from us
+and don't get me wrong, they do a great job, but what makes all of this so hard that we need these?
 
 ## Client-side
 
@@ -28,7 +28,35 @@ a way to abstract the loading states that we enter in the above. We call our `Pr
 checking whether we are still `fetching` inside of our `render` function we use the `throw` keyword from JS and rather than
 throwing an error we `throw` that `Promise` up, when a `Suspense` boundary catches this it will render a loading state.
 
-> TODO: add `Suspense` example (not preact compat)
+> TODO: create dedicated realm for this so we don't pollute the global Preact scope
+```js
+import { Suspense } from 'preact/compat'
+import { useState } from 'preact/hooks'
+
+let globData;
+const getData = () => {
+  if (globData) return globData;
+  return new Promise(res => {
+    setTimeout(() => {
+      res([{ id: 1, name: 'Jovi De Croock' }])
+    }, 500);
+  }
+})
+
+const App = () => {
+  const [data, setData] = useState(getData)
+
+  if (data.then) {
+    throw data;
+  }
+
+  return (
+    <div>
+      {data.map(person => <span key={person.id}>{person.name}</span>)}
+    </div>
+  )
+}
+```
 
 In the above you see us fetching data and on resolve the `fallback` UI dissapears and we render the intended display of todo's.
 This abstraction however does more, when we have a waterfall, we can stay in the `fallback` state without any problem as the
@@ -43,7 +71,41 @@ passed through the whole tree. It's important to take this single pass in consid
 when we consider resolving data on the client, a server-side render does not support doing multiple passes through the data. Which
 means we'll be rendering the loading spinners rather than our data.
 
-> TODO: add example of stringifying some VDOM with loading states
+```js
+import { useState, useEffect } from 'preact/hooks'
+import renderToString from 'preact-render-to-string'
+
+const getData = () => new Promise(res => {
+  setTimeout(() => {
+    res([{ id: 1, name: 'Jovi De Croock' }])
+  }, 500);
+})
+
+const App = () => {
+  const [loading, setLoading] = useState(false)
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    getData().then(data => {
+      setData(data)
+      setLoading(false)
+    })
+  }, [])
+
+  if (loading) {
+    return <p>loading...</p>
+  }
+
+  return (
+    <div>
+      {data.map(person => <span key={person.id}>{person.name}</span>)}
+    </div>
+  )
+}
+
+const stringifiedHTML = renderToString(<App />)
+// Append result to DOM.
+```
 
 We don't invoke lifecycles, effects, ... during a server-side render as we won't react to state-updates anyway, also how would the
 render to string process even know when all data is resolved? Popular frameworks have introduced concepts like `getServerSideProps`
@@ -55,4 +117,10 @@ which essentially leverages the concept of `Suspense` throwing Promises up the t
 
 This means that we would invoke `prepass` and then go on to `render-to-string`, as long as we don't reach the end of the tree (due to Promises
 being thrown) prepass would know it has not resolved all the data requirements. This brings one important pitfall to be aware of, the
-waterfalls that could be acceptable on the client will be causing a _huge delay_ in the HTML skeleton arriving
+waterfalls that could be acceptable on the client will be causing a _huge delay_ in the HTML skeleton arriving. Another thing to consider is that
+we'll need a client/... that supports caching the responses we get during the `prepass`, because when we follow the `prepass` with our `renderToString`
+we'll need to be able to synchronously retrieve the data. We will also need to be able to send the data back to the client so the data-cache can be hydrated
+and the dom-hydration can complete elegantly.
+
+At the time of writing React has given us React 18 which brings support for asynchronous `renderToString`, however I thought it was still valuable to
+give some insight into the considerations these Virtual DOM libraries have to take when approaching data-requirements.
