@@ -12,8 +12,32 @@ import SSR, {
   // @ts-ignore
   documentProps as suspenseDataDocumentProps,
 } from './suspense-data-ssr/index.mdx'
+import State, {
+  // @ts-ignore
+  documentProps as stateDocumentProps,
+} from './state-outside-vdom/index.mdx'
 
 export default [
+  {
+    ...stateDocumentProps,
+    Component: () => {
+      useLink({
+        rel: 'stylesheet',
+        href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github-dark.min.css'
+      })
+
+      return (
+        <>
+          <SEO
+            title={stateDocumentProps.title}
+            description={stateDocumentProps.description}
+          />
+          <State />
+        </>
+      )
+    },
+    path: '/blog' + stateDocumentProps.path,
+  },
   {
     ...suspenseDataDocumentProps,
     Component: () => {
