@@ -152,8 +152,8 @@ class FormState {
 const FormContext = createContext();
 
 const useField = (name) => {
-  // This function is used to force a re-render, we could also pass this to
-  // the FormState class while we register.
+  // This function is used to force a re-render, this way FormState
+  // can notify our runtime of a change
   const [, rerender] = useReducer((x) => x + 1, 0)
   const form = useContext(FormContext)
 
