@@ -47,12 +47,7 @@ const useField = (name) => {
 
 const Input = (props) => {
   const [value, onInput] = useField(props.name)
-  return (
-    <div>
-      <RenderTracker />
-      <input value={value} onInput={onInput} />
-    </div>
-  )
+  return <input value={value} onInput={onInput} />
 }
 
 const Form = () => {
@@ -118,14 +113,17 @@ subscribe to the slices of state they want rather than subscribing to the full c
 Don't get me wrong here, we will still be using `context` but the value of it won't change, the value
 will be a stable entity that allows components to subscribe to state, change it and be notified about changes.
 
-For the sake of simplicity I kept this example fairly in line with the above.
+For the sake of simplicity I kept this example fairly in line with the above, in the example you'll see that the
+external state-manager still needs a way to couple back to the Virtual DOM library so we need to give it a way to notify
+that changes are present.
 
 ```
 import { createContext } from 'preact';
-import { useContext, useReducer } from 'preact/hooks';
+import { useContext, useReducer, useEffect } from 'preact/hooks';
 
 class FormState {
   values;
+  listeners = {};
 
   constructor(values) {
     this.values = values;
@@ -133,6 +131,21 @@ class FormState {
 
   onChange(name, value) {
     this.values[name] = value;
+    this.listeners[name].forEach(cb => { cb(); })
+  }
+
+  register(name, cb) {
+    const listenersForField = this.listeners[name]
+    if (!listenersForField) {
+      this.listeners[name] = [cb]
+    } else {
+      listenersForField.push(cb)
+    }
+  }
+
+  unregister(name, cb) {
+    const listenersForField = this.listeners[name]
+    this.listeners[name] = listenersForField.filter(x => x !== cb)
   }
 }
 
@@ -144,23 +157,24 @@ const useField = (name) => {
   const [, rerender] = useReducer((x) => x + 1, 0)
   const form = useContext(FormContext)
 
+  useEffect(() => {
+    form.register(name, rerender)
+    return () => {
+      form.unregister(name, rerender)
+    }
+  }, [])
+
   return [
     form.values[name],
     (e) => {
       form.onChange(name, e.currentTarget.value)
-      rerender(0);
     }
   ]
 }
 
 const Input = (props) => {
   const [value, onInput] = useField(props.name)
-  return (
-    <div>
-      <RenderTracker />
-      <input value={value} onInput={onInput} />
-    </div>
-  )
+  return <input value={value} onInput={onInput} />
 }
 
 const Form = () => {
@@ -211,8 +225,11 @@ this won't be felt, however it can also help you reduce the amount of things to 
 effects/... re-run so in my opinion it's a pretty good way to go about things.
 
 This method is used by libraries like Redux, urql and many more to reduce the amount of
-renders that occur when state changes.
+renders that occur when state changes. Imagine changing a piece of state and the whole app
+having to recalculate!
 
 ## Concluding
 
-No Redux is not dead
+We might have often heard the sentence "Redux is dead, we can just manage state with context",
+however much that latter part might be true it comes with some caveats and should be a decision
+that fits your needs.

@@ -1,9 +1,10 @@
 import { createContext } from 'preact';
-import { useContext, useReducer } from 'preact/hooks';
+import { useContext, useReducer, useEffect } from 'preact/hooks';
 import { RerenderTracker } from './common'
 
 class FormState {
   values;
+  listeners = {};
 
   constructor(values) {
     this.values = values;
@@ -11,6 +12,21 @@ class FormState {
 
   onChange(name, value) {
     this.values[name] = value;
+    this.listeners[name].forEach(cb => { cb(); })
+  }
+
+  register(name, cb) {
+    const listenersForField = this.listeners[name]
+    if (!listenersForField) {
+      this.listeners[name] = [cb]
+    } else {
+      listenersForField.push(cb)
+    }
+  }
+
+  unregister(name, cb) {
+    const listenersForField = this.listeners[name]
+    this.listeners[name] = listenersForField.filter(x => x !== cb)
   }
 }
 
@@ -20,11 +36,17 @@ const useField = (name) => {
   const [, rerender] = useReducer((x) => x + 1, 0)
   const form = useContext(FormContext)
 
+  useEffect(() => {
+    form.register(name, rerender)
+    return () => {
+      form.unregister(name, rerender)
+    }
+  }, [])
+
   return [
     form.values[name],
     (e) => {
       form.onChange(name, e.currentTarget.value)
-      rerender(0);
     }
   ]
 }
