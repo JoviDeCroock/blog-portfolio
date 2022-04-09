@@ -106,6 +106,9 @@ try to diff it up until that boundary.
 This means that every subscriber gets checked when something changes, there have been proposals to resolve
 this with [context-selector](https://github.com/reactjs/rfcs/pull/119) but this is not present currently.
 
+> We use the optimization of Strict-Equality, read about it in the [previous blog post](https://www.jovidecroock.com/blog/vdom-compilers),
+  on the `FormProvider` so we aren't causing top-down renders when state changes.
+
 ## State outside of the Virtual-DOM
 
 The theory behind externally managing the state is that we allow for granular updates, components can
@@ -230,6 +233,9 @@ having to recalculate!
 
 ## Concluding
 
-We might have often heard the sentence "Redux is dead, we can just manage state with context",
-however much that latter part might be true it comes with some caveats and should be a decision
-that fits your needs.
+The latter optimization is one that library authors will often do for you, so next time before you
+go implementing Redux/... yourself consider what they are doing for you.
+Managing state with context can be a good solution but it can sometimes impose some performance constraints
+as demonstrated in the above.
+
+Hope this gave you some insights.
