@@ -1,0 +1,61 @@
+export const documentProps = {
+  title: 'Hydration in Preact',
+  description: '',
+  path: '/hydration-and-preact',
+  tags: ['vdom', 'front-end']
+}
+
+# Hydration
+
+We often talk about the concept of hydration and how the speed of it is vital to delivering a good experience, I want
+to touch on some efforts we as the Preact team have done to optimize for this metric as well.
+
+## Say what?
+
+For people unfamiliar with the concept, hydration is the practice of making a HTML page interactive. When we execute the following
+code-snippet
+
+```jsx
+import { render } from 'preact';
+
+render(<button onClick={() => { console.log('Oh hi, nice to have you here') }}>Hello world</button>, document.body);
+```
+
+We will replace anything inside `document.body` with a `button` that has a click-listener attached. When we server-side render
+we will be receiving the following html.
+
+```html
+<body>
+  <button>Hello world</button>
+</body>
+```
+
+Which in and of itself does nothing, we can click the button however much we like it won't do anything, we could call `render` again
+like the previous code-snipper but that would destroy and recreate the DOM. Instead we will call `hydrate`.
+
+```jsx
+import { hydrate } from 'preact';
+
+hydrate(<button onClick={() => { console.log('Oh hi, nice to have you here') }}>Hello world</button>, document.body);
+```
+
+Now Preact will go through the existing elements in `document.body` and match them up against what the Virtual-DOM is saying has to be there.
+After this is executed our application will be interactive.
+
+It is valuable to be aware of how this will occur in practice because we first get our HTML and our HTML file will contain a script tag
+telling the client where to find the code that will make this page interactive. This means we are essentially dealing with a waterfall
+
+> Download HTML --> Parse HTML --> Download JS --> Parse JS --> Execute hydration --> Page interactive
+
+This means the bigger your JS/... the longer it will take before the user can click something or navigate further, this
+is called the [Time To Interactive metric in the core-web-vitals metrics](https://web.dev/interactive/).
+
+## Time to interactive
+
+There are a lot of resources on the web.dev site as well as a lot of great articles on progrsesive enhancement, in this article however
+we are going to focus on Preact and hydration.
+
+https://web.dev/rendering-on-the-web/
+
+Deferred hydration and resumption by means of `lazy` boundaries reduces code/...
+https://github.com/JoviDeCroock/realworld/blob/main/src/index.js#L4
