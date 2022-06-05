@@ -60,8 +60,8 @@ export default () => (
           - Senior software engineer - Tech lead
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://graphcdn.io/">
-            GraphCDN
+          <Link target="blank" href="https://stellate.co/">
+            Stellate
           </Link>{' '}
           - Staff Software Engineer
         </ListItem>
