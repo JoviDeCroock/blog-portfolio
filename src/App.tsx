@@ -1,8 +1,7 @@
-import { h, render } from 'preact'
-import 'highlight-updates/preact'
+import { h } from 'preact'
 import { setup } from 'goober'
 import { createGlobalStyles } from 'goober/global'
-import { LocationProvider, Router } from 'preact-iso'
+import { Router } from 'preact-iso'
 import Home from './pages/Home'
 import Blog from './pages/Blog'
 import posts from './pages/posts'
@@ -58,7 +57,7 @@ setup(h)
 
 export function App() {
   return (
-    <LocationProvider>
+    <>
       <GlobalStyles />
       <Layout>
         <Router>
@@ -70,9 +69,6 @@ export function App() {
           <NotFound default />
         </Router>
       </Layout>
-    </LocationProvider>
+    </>
   )
 }
-
-const element = document.getElementById('main')
-if (element) render(<App />, element)
