@@ -18,7 +18,12 @@ code-snippet
 ```jsx
 import { render } from 'preact';
 
-render(<button onClick={() => { console.log('Oh hi, nice to have you here') }}>Hello world</button>, document.body);
+render(
+  <button
+    onClick={() => { console.log('Oh hi, nice to have you here') }}
+  >Hello world</button>,
+  document.body
+);
 ```
 
 We will replace anything inside `document.body` with a `button` that has a click-listener attached. When we server-side render
@@ -36,7 +41,12 @@ like the previous code-snipper but that would destroy and recreate the DOM. Inst
 ```jsx
 import { hydrate } from 'preact';
 
-hydrate(<button onClick={() => { console.log('Oh hi, nice to have you here') }}>Hello world</button>, document.body);
+hydrate(
+  <button
+    onClick={() => { console.log('Oh hi, nice to have you here') }}
+  >Hello world</button>,
+  document.body
+);
 ```
 
 Now Preact will go through the existing elements in `document.body` and match them up against what the Virtual-DOM is saying has to be there.
