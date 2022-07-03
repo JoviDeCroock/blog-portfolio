@@ -16,8 +16,32 @@ import State, {
   // @ts-ignore
   documentProps as stateDocumentProps,
 } from './state-outside-vdom/index.mdx'
+import Hydration, {
+  // @ts-ignore
+  documentProps as hydrationDocumentProps,
+} from './hydration/index.mdx'
 
 export default [
+  {
+    ...hydrationDocumentProps,
+    Component: () => {
+      useLink({
+        rel: 'stylesheet',
+        href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github-dark.min.css'
+      })
+
+      return (
+        <>
+          <SEO
+            title={hydrationDocumentProps.title}
+            description={hydrationDocumentProps.description}
+          />
+          <Hydration />
+        </>
+      )
+    },
+    path: '/blog' + hydrationDocumentProps.path,
+  },
   {
     ...stateDocumentProps,
     Component: () => {

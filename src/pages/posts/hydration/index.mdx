@@ -1,6 +1,6 @@
 export const documentProps = {
   title: 'Hydration in Preact',
-  description: '',
+  description: 'We see a lot of talk about hydration, what is it and where is it applied?',
   path: '/hydration-and-preact',
   tags: ['vdom', 'front-end']
 }
@@ -50,12 +50,63 @@ telling the client where to find the code that will make this page interactive. 
 This means the bigger your JS/... the longer it will take before the user can click something or navigate further, this
 is called the [Time To Interactive metric in the core-web-vitals metrics](https://web.dev/interactive/).
 
-## Time to interactive
+## Interactivity please
 
-There are a lot of resources on the web.dev site as well as a lot of great articles on progrsesive enhancement, in this article however
-we are going to focus on Preact and hydration.
+We want to optimize this time-to-interactive metric as it determines the usability of your application, imagine someone downloading the HTML
+for your application and due to a large bundle size or a bad connection the JS loads in slow, now the users will be hitting buttons but nothing
+will actually be happening... This is the valley between first paint and interactiveness.
 
-https://web.dev/rendering-on-the-web/
+From this we can conclude there's a few things we can do to make things interactive faster
 
-Deferred hydration and resumption by means of `lazy` boundaries reduces code/...
-https://github.com/JoviDeCroock/realworld/blob/main/src/index.js#L4
+- we leverage the platform `<a>` tags for our links, these work out of the box without JS, the SPA transitions however might not work
+- we start inlining our event-handlers for critical paths in the application
+- we reduce the code downloaded for the minimal interactivity
+- we reduce the amount of surface hydration has to touch before being fully interactive
+
+The two first are interesting paths and I highly suggest looking into how [Remix](https://remix.run/) is trying to shift the status quo there,
+however for this post we will focus where front-end libraries like Preact can come in to help out.
+
+A pretty native tool to reduce bundle-size for entry points have been `async routes`, as that is the first factor that will be variable in the
+entry of an application, we split up in multiple routes which essentially all are unused code apart from the one route we render. This leads me
+to the first usable heuristic in optimizing hydration, we introduce a helper to orchestrate these async loading states, currently we have these in
+the shape of `lazy` and `Suspense` as well as in [Preact-ISO](https://github.com/preactjs/wmr/tree/main/packages/preact-iso) (which we should
+really generalize one day).
+
+For the sake of familiarity let's look at the `Suspense` approach, when a route isn't loaded `lazy` will throw a `Promise` which follows a similar
+pattern to error boundaries in that when we see `Suspense` we can stop there, render the `fallback` and go on with our lives. What if instead of just
+rendering the fallback we look at whether there is DOM and mark this `Suspense` root as a pending hydration? At that point we have a deferred hydration
+going on that progressively hydrates the whole application as components are coming in.
+
+When we apply that to the deferred routes we see that our application becomes interactive in the following order:
+
+```html
+<body>
+  <header><!-- some links --></header> <!-- Interactive in the first pass -->
+  <main>
+    <!--
+      route content
+      Interactive in the second pass
+      when the route specific code arrives
+    -->
+  </main>
+  </footer><!-- some links --></footer> <!-- Interactive in the first pass -->
+</body>
+```
+
+This is a little known trick that currently actually already lives in Preact, I have actually created [a small demo](https://github.com/JoviDeCroock/realworld/blob/main/src/index.js#L4)
+years ago to show this. The demo goes a bit further as it also introduces the above concept for data-loading, as long as data isn't loaded it will suspend and use
+the existing non-hydrated DOM.
+
+## Islands of interactivity
+
+There is another alternative in the [islands approach](https://jasonformat.com/islands-architecture), conceptually we can approach this as
+removing all the parts we don't need and only hydrating little roots in our Virtual DOM. This all can happen at build-time and mainly introduces
+heuristics to play with, for instance only hydrate when this island becomes visible. This works out well in
+Tools pioneering this approach are [Astro](https://astro.build/) and [Fresh](https://fresh.deno.dev/), they are definitley worth checking out
+for your next project!
+
+Hell, I have considered rewriting this very blog in either of them just because I love seeing these tools in action and
+honestly I really should get some static-site generation in here for SEO... Oh and probably some styling as well as I am starting to notice that
+my minimalism is even starting to distrub me...
+
+There is so much innovation coming to this space when I look at streaming rendering, islands, ... and it honestly excites me beyond belief!

@@ -1,4 +1,5 @@
 import { Component } from 'preact';
+// @ts-ignore
 import renderToString from 'https://unpkg.com/preact-render-to-string@5.1.20/dist/index.module.js?module'
 
 const getData = () => new Promise(res => {
