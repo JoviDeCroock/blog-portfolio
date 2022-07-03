@@ -1,7 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'url'
-import { extractCss } from 'goober'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const toAbsolute = (p) => path.resolve(__dirname, p)
@@ -23,10 +22,10 @@ const routesToPrerender = fs
   // pre-render each route...
   for (const url of routesToPrerender) {
     const context = {}
-    const appHtml = await render(url, context)
-    const styleTag = `<style id="_goober">${extractCss()}</style>`;
-    console.log(styleTag)
-    const html = template.replace(`<div id="main"></div>`, `<div id="main">${appHtml}</div>`)
+    const result = await render(url, context)
+
+    let html = template.replace(`<div id="main"></div>`, `<div id="main">${result.body}</div>`)
+    html = html.replace(`<!-- STYLE CONTENT -->`, `<style id="_goober">${result.css}</style>`)
 
     const filePath = `dist/static${url === '/' ? '/index' : url}.html`
     fs.writeFileSync(toAbsolute(filePath), html)

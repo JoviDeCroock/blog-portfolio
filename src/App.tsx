@@ -2,11 +2,18 @@ import { h } from 'preact'
 import { setup } from 'goober'
 import { createGlobalStyles } from 'goober/global'
 import { Router } from 'preact-iso'
+import Layout from './components/Layout'
+
 import Home from './pages/Home'
 import Blog from './pages/Blog'
-import posts from './pages/posts'
 import NotFound from './pages/404'
-import Layout from './components/Layout'
+
+// Posts
+import VDom from './pages/posts/vdom-compilers/index.mdx'
+import Inputs from './pages/posts/controlled-inputs/index.mdx'
+import Suspense from './pages/posts/suspense-data-ssr/index.mdx'
+import State from './pages/posts/state-outside-vdom/index.mdx'
+import Hydration from './pages/posts/hydration/index.mdx'
 
 const GlobalStyles = createGlobalStyles`
   *, *::before, *::after {
@@ -63,9 +70,10 @@ export function App() {
         <Router>
           <Home path="/" />
           <Blog path="/blog" />
-          {posts.map((post) => (
-            <post.Component path={post.path} />
-          ))}
+          <VDom path='/blog/vdom-compilers' />
+          <Inputs path='/blog/controlled-inputs' />
+          <Suspense path='/blog/suspense-data-ssr' />
+          <State path='/blog/state-in-vdom' />
           <NotFound default />
         </Router>
       </Layout>

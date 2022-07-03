@@ -44,7 +44,7 @@ const Stringified = () => {
   useEffect(() => {
     // @ts-ignore
     import('https://unpkg.com/preact-render-to-string@5.1.20/dist/index.module.js?module').then(renderToString => {
-      setHtml(renderToString(<App />))
+      setHtml(renderToString.default(<App />))
     })
   })
 
