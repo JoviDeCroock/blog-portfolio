@@ -16,8 +16,9 @@ const routesToPrerender = fs
   .readdirSync(toAbsolute('src/pages'))
   .map((file) => {
     const name = file.replace(/\.tsx$/, '').toLowerCase()
-    return `/${name}`
-  })
+    if (name === 'posts') return null;
+    return name === 'home' ? '/' :`/${name}`
+  }).filter(Boolean)
 
 const postsToPrerender = [
   '/blog/vdom-compilers',
