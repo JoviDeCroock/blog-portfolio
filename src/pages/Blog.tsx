@@ -19,7 +19,7 @@ const Summary = styled('div')`
 const TitleLink = styled(Link)`
   font-size: 2.5rem;
   text-decoration: underline;
-  font-weight: bold;
+  font-weight: 500;
 `
 
 export default () => (

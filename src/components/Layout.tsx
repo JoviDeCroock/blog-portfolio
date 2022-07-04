@@ -28,7 +28,7 @@ const Nav = styled('nav')`
   gap: 3rem;
   padding: 0.5rem;
   text-transform: uppercase;
-  font-weight: bold;
+  font-weight: 500;
   margin-bottom: 1rem;
 `
 

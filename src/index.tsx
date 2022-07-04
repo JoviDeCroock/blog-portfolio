@@ -28,17 +28,23 @@ const GlobalStyles = createGlobalStyles`
   }
 
   body {
-    font-family: system-ui;
+    font-family: 'Inter', sans-serif, system-ui;
     line-height: 1.5;
   }
 
+  pre, code {
+    font-family: 'Fira Code', monospace;
+  }
+
   h1 {
+    font-weight: 500;
     font-size: 3rem;
     margin-bottom: 0.5em;
     line-height: 1;
   }
 
   h2 {
+    font-weight: 500;
     font-size: 2.5rem;
     margin-bottom: 0.5em;
   }
