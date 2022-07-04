@@ -16,7 +16,7 @@
  "dependencies": {
   "@mdx-js/rollup": "^2.1.2",
   "goober": "2.1.10",
-  "hoofd": "^1.5.0",
+  "hoofd": "^1.5.1",
   "preact": "^10.8.2",
   "preact-iso": "^2.3.0",
   "preact-render-to-string": "^5.2.0",
