@@ -1,6 +1,4 @@
 import { Component } from 'preact';
-// @ts-ignore
-import renderToString from 'https://unpkg.com/preact-render-to-string@5.1.20/dist/index.module.js?module'
 
 const getData = () => new Promise(res => {
   setTimeout(() => {
@@ -36,15 +34,26 @@ class App extends Component {
   }
 }
 
-const stringifiedHTML = renderToString(<App />)
+
+import { useEffect, useState } from 'preact/hooks';
+
 
 const Stringified = () => {
+  const [html, setHtml] = useState('')
+
+  useEffect(() => {
+    // @ts-ignore
+    import('https://unpkg.com/preact-render-to-string@5.1.20/dist/index.module.js?module').then(renderToString => {
+      setHtml(renderToString.default(<App />))
+    })
+  })
+
   return (
-    <div>
+    <div style="background:grey;">
       The above stringified HTML
       <code>
         <pre>
-          {stringifiedHTML}
+          {html}
         </pre>
       </code>
     </div>

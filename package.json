@@ -9,25 +9,26 @@
  "scripts": {
   "prepare": "husky install",
   "dev": "vite",
-  "build": "vite build && mv _redirects dist/_redirects"
+  "build": "yarn generate && mv _redirects dist/_redirects",
+  "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server && mv dist/server/entry-server.js dist/server/entry-server.cjs",
+  "generate": "vite build --outDir dist && yarn build:server && node prerender"
  },
  "dependencies": {
-  "@mdx-js/rollup": "^2.0.0",
-  "goober": "2.0.37",
-  "highlight-updates": "^0.0.6",
-  "hoofd": "^1.4.0",
-  "preact": "^10.6.5",
+  "@mdx-js/rollup": "^2.1.2",
+  "goober": "2.1.10",
+  "hoofd": "^1.5.1",
+  "preact": "^10.8.2",
   "preact-iso": "^2.3.0",
-  "preact-render-to-string": "^5.1.19",
+  "preact-render-to-string": "^5.2.0",
   "rehype-highlight": "^5.0.2"
  },
  "devDependencies": {
-  "@preact/preset-vite": "^2.1.7",
+  "@preact/preset-vite": "^2.3.0",
   "husky": "^7.0.4",
   "lint-staged": "^12.3.3",
   "prettier": "^2.5.1",
   "typescript": "^4.5.5",
-  "vite": "^2.8.1"
+  "vite": "^2.9.0"
  },
  "lint-staged": {
   "src/**/.tsx": [

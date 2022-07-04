@@ -1,5 +1,3 @@
-// @ts-ignore
-import { Highlighter } from 'highlight-updates/preact'
 import { useRef } from 'preact/hooks';
 import { RerenderTracker } from './common'
 
@@ -14,13 +12,11 @@ const Uncontrolled = () => {
 
   return (
     <div style="border: 1px solid black; padding: 4px 8px">
-      <Highlighter>
         <RerenderTracker name='input' />
         <input ref={inputRef} value="I am uncontrolled" />
         <button onClick={printValue}>
           Console log value of input
         </button>
-      </Highlighter>
     </div>
   );
 }

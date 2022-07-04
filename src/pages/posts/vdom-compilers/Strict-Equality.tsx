@@ -1,6 +1,4 @@
 import { useState } from 'preact/hooks'
-// @ts-ignore
-import { Highlighter } from 'highlight-updates/preact'
 import { RerenderTracker } from './common'
 
 const Counter = (props) => {
@@ -35,7 +33,6 @@ const Layout = (props) => {
 const App = () => {
   const [, setRerender] = useState({})
   return (
-    <Highlighter>
       <div style="border: 1px solid black; padding: 4px 8px">
         <RerenderTracker name="App" />
         <button onClick={() => setRerender({})}>Rerender App</button>
@@ -44,7 +41,6 @@ const App = () => {
           <Counter i="2" />
         </Layout>
       </div>
-    </Highlighter>
   )
 }
 

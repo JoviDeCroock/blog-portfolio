@@ -1,7 +1,14 @@
 import { styled } from 'goober'
 import SEO from '../components/Seo'
 import { Link, Prelude, Title } from '../components/Text'
-import posts from './posts'
+
+import { documentProps as VDomDocumentProps } from './posts/vdom-compilers/documentProps'
+import { documentProps as inputsDocumentProps } from './posts/controlled-inputs/documentProps'
+import { documentProps as ssrDocumentProps } from './posts/suspense-data-ssr/documentProps'
+import { documentProps as stateDocumentProps } from './posts/state-outside-vdom/documentProps'
+import { documentProps as hydrationDocumentProps } from './posts/hydration/documentProps'
+
+const posts = [hydrationDocumentProps, stateDocumentProps, ssrDocumentProps, inputsDocumentProps, VDomDocumentProps]
 
 const Block = styled('main')`
   margin-bottom: 1rem;

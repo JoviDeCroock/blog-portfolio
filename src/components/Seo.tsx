@@ -1,4 +1,4 @@
-import { useLang, useTitle, useMeta } from 'hoofd/preact'
+import { useLang, useTitle, useMeta, useLink } from 'hoofd/preact'
 
 type SEOProps = {
   title: string;
@@ -9,6 +9,12 @@ const author = 'Jovi De Croock';
 
 // TODO: keywords
 const SEO = (props: SEOProps) => {
+  useLink({
+    rel: 'stylesheet',
+    href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github-dark.min.css',
+    crossorigin: "anonymous"
+  })
+
   useLang('en')
 
   useTitle(props.title)

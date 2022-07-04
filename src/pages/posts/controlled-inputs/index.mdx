@@ -1,14 +1,14 @@
+import SEO from '../../../components/Seo'
+import { documentProps } from './documentProps'
+
 import Uncontrolled from './Uncontrolled.tsx'
 import Issue from './Issue.tsx'
 import Solution from './Solution.tsx'
 
-export const documentProps = {
-  title: 'Controlled inputs',
-  description:
-    'Controlled and uncontrolled inputs have always been a big subject, what does it actually mean, to be (un)controlled?',
-  path: '/controlled-inputs',
-  tags: ['vdom', 'front-end']
-}
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+/>
 
 # Controlled inputs
 

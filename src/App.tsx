@@ -1,13 +1,19 @@
-import { h, render } from 'preact'
-import 'highlight-updates/preact'
+import { h } from 'preact'
 import { setup } from 'goober'
 import { createGlobalStyles } from 'goober/global'
-import { LocationProvider, Router } from 'preact-iso'
+import { Router, Route } from 'preact-iso'
+import Layout from './components/Layout'
+
 import Home from './pages/Home'
 import Blog from './pages/Blog'
-import posts from './pages/posts'
 import NotFound from './pages/404'
-import Layout from './components/Layout'
+
+// Posts
+import VDom from './pages/posts/vdom-compilers/index.mdx'
+import Inputs from './pages/posts/controlled-inputs/index.mdx'
+import Suspense from './pages/posts/suspense-data-ssr/index.mdx'
+import State from './pages/posts/state-outside-vdom/index.mdx'
+import Hydration from './pages/posts/hydration/index.mdx'
 
 const GlobalStyles = createGlobalStyles`
   *, *::before, *::after {
@@ -58,21 +64,20 @@ setup(h)
 
 export function App() {
   return (
-    <LocationProvider>
+    <>
       <GlobalStyles />
       <Layout>
         <Router>
-          <Home path="/" />
-          <Blog path="/blog" />
-          {posts.map((post) => (
-            <post.Component path={post.path} />
-          ))}
-          <NotFound default />
+          <Route component={Home} path="/" />
+          <Route component={Blog} path="/blog" />
+          <Route component={VDom} path="/blog/vdom-compilers" />
+          <Route component={Inputs} path="/blog/controlled-inputs" />
+          <Route component={Suspense} path="/blog/suspense-data-ssr" />
+          <Route component={State} path="/blog/state-in-vdom" />
+          <Route component={Hydration} path="/blog/hydration-and-preact" />
+          <Route component={NotFound} default />
         </Router>
       </Layout>
-    </LocationProvider>
+    </>
   )
 }
-
-const element = document.getElementById('main')
-if (element) render(<App />, element)
