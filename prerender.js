@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const toAbsolute = (p) => path.resolve(__dirname, p)
 
-const template = fs.readFileSync(toAbsolute('dist/static/index.html'), 'utf-8')
+const template = fs.readFileSync(toAbsolute('dist/index.html'), 'utf-8')
 const { render } = await import('./dist/server/entry-server.cjs')
 try {
   fs.mkdirSync(toAbsolute('dist/blog'))
