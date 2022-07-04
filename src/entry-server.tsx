@@ -1,6 +1,7 @@
 import renderToString from 'preact-render-to-string'
 import { LocationProvider } from 'preact-iso'
 import { extractCss } from 'goober'
+import { toStatic } from 'hoofd/preact'
 import { App } from './App'
 
 // @ts-ignore
@@ -17,6 +18,7 @@ export function render(url) {
   )
   return {
     body: html,
+    meta: toStatic(),
     css: extractCss()
   }
 }

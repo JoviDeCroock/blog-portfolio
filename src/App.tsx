@@ -74,6 +74,7 @@ export function App() {
           <Inputs path='/blog/controlled-inputs' />
           <Suspense path='/blog/suspense-data-ssr' />
           <State path='/blog/state-in-vdom' />
+          <Hydration path='/blog/hydration-and-preact' />
           <NotFound default />
         </Router>
       </Layout>
