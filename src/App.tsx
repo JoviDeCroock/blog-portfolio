@@ -1,19 +1,19 @@
 import { h } from 'preact'
 import { setup } from 'goober'
 import { createGlobalStyles } from 'goober/global'
-import { Router, Route } from 'preact-iso'
+import { Router, Route, lazy, ErrorBoundary } from 'preact-iso'
 import Layout from './components/Layout'
 
-import Home from './pages/Home'
-import Blog from './pages/Blog'
-import NotFound from './pages/404'
+const NotFound = lazy(() => import('./pages/404'))
+const Blog = lazy(() => import('./pages/Blog'))
+const Home = lazy(() => import('./pages/Home'))
 
 // Posts
-import VDom from './pages/posts/vdom-compilers/index.mdx'
-import Inputs from './pages/posts/controlled-inputs/index.mdx'
-import Suspense from './pages/posts/suspense-data-ssr/index.mdx'
-import State from './pages/posts/state-outside-vdom/index.mdx'
-import Hydration from './pages/posts/hydration/index.mdx'
+const VDom = lazy(() => import('./pages/posts/vdom-compilers/index.mdx'))
+const Inputs = lazy(() => import('./pages/posts/controlled-inputs/index.mdx'))
+const Suspense = lazy(() => import('./pages/posts/suspense-data-ssr/index.mdx'))
+const State = lazy(() => import('./pages/posts/state-outside-vdom/index.mdx'))
+const Hydration = lazy(() => import('./pages/posts/hydration/index.mdx'))
 
 const GlobalStyles = createGlobalStyles`
   *, *::before, *::after {
@@ -67,16 +67,20 @@ export function App() {
     <>
       <GlobalStyles />
       <Layout>
-        <Router>
-          <Route component={Home} path="/" />
-          <Route component={Blog} path="/blog" />
-          <Route component={VDom} path="/blog/vdom-compilers" />
-          <Route component={Inputs} path="/blog/controlled-inputs" />
-          <Route component={Suspense} path="/blog/suspense-data-ssr" />
-          <Route component={State} path="/blog/state-in-vdom" />
-          <Route component={Hydration} path="/blog/hydration-and-preact" />
-          <Route component={NotFound} default />
-        </Router>
+        <ErrorBoundary>
+          <div>
+            <Router>
+              <Route component={Home} path="/" />
+              <Route component={Blog} path="/blog" />
+              <Route component={VDom} path="/blog/vdom-compilers" />
+              <Route component={Inputs} path="/blog/controlled-inputs" />
+              <Route component={Suspense} path="/blog/suspense-data-ssr" />
+              <Route component={State} path="/blog/state-in-vdom" />
+              <Route component={Hydration} path="/blog/hydration-and-preact" />
+              <Route component={NotFound} default />
+            </Router>
+          </div>
+        </ErrorBoundary>
       </Layout>
     </>
   )
