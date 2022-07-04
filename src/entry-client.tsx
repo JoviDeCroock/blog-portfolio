@@ -1,4 +1,4 @@
-import { render } from "preact"
+import { render, hydrate } from "preact"
 import { LocationProvider } from "preact-iso"
 import { App } from "./App"
 
@@ -8,4 +8,9 @@ let jsx = (
     <App />
   </LocationProvider>
 )
-if (element) render(jsx, element)
+if (element && element.hasChildNodes()) {
+  hydrate(jsx, element)
+} else if (element) {
+  // Dev
+  render(jsx, element)
+}

@@ -1,7 +1,7 @@
 import { h } from 'preact'
 import { setup } from 'goober'
 import { createGlobalStyles } from 'goober/global'
-import { Router } from 'preact-iso'
+import { Router, Route } from 'preact-iso'
 import Layout from './components/Layout'
 
 import Home from './pages/Home'
@@ -68,14 +68,14 @@ export function App() {
       <GlobalStyles />
       <Layout>
         <Router>
-          <Home path="/" />
-          <Blog path="/blog" />
-          <VDom path='/blog/vdom-compilers' />
-          <Inputs path='/blog/controlled-inputs' />
-          <Suspense path='/blog/suspense-data-ssr' />
-          <State path='/blog/state-in-vdom' />
-          <Hydration path='/blog/hydration-and-preact' />
-          <NotFound default />
+          <Route component={Home} path="/" />
+          <Route component={Blog} path="/blog" />
+          <Route component={VDom} path="/blog/vdom-compilers" />
+          <Route component={Inputs} path="/blog/controlled-inputs" />
+          <Route component={Suspense} path="/blog/suspense-data-ssr" />
+          <Route component={State} path="/blog/state-in-vdom" />
+          <Route component={Hydration} path="/blog/hydration-and-preact" />
+          <Route component={NotFound} default />
         </Router>
       </Layout>
     </>
