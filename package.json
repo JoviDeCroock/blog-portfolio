@@ -20,6 +20,7 @@
   "preact": "^10.8.2",
   "preact-iso": "^2.3.0",
   "preact-render-to-string": "^5.2.0",
+  "preact-ssr-prepass": "^1.2.0",
   "rehype-highlight": "^5.0.2"
  },
  "devDependencies": {
@@ -35,11 +36,11 @@
    "prettier --write"
   ],
   "src/**/.ts": [
-    "prettier --write"
-   ],
+   "prettier --write"
+  ],
   "src/**/.mdx": [
-    "prettier --write"
-   ]
+   "prettier --write"
+  ]
  },
  "husky": {
   "hooks": {
