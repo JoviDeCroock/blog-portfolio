@@ -1,12 +1,15 @@
 import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
 import { documentProps } from './documentProps'
 
 import RenderToString from './RenderToString.tsx'
 import Suspense from './Suspense.tsx'
 
+<CodeTheme />
 <SEO
   title={documentProps.title}
   description={documentProps.description}
+  keywords={documentProps.tags}
 />
 
 # Declarative data requirements

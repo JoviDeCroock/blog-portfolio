@@ -1,12 +1,15 @@
 import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
 import { documentProps } from './documentProps'
 
 import ContextForm from './ContextForm'
 import ExternalForm from './ExternalForm'
 
+<CodeTheme />
 <SEO
   title={documentProps.title}
   description={documentProps.description}
+  keywords={documentProps.tags}
 />
 
 # State in Virtual-DOM

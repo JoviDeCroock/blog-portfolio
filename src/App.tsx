@@ -29,6 +29,10 @@ const GlobalStyles = createGlobalStyles`
   }
 
   html, body {
+    font-kerning: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     padding: 0;
     margin: 0;
   }
