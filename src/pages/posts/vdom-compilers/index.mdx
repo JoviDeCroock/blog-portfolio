@@ -1,12 +1,15 @@
 import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
 import { documentProps } from './documentProps'
 
 import StateEquality from './State-Equality.tsx'
 import StrictEquality from './Strict-Equality.tsx'
 
+<CodeTheme />
 <SEO
   title={documentProps.title}
   description={documentProps.description}
+  keywords={documentProps.tags}
 />
 
 # Virtual Dom optimizations

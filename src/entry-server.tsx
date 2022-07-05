@@ -18,6 +18,9 @@ export async function render(url) {
     </LocationProvider>
   )
   await prepass(jsx)
+  // Clean out hoofd and goober queue
+  toStatic()
+  extractCss()
   const html = renderToString(jsx)
   return {
     body: html,

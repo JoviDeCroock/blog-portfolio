@@ -8,7 +8,13 @@ import { documentProps as ssrDocumentProps } from './posts/suspense-data-ssr/doc
 import { documentProps as stateDocumentProps } from './posts/state-outside-vdom/documentProps'
 import { documentProps as hydrationDocumentProps } from './posts/hydration/documentProps'
 
-const posts = [hydrationDocumentProps, stateDocumentProps, ssrDocumentProps, inputsDocumentProps, VDomDocumentProps]
+const posts = [
+  hydrationDocumentProps,
+  stateDocumentProps,
+  ssrDocumentProps,
+  inputsDocumentProps,
+  VDomDocumentProps,
+]
 
 const Block = styled('main')`
   margin-bottom: 1rem;
