@@ -32,7 +32,7 @@ const SEO = (props: SEOProps) => {
 
   // OpenGraph
   useMeta({ property: 'og:title', content: props.title })
-  useMeta({ property: 'og:image', content: props.image })
+  useMeta({ property: 'og:image', content: props.image || 'https://jovidecroock.com/me.jpg' })
   useMeta({ property: 'og:type', content: 'website' })
   useMeta({
     property: 'og:description',
