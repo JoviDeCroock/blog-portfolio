@@ -9,7 +9,6 @@ type SEOProps = {
 
 const author = 'Jovi De Croock';
 
-// TODO: keywords and image if provided
 const SEO = (props: SEOProps) => {
   useLang('en')
   useTitle(props.title)
