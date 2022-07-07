@@ -26,22 +26,26 @@ at this possibly being timing-related it was worth looking at how the DOM handle
 const defer = Promise.prototype.then.bind(Promise.resolve());
 
 function App() {
+  function onChange() {
+    console.log("onChange");
+    defer(() => {
+      console.log("onChange - microtick delay");
+    });
+  }
+
+  function onClick() {
+    console.log("onClick");
+    defer(() => {
+      console.log("onClick - microtick delay");
+    });
+  }
+
   return (
     <input
       type="checkbox"
+      onChange={onChange}
       checked={true}
-      onChange={() => {
-        console.log("onChange");
-        defer(() => {
-          console.log("onChange - microtick delay");
-        });
-      }}
-      onClick={() => {
-        console.log("onClick");
-        defer(() => {
-          console.log("onClick - microtick delay");
-        });
-      }}
+      onClick={onClick}
     />
   );
 }
