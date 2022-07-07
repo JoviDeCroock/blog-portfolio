@@ -112,7 +112,11 @@ function App() {
 
 So what we see here in terms of logs would be `original - microtick after original - bubbled`, well that's akward... in
 Preact we use this `defer` heuristic to batch updates to the DOM, you can find the relevant code [here](https://github.com/preactjs/preact/blob/10.9.0/src/component.js#L181).
-This means that when we click the inner-div from the issue, we first execute the whole update in Preact and only after we can start bubbling,
+Batching state updates has been in Preact for a long time and enables us to do less work as we group a set of updates happening and then order them from top to bottom and
+execute them all at once.
+
+In relation to the issue the microtick issue means that when we click the inner-div from the issue,
+we first execute the whole update in Preact and only after we can start bubbling,
 this makes it so that the event bubbles up to the newly created DOM-node and immediately undo'es the applied state-update!
 
 We can fix this by for instance using `const defer = setTimeout` which essentially should not pose risk and allows us to batch state-updates
