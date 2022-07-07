@@ -2,7 +2,7 @@ const defer = Promise.prototype.then.bind(Promise.resolve());
 
 export default function Example() {
   return (
-    <div>
+    <div style="width:100%;border:1px solid black;padding:8px;">
       <input
         id='example'
         type="checkbox"
