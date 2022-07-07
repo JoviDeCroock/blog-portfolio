@@ -22,6 +22,8 @@ When we start exploring this bug it's easy to tell people to call `e.stopPropaga
 but that only fits the case where we aren't relying on the bubbling to impact other nodes on its path. When someone pointed
 at this possibly being timing-related it was worth looking at how the DOM handles these, which brings us to an interesting finding.
 
+> When following along you won't experience this bug if you are using Safari!
+
 ```js
 const defer = Promise.prototype.then.bind(Promise.resolve());
 
