@@ -21,10 +21,11 @@ const SEO = (props: SEOProps) => {
   useMeta({ name: 'keywords', content: props.keywords ? props.keywords.join(', ') : undefined })
 
   // Twitta
-  useMeta({ name: 'twitter:card', content: 'summary' })
+  useMeta({ name: 'twitter:card', content: props.image ? 'summary_large_image' : 'summary' })
   useMeta({ name: 'twitter:creator', content: 'jovidec' })
   useMeta({ name: 'twitter:title', content: props.title })
-  useMeta({ name: 'twitter:image', content: props.image })
+  useMeta({ name: 'twitter:title', content: props.title })
+  useMeta({ name: 'twitter:image', content: props.image || 'https://jovidecroock.com/me.jpg' })
   useMeta({
     name: 'twitter:description',
     content: props.description,
