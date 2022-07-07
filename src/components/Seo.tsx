@@ -24,7 +24,6 @@ const SEO = (props: SEOProps) => {
   useMeta({ name: 'twitter:card', content: props.image ? 'summary_large_image' : 'summary' })
   useMeta({ name: 'twitter:creator', content: 'jovidec' })
   useMeta({ name: 'twitter:title', content: props.title })
-  useMeta({ name: 'twitter:title', content: props.title })
   useMeta({ name: 'twitter:image', content: props.image || 'https://jovidecroock.com/me.jpg' })
   useMeta({
     name: 'twitter:description',
