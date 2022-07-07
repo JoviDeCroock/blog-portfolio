@@ -26,6 +26,7 @@ const postsToPrerender = [
   '/blog/suspense-data-ssr',
   '/blog/state-in-vdom',
   '/blog/hydration-and-preact',
+  '/blog/browser-timings',
 ]
 
 const generateHead = res => {

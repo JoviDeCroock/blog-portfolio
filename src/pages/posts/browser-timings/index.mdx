@@ -1,0 +1,130 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+import Example from './Example'
+import Issue from './Issue'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+/>
+
+# Timings
+
+While exploring [a bug](https://github.com/preactjs/preact/issues/3596) we found a weird quirk where a DOM event seemingly
+bubbled higher up to a not-yet existing DOM-element. This is in practice not possible but it leads us on a path towards
+the solution.
+
+When we start exploring this bug it's easy to tell people to call `e.stopPropagation()` as in fact it solves the issue,
+but that only fits the case where we aren't relying on the bubbling to impact other nodes on its path. When someone pointed
+at this possibly being timing-related it was worth looking at how the DOM handles these, which brings us to an interesting finding.
+
+```js
+const defer = Promise.prototype.then.bind(Promise.resolve());
+
+function App() {
+  return (
+    <input
+      type="checkbox"
+      checked={true}
+      onChange={() => {
+        console.log("onChange");
+        defer(() => {
+          console.log("onChange - microtick delay");
+        });
+      }}
+      onClick={() => {
+        console.log("onClick");
+        defer(() => {
+          console.log("onClick - microtick delay");
+        });
+      }}
+    />
+  );
+}
+```
+<Example />
+
+For people who aren't familiar with the above practice of `Promise.prototype.then.bind(Promise.resolve());` we are essentially
+deferring the callback with one microtick, this is intended to let the browser batch up more work before we execute it.
+
+Consider the following example:
+
+```js
+const defer = Promise.prototype.then.bind(Promise.resolve());
+const commands = []
+
+function addWork(command) {
+  commands.unshift(command);
+  defer(() => { flush(); })
+}
+
+function flush() {
+  if (!commands.length) return;
+  console.log('flushing')
+  let command;
+  while(command = commands.pop()) command()
+}
+
+addWork(() => { console.log('task 1') })
+addWork(() => { console.log('task 2') })
+addWork(() => { console.log('task 3') })
+addWork(() => { console.log('task 4') })
+```
+
+We will add four items of work before executing on our flush! Feel free to copy paste that in your developer console and you
+will see the following logs: `flushing task 1 task 2 task 3 task 4` so one flush that executes all 4 tasks.
+
+That being said, let's return to the example, open your console and click the checkbox a few times.
+Isn't it weird how the `defer` here actually isn't working? We see `click - microtick - change - microtick`, this because the DOM
+also performs it's own delays, let's extend this to our issue report.
+
+```js
+const defer = Promise.prototype.then.bind(Promise.resolve());
+
+function App() {
+  function bubbled() {
+    console.log('bubbled')
+  }
+
+  function original() {
+    console.log('original')
+    defer(() => {
+      console.log('microtick after original')
+    })
+  }
+
+  return (
+    <div onClick={bubbled}>
+      <div onClick={original}>Click me!</div>
+    </div>
+  );
+}
+```
+<Issue />
+
+So what we see here in terms of logs would be `original - microtick after original - bubbled`, well that's akward... in
+Preact we use this `defer` heuristic to batch updates to the DOM, you can find the relevant code [here](https://github.com/preactjs/preact/blob/10.9.0/src/component.js#L181).
+This means that when we click the inner-div from the issue, we first execute the whole update in Preact and only after we can start bubbling,
+this makes it so that the event bubbles up to the newly created DOM-node and immediately undo'es the applied state-update!
+
+We can fix this by for instance using `const defer = setTimeout` which essentially should not pose risk and allows us to batch state-updates
+across bubbling and events!
+
+After analyzing all of this we discovered that there were two more bugs related to this very issue [#2887](https://github.com/preactjs/preact/issues/2887)
+and [#2745](https://github.com/preactjs/preact/issues/2745). People experiencing this issue can already bypass this today by leveraging the options api.
+
+```js
+import { options } from 'preact'
+
+options.debounceRendering = setTimeout
+```
+
+which will replace the built-in defer with your own, similarly you can experiment with other scheduling API's if you feel adventurous!
+Some examples of scheduling alternatives would be [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback)
+and [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame).
+
+Personally I am really looking forward to seeing how the [Scheduler API](https://www.w3.org/TR/task-scheduler/) turns out!

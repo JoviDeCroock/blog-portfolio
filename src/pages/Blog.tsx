@@ -7,8 +7,10 @@ import { documentProps as inputsDocumentProps } from './posts/controlled-inputs/
 import { documentProps as ssrDocumentProps } from './posts/suspense-data-ssr/documentProps'
 import { documentProps as stateDocumentProps } from './posts/state-outside-vdom/documentProps'
 import { documentProps as hydrationDocumentProps } from './posts/hydration/documentProps'
+import { documentProps as timingsDocumentProps } from './posts/browser-timings/documentProps'
 
 const posts = [
+  timingsDocumentProps,
   hydrationDocumentProps,
   stateDocumentProps,
   ssrDocumentProps,
