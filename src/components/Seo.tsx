@@ -4,6 +4,7 @@ type SEOProps = {
   title: string;
   description: string;
   keywords?: string[];
+  image?: string;
 }
 
 const author = 'Jovi De Croock';
@@ -21,8 +22,9 @@ const SEO = (props: SEOProps) => {
 
   // Twitta
   useMeta({ name: 'twitter:card', content: 'summary' })
-  useMeta({ name: 'twitter:creator', content: author })
+  useMeta({ name: 'twitter:creator', content: 'jovidec' })
   useMeta({ name: 'twitter:title', content: props.title })
+  useMeta({ name: 'twitter:image', content: props.image })
   useMeta({
     name: 'twitter:description',
     content: props.description,
@@ -30,6 +32,7 @@ const SEO = (props: SEOProps) => {
 
   // OpenGraph
   useMeta({ property: 'og:title', content: props.title })
+  useMeta({ property: 'og:image', content: props.image })
   useMeta({ property: 'og:type', content: 'website' })
   useMeta({
     property: 'og:description',
