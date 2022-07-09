@@ -37,6 +37,29 @@ const TitleLink = styled(Link)`
   font-weight: 500;
 `
 
+const Tag = styled('span')`
+  border-radius: 10px;
+  background: ${x => x.background};
+  color: white;
+  font-size: 14px;
+  padding: 4px 8px;
+`;
+
+const SubjectSummary = styled('div')`
+  display: flex;
+  & > span:not(:last-child) {
+    margin-right: 8px;
+  }
+`;
+
+const tagBgs = {
+  'front-end': '#7842f5',
+  vdom: '#6ff542',
+  state: '#f5427e',
+  suspense: '#f54242',
+  thinking: '#f59c42'
+}
+
 export default () => (
   <>
     <SEO
@@ -53,6 +76,9 @@ export default () => (
         <Summary>
           <TitleLink href={post.path}>{post.title}</TitleLink>
           <Prelude>{post.description}</Prelude>
+          <SubjectSummary>
+            {post.tags.map(tag => <Tag background={tagBgs[tag]} key={tag}>{tag}</Tag>)}
+          </SubjectSummary>
         </Summary>
       ))}
     </Block>
