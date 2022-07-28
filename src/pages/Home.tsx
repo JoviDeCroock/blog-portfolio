@@ -63,7 +63,7 @@ export default () => (
           <Link target="blank" href="https://stellate.co/">
             Stellate
           </Link>{' '}
-          - Staff Software Engineer
+          - Software Engineer
         </ListItem>
       </ul>
     </Block>
