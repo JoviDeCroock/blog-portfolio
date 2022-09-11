@@ -1,0 +1,63 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+/>
+
+# Preact unique vnode identifiers
+
+When React first announced `useOpaqueIdentifier` and later `useId` I was honestly fascinated,
+having a consistent unique id across server-side render and client-side hydration is extremely
+powerful. All of a sudden it becomes possible for a component library to help consumers with
+accessibility by ensuring that every `<input>` has an acommpanying `<label>` with the correct
+`htmlFor` set.
+
+Component libraries already did this before, an example from [react-spectrum](https://github.com/adobe/react-spectrum/blob/v2.27.0/packages/@react-aria/utils/src/useId.ts#L9)
+but all of a sudden these libraries got a guarantee, that despite suspense, ... the identifier
+generated would be unique and consistent given a stable vdom tree.
+
+## Preact
+
+When approaching this for Preact initially I approached it quite naively, every component can have
+a consistent identifier when they first mount which can be used as the base for an id. This wasn't
+sufficient as we can have cases where we don't mount certain subtrees in SSR but we do mount them
+on the client or we have trees that suspend and ultimately we create race-conditions.
+
+We needed an approach that given a stable tree it gives us a stable base-identifier for every component.
+This to me was a starting point, we only need to generate the stable identifier for every component,
+not for every dom-node, this because only components can call `useId` so as long as we have the
+base-identifier we can append a counter of how many `useId` invocations are happening.
+
+While thinking about it in our Virtual DOM tree we need to assess the position of a certain node,
+a node can have an endless amount of children and can be at a certain depth. This means that we can
+uniquely identify a tree by building up the position a child-node is in the parent-children and keep
+that around as a mask we build up for each node.
+
+<img src='/useId.jpg' alt="Diagram showing a root-node which has a base-id of 1, this node has two children which respectively map to 1.1 and 1.2, 1.1 has 1 child becoming 1.1.1 and 1.2 has two children 1.2.1 and 1.2.2 respectively" />
+
+The above diagram shows the reasoning employed here, the depth is accounted for by adding a new number to the mask and
+the position in the array of its parent makes up the number we are appending. This should be sufficient to create
+our unique tree-identifiers.
+
+Now all that's left is counting how many `useId` invocations occur in a component, this in and of itself was easier
+due to how hooks work, remember the rules-of-hooks where we enforce not callign it conditionally as well
+as not calling it in a loop? This means that the amount of hooks and the order of them is deterministic!
+
+In Preact we have often seen people use react on the server and Preact on the client to hydrate to reduce the
+client-side bundle, this feature effectively works against that as we require preact-render-to-string and preact
+so we can have consistent ids.
+
+This was a small insight into a feature I have thoroughly enjoyed working on and it has been inspired by numerous things
+
+- [The react implementation](https://github.com/acdlite/react/blob/371302f0144079a7b9f04c3c485ee19cf82b936f/packages/react-reconciler/src/ReactFiberTreeContext.old.js)
+  I had to put quite a bit of work into understanding the React one 😅
+- [The trie data structure](https://en.wikipedia.org/wiki/Trie)
+
+And as always I would love to shoutout my fellow Preact maintainers for reviewing and being patient with me always trying
+new things!

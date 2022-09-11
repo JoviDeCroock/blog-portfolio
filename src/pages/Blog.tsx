@@ -8,8 +8,10 @@ import { documentProps as ssrDocumentProps } from './posts/suspense-data-ssr/doc
 import { documentProps as stateDocumentProps } from './posts/state-outside-vdom/documentProps'
 import { documentProps as hydrationDocumentProps } from './posts/hydration/documentProps'
 import { documentProps as timingsDocumentProps } from './posts/browser-timings/documentProps'
+import { documentProps as useIdDocumentProps } from './posts/preact-use-id/documentProps'
 
 const posts = [
+  useIdDocumentProps,
   timingsDocumentProps,
   hydrationDocumentProps,
   stateDocumentProps,

@@ -15,6 +15,7 @@ const Suspense = lazy(() => import('./pages/posts/suspense-data-ssr/index.mdx'))
 const State = lazy(() => import('./pages/posts/state-outside-vdom/index.mdx'))
 const Hydration = lazy(() => import('./pages/posts/hydration/index.mdx'))
 const Timings = lazy(() => import('./pages/posts/browser-timings/index.mdx'))
+const UseId = lazy(() => import('./pages/posts/preact-use-id/index.mdx'))
 
 const GlobalStyles = createGlobalStyles`
   *, *::before, *::after {
@@ -83,6 +84,7 @@ export function App() {
               <Route component={State} path="/blog/state-in-vdom" />
               <Route component={Hydration} path="/blog/hydration-and-preact" />
               <Route component={Timings} path="/blog/browser-timings" />
+              <Route component={UseId} path="/blog/preact-use-id" />
               <Route component={NotFound} default />
             </Router>
           </div>
