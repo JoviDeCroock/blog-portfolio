@@ -47,6 +47,10 @@ Now all that's left is counting how many `useId` invocations occur in a componen
 due to how hooks work, remember the rules-of-hooks where we enforce not callign it conditionally as well
 as not calling it in a loop? This means that the amount of hooks and the order of them is deterministic!
 
+So now we have a base-id and a counter unique to the invoking component, the deeper the tree the longer the id would get
+if we don't do anything with it so we decided to hash the value. An important aspect here is that we don't want people to
+pay a cost for a feature they don't use so you would only pay this cost when you decide to invoke a `useId`.
+
 In Preact we have often seen people use react on the server and Preact on the client to hydrate to reduce the
 client-side bundle, this feature effectively works against that as we require preact-render-to-string and preact
 so we can have consistent ids.
