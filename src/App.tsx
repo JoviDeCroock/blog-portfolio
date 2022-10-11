@@ -1,6 +1,5 @@
 import { h } from 'preact'
 import { setup } from 'goober'
-import { createGlobalStyles } from 'goober/global'
 import { Router, Route, lazy, ErrorBoundary } from 'preact-iso'
 import Layout from './components/Layout'
 
@@ -17,61 +16,11 @@ const Hydration = lazy(() => import('./pages/posts/hydration/index.mdx'))
 const Timings = lazy(() => import('./pages/posts/browser-timings/index.mdx'))
 const UseId = lazy(() => import('./pages/posts/preact-use-id/index.mdx'))
 
-const GlobalStyles = createGlobalStyles`
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
-
-  blockquote {
-    display: flex;
-    text-align: center;
-    border-left: 1px solid grey;
-    margin-left: 24px;
-    padding-left: 12px;
-  }
-
-  html, body {
-    font-kerning: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-    padding: 0;
-    margin: 0;
-  }
-
-  body {
-    font-family: 'Inter', sans-serif, system-ui;
-    line-height: 1.5;
-  }
-
-  pre, code {
-    font-family: 'Fira Code', monospace;
-  }
-
-  h1 {
-    font-weight: 500;
-    font-size: 3rem;
-    margin-bottom: 0.5em;
-    line-height: 1;
-  }
-
-  h2 {
-    font-weight: 500;
-    font-size: 2.5rem;
-    margin-bottom: 0.5em;
-  }
-
-  p, a, li {
-    font-size: 1rem;
-  }
-`
-
 setup(h)
 
 export function App() {
   return (
     <>
-      <GlobalStyles />
       <Layout>
         <ErrorBoundary>
           <div>
