@@ -24,6 +24,7 @@ const Footer = () => (
     <FooterLink target="blank" href="https://dev.to/jovidecroock">
       Dev.to
     </FooterLink>
+    <FooterLink rel="me" href="https://fosstodon.org/@jovi">Mastodon</FooterLink>
   </Wrapper>
 )
 
