@@ -63,7 +63,7 @@ export default () => (
           <Link target="blank" href="https://stellate.co/">
             Stellate
           </Link>{' '}
-          - Software Engineer
+          - Staff Software Engineer
         </ListItem>
       </ul>
     </Block>
@@ -73,8 +73,7 @@ export default () => (
       <SkillIndicator title="GraphQL" level={9.5} />
       <SkillIndicator title="Node.js" level={9} />
       <SkillIndicator title="TypeScript" level={9} />
-      <SkillIndicator title="React-Native" level={7.5} />
-      <SkillIndicator title="Terraform" level={7} />
+      <SkillIndicator title="Terraform" level={8} />
       <SkillIndicator title="AWS" level={7} />
       <SkillIndicator title="SQL" level={7} />
     </Block>
