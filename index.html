@@ -20,6 +20,77 @@
         box-sizing: border-box;
       }
 
+      *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  figure,
+  blockquote,
+  dl,
+  dd,
+  ul,
+  li,
+  pre {
+    margin: 0;
+  }
+
+  ul,
+  ol {
+    padding: 0;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  button {
+    appearance: none;
+  }
+
+  img,
+  picture {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html:focus-within {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0 !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  #index {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
       blockquote {
         display: flex;
         text-align: center;
@@ -33,12 +104,16 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
+        font-feature-settings: "salt";
         padding: 0;
         margin: 0;
       }
 
       body {
-        font-family: 'Inter', sans-serif, system-ui;
+        overflow-x: hidden;
+        font-family: "Inter", system-ui, sans-serif;
+        background-color: #111111;
+        color: #dddce5;
         line-height: 1.5;
       }
 
@@ -46,21 +121,39 @@
         font-family: 'Fira Code', monospace;
       }
 
+      h1, h2, h3, h4, h5 {
+        color: #FEFEFE;
+      }
+
       h1 {
         font-weight: 500;
         font-size: 3rem;
         margin-bottom: 0.5em;
         line-height: 1;
+        color: #dddce5;
       }
 
       h2 {
         font-weight: 500;
         font-size: 2.5rem;
         margin-bottom: 0.5em;
+        color: #dddce5;
       }
 
       p, a, li {
         font-size: 1rem;
+        color: #dddce5;
+      }
+
+      a {
+        font-weight: 700;
+        color: inherit;
+        color: #dddce5;
+      }
+
+      a:hover, a:focus {
+        text-decoration:none;
+        color: #6effb0;
       }
     </style>
 

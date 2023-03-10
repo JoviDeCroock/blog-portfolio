@@ -3,7 +3,6 @@ import { Link, Prelude, SubTitle, Title } from '../components/Text'
 import SEO from '../components/Seo'
 
 const Hero = styled('div')`
-  background: white;
   width: 100%;
 `
 
@@ -138,7 +137,7 @@ const BarWrapper = styled('div')`
 `
 
 const Indicator = styled('div')`
-  background-color: #4286f4;
+  background-color: #6effb0;
   border: 1px solid transparent;
   border-radius: 10px;
   height: 100%;
