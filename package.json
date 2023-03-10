@@ -9,7 +9,7 @@
  "scripts": {
   "prepare": "husky install",
   "dev": "vite",
-  "build": "yarn generate",
+  "build": "pnpm run generate",
   "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
   "generate": "vite build --outDir dist && yarn build:server && node prerender"
  },
