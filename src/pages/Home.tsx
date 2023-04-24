@@ -81,16 +81,22 @@ export default () => (
       <SubTitle>Open source projects</SubTitle>
       <ul>
         <ListItem>
-          <Link target="blank" href="https://github.com/preactjs/preact">
-            Preact
-          </Link>{' '}
-          maintainer (core team)
-        </ListItem>
-        <ListItem>
           <Link target="blank" href="https://github.com/formidablelabs/urql">
             Urql
           </Link>{' '}
           maintainer (core team)
+        </ListItem>
+        <ListItem>
+          <Link target="blank" href="https://github.com/0no-co/hoofd">
+            Hoofd
+          </Link>{' '}
+          - Lightweight (P)React head library
+        </ListItem>
+         <ListItem>
+          <Link target="blank" href="https://github.com/0no-co/graphqlsp">
+            GraphQLSP
+          </Link>{' '}
+          - TypeScript LSP plugin for GraphQL
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/preactjs/prefresh">
@@ -99,24 +105,12 @@ export default () => (
           - Fast-refresh for Preact
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://github.com/JoviDeCroock/hoofd">
-            Hoofd
+           Former
+          <Link target="blank" href="https://github.com/preactjs/preact">
+            Preact
           </Link>{' '}
-          - Lightweight (P)React head library
+          maintainer (core team)
         </ListItem>
-      </ul>
-    </Block>
-    <Block>
-      <SubTitle>Achievements</SubTitle>
-      <ul>
-        <ListItem>Google Open Source Peer Bonus - Q4 2019</ListItem>
-        <ListItem>
-          Helped implement a complex entity-level authorisation system
-        </ListItem>
-        <ListItem>
-          Tennis handicap prediction algorithm, focussed on beating bookmakers
-        </ListItem>
-        <ListItem>First prize at Hack The Future 2016 - Android</ListItem>
       </ul>
     </Block>
     <Block>
