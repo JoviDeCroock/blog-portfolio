@@ -105,7 +105,7 @@ export default () => (
           - Fast-refresh for Preact
         </ListItem>
         <ListItem>
-           Former
+          Former{' '}
           <Link target="blank" href="https://github.com/preactjs/preact">
             Preact
           </Link>{' '}
