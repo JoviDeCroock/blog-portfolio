@@ -81,10 +81,10 @@ export default () => (
       <SubTitle>Open source projects</SubTitle>
       <ul>
         <ListItem>
-          <Link target="blank" href="https://github.com/formidablelabs/urql">
+          <Link target="blank" href="https://github.com/urql-graphql/urql">
             Urql
           </Link>{' '}
-          maintainer (core team)
+          contributor
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/0no-co/hoofd">
@@ -105,7 +105,6 @@ export default () => (
           - Fast-refresh for Preact
         </ListItem>
         <ListItem>
-          Former{' '}
           <Link target="blank" href="https://github.com/preactjs/preact">
             Preact
           </Link>{' '}
