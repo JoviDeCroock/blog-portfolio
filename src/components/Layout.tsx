@@ -47,7 +47,6 @@ export type LayoutProps = {
 
 const Layout = (props: LayoutProps) => (
   <Wrapper>
-    <Header />
     <Main>{props.children}</Main>
     <Footer />
   </Wrapper>
