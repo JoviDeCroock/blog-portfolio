@@ -103,7 +103,7 @@ export default () => (
           <Link target="blank" href="https://github.com/urql-graphql/urql">
             Urql
           </Link>{' '}
-          contributor
+          maintainer
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/0no-co/hoofd">
