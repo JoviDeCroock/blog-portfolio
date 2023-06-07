@@ -43,27 +43,31 @@ export default () => (
       </Prelude>
     </Hero>
     <Block>
-      <SubTitle>Experience</SubTitle>
+      <SubTitle>Education</SubTitle>
       <ul>
         <ListItem>VHTI Dendermonde - Hardware</ListItem>
-        <ListItem>HoGent - Applied IT</ListItem>
+        <ListItem>HoGent - Bachelor Computer Science</ListItem>
+      </ul>
+      <SubTitle>Experience</SubTitle>
+      <ul>
+
         <ListItem>
           <Link target="blank" href="https://codifly.be">
             Codifly
           </Link>{' '}
-          - Web and Mobile engineer
+          - Web and Mobile engineer (2017-2019)
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://formidable.com/">
             Formidable
           </Link>{' '}
-          - Senior software engineer - Tech lead
+          - Senior software engineer - Tech lead (2019-2021)
         </ListItem>
         <ListItem>
           <Link target="blank" href="https://stellate.co/">
             Stellate
           </Link>{' '}
-          - Staff Software Engineer
+          - Staff Software Engineer (2021-Now)
         </ListItem>
       </ul>
     </Block>
@@ -76,10 +80,23 @@ export default () => (
       <SkillIndicator title="Terraform" level={8} />
       <SkillIndicator title="AWS" level={7} />
       <SkillIndicator title="SQL" level={7} />
+      <SkillIndicator title="Rust" level={6} />
     </Block>
     <Block>
       <SubTitle>Open source projects</SubTitle>
       <ul>
+      <ListItem>
+          <Link target="blank" href="https://github.com/preactjs/preact">
+            Preact
+          </Link>{' '}
+          maintainer (core team)
+        </ListItem>
+        <ListItem>
+          <Link target="blank" href="https://github.com/preactjs/prefresh">
+            Prefresh
+          </Link>{' '}
+          - Fast-refresh for Preact
+        </ListItem>
         <ListItem>
           <Link target="blank" href="https://github.com/urql-graphql/urql">
             Urql
@@ -97,18 +114,6 @@ export default () => (
             GraphQLSP
           </Link>{' '}
           - TypeScript LSP plugin for GraphQL
-        </ListItem>
-        <ListItem>
-          <Link target="blank" href="https://github.com/preactjs/prefresh">
-            Prefresh
-          </Link>{' '}
-          - Fast-refresh for Preact
-        </ListItem>
-        <ListItem>
-          <Link target="blank" href="https://github.com/preactjs/preact">
-            Preact
-          </Link>{' '}
-          maintainer (core team)
         </ListItem>
       </ul>
     </Block>
