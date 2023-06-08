@@ -20,10 +20,13 @@ const Footer = () => (
     <FooterLink target="blank" href="https://www.github.com/jovidecroock">
       Github
     </FooterLink>
-    -<FooterLink href="mailto:decroockjovi@gmail.com">Contact</FooterLink>-
-    <FooterLink target="blank" href="https://dev.to/jovidecroock">
-      Dev.to
+    -
+    <FooterLink href="mailto:decroockjovi@gmail.com">Contact</FooterLink>
+    -
+    <FooterLink target="blank" href="https://jovidecroock.com/blog">
+      Blog
     </FooterLink>
+    -
     <FooterLink rel="me" href="https://fosstodon.org/@jovi">Mastodon</FooterLink>
   </Wrapper>
 )
