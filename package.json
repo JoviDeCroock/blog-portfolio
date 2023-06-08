@@ -6,7 +6,7 @@
  "description": "My own portfolio",
  "homepage": "https://jovidecroock.com/",
  "license": "MIT",
- "packageManager": "pnpm@8.3.1",
+ "packageManager": "pnpm@8.6.1",
  "scripts": {
   "prepare": "husky install",
   "dev": "vite",

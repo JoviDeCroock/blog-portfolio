@@ -28,42 +28,48 @@ export default () => (
       <Prelude>
         When growing up I discovered a passion for IT, this grew into me working{' '}
         at a hardware store and eventually into finding my passion for{' '}
-        programming. This passion turned me to study software engineering, find
+        programming. This passion turned me to study computer science, find{' '}
         freelancer assignments and eventually my first job.
         <br />
         <br />
-        Nowadays I find myself enjoying work on both front-end as well as
+        Nowadays I find myself enjoying work on both front-end as well as{' '}
         back-end systems. Finding elegant solutions to complex behavior is my{' '}
-        favorite challenge. Another thing I find a deep interest in is{' '}
-        optimising performance.
+        favorite challenge. In companies I like to empower people to deliver their{' '}
+        best work, a force multiplier for others, be that by working on DX or discovering{' '}
+        solutions to problems together.
         <br />
-        <br />A second passion that has grown over the years is open-source, I
-        love working in the open and I love collaborating with others to solve
-        problems.
+        <br />
+        A second passion that has grown over the years is open-source, I{' '}
+        love working in the open and I love collaborating with others to solve{' '}
+        common development problems.
       </Prelude>
     </Hero>
     <Block>
-      <SubTitle>Experience</SubTitle>
+      <SubTitle>Education</SubTitle>
       <ul>
         <ListItem>VHTI Dendermonde - Hardware</ListItem>
-        <ListItem>HoGent - Applied IT</ListItem>
+        <ListItem>HoGent - Bachelor Computer Science</ListItem>
+      </ul>
+      <SubTitle>Experience</SubTitle>
+      <ul>
+
         <ListItem>
-          <Link target="blank" href="https://codifly.be">
+          <Link rel="nofollow" target="blank" href="https://codifly.be">
             Codifly
           </Link>{' '}
-          - Web and Mobile engineer
+          - Web and Mobile engineer (2017-2019)
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://formidable.com/">
+          <Link rel="nofollow" target="blank" href="https://formidable.com/">
             Formidable
           </Link>{' '}
-          - Senior software engineer - Tech lead
+          - Senior software engineer - Tech lead (2019-2021)
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://stellate.co/">
+          <Link rel="nofollow" target="blank" href="https://stellate.co/">
             Stellate
           </Link>{' '}
-          - Staff Software Engineer
+          - Staff Software Engineer (2021-Now)
         </ListItem>
       </ul>
     </Block>
@@ -76,48 +82,56 @@ export default () => (
       <SkillIndicator title="Terraform" level={8} />
       <SkillIndicator title="AWS" level={7} />
       <SkillIndicator title="SQL" level={7} />
+      <SkillIndicator title="Rust" level={6} />
     </Block>
     <Block>
       <SubTitle>Open source projects</SubTitle>
       <ul>
-        <ListItem>
-          <Link target="blank" href="https://github.com/urql-graphql/urql">
-            Urql
+      <ListItem>
+          <Link rel="nofollow" target="blank" href="https://github.com/preactjs/preact">
+            Preact
           </Link>{' '}
-          contributor
+          maintainer (core team)
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://github.com/0no-co/hoofd">
-            Hoofd
-          </Link>{' '}
-          - Lightweight (P)React head library
-        </ListItem>
-         <ListItem>
-          <Link target="blank" href="https://github.com/0no-co/graphqlsp">
-            GraphQLSP
-          </Link>{' '}
-          - TypeScript LSP plugin for GraphQL
-        </ListItem>
-        <ListItem>
-          <Link target="blank" href="https://github.com/preactjs/prefresh">
+          <Link rel="nofollow" target="blank" href="https://github.com/preactjs/prefresh">
             Prefresh
           </Link>{' '}
           - Fast-refresh for Preact
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://github.com/preactjs/preact">
-            Preact
+          <Link rel="nofollow" target="blank" href="https://github.com/urql-graphql/urql">
+            Urql
           </Link>{' '}
-          maintainer (core team)
+          maintainer
+        </ListItem>
+        <ListItem>
+          <Link rel="nofollow" target="blank" href="https://github.com/0no-co/hoofd">
+            Hoofd
+          </Link>{' '}
+          - Lightweight (P)React head library
+        </ListItem>
+         <ListItem>
+          <Link rel="nofollow" target="blank" href="https://github.com/0no-co/graphqlsp">
+            GraphQLSP
+          </Link>{' '}
+          - TypeScript LSP plugin for GraphQL
         </ListItem>
       </ul>
     </Block>
     <Block>
-      <SubTitle>Interests</SubTitle>
+      <SubTitle>Achievements</SubTitle>
       <ul>
-        <ListItem>Psychology</ListItem>
-        <ListItem>Philosophy</ListItem>
-        <ListItem>Music</ListItem>
+        <ListItem>
+          <Link rel="nofollow" target="blank" href="https://github.com/FredKSchott/esm-hmr">
+            Contributed to the ESM HMR Spec
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link rel="nofollow" target="blank" href="https://opensource.googleblog.com/2020/01/announcing-2019-second-cycle-google.html">
+            Google Open Source Peer Bonus 2019 Cycle 2
+          </Link>
+        </ListItem>
       </ul>
     </Block>
   </>
