@@ -13,18 +13,21 @@ const FooterLink = styled(Link)`
 
 const Footer = () => (
   <Wrapper>
-    <FooterLink target="blank" href="https://www.twitter.com/jovidec">
+    <FooterLink rel="nofollow" target="blank" href="https://www.twitter.com/jovidec">
       Twitter
     </FooterLink>
     -
-    <FooterLink target="blank" href="https://www.github.com/jovidecroock">
+    <FooterLink rel="nofollow" target="blank" href="https://www.github.com/jovidecroock">
       Github
     </FooterLink>
-    -<FooterLink href="mailto:decroockjovi@gmail.com">Contact</FooterLink>-
-    <FooterLink target="blank" href="https://dev.to/jovidecroock">
-      Dev.to
+    -
+    <FooterLink href="mailto:decroockjovi@gmail.com">Contact</FooterLink>
+    -
+    <FooterLink rel="nofollow" target="blank" href="https://jovidecroock.com/blog">
+      Blog
     </FooterLink>
-    <FooterLink rel="me" href="https://fosstodon.org/@jovi">Mastodon</FooterLink>
+    -
+    <FooterLink rel="me" target="blank" href="https://fosstodon.org/@jovi">Mastodon</FooterLink>
   </Wrapper>
 )
 

@@ -54,19 +54,19 @@ export default () => (
       <ul>
 
         <ListItem>
-          <Link target="blank" href="https://codifly.be">
+          <Link rel="nofollow" target="blank" href="https://codifly.be">
             Codifly
           </Link>{' '}
           - Web and Mobile engineer (2017-2019)
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://formidable.com/">
+          <Link rel="nofollow" target="blank" href="https://formidable.com/">
             Formidable
           </Link>{' '}
           - Senior software engineer - Tech lead (2019-2021)
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://stellate.co/">
+          <Link rel="nofollow" target="blank" href="https://stellate.co/">
             Stellate
           </Link>{' '}
           - Staff Software Engineer (2021-Now)
@@ -88,31 +88,31 @@ export default () => (
       <SubTitle>Open source projects</SubTitle>
       <ul>
       <ListItem>
-          <Link target="blank" href="https://github.com/preactjs/preact">
+          <Link rel="nofollow" target="blank" href="https://github.com/preactjs/preact">
             Preact
           </Link>{' '}
           maintainer (core team)
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://github.com/preactjs/prefresh">
+          <Link rel="nofollow" target="blank" href="https://github.com/preactjs/prefresh">
             Prefresh
           </Link>{' '}
           - Fast-refresh for Preact
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://github.com/urql-graphql/urql">
+          <Link rel="nofollow" target="blank" href="https://github.com/urql-graphql/urql">
             Urql
           </Link>{' '}
-          contributor
+          maintainer
         </ListItem>
         <ListItem>
-          <Link target="blank" href="https://github.com/0no-co/hoofd">
+          <Link rel="nofollow" target="blank" href="https://github.com/0no-co/hoofd">
             Hoofd
           </Link>{' '}
           - Lightweight (P)React head library
         </ListItem>
          <ListItem>
-          <Link target="blank" href="https://github.com/0no-co/graphqlsp">
+          <Link rel="nofollow" target="blank" href="https://github.com/0no-co/graphqlsp">
             GraphQLSP
           </Link>{' '}
           - TypeScript LSP plugin for GraphQL
@@ -120,11 +120,18 @@ export default () => (
       </ul>
     </Block>
     <Block>
-      <SubTitle>Interests</SubTitle>
+      <SubTitle>Achievements</SubTitle>
       <ul>
-        <ListItem>Psychology</ListItem>
-        <ListItem>Philosophy</ListItem>
-        <ListItem>Music</ListItem>
+        <ListItem>
+          <Link rel="nofollow" target="blank" href="https://github.com/FredKSchott/esm-hmr">
+            Contributed to the ESM HMR Spec
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link rel="nofollow" target="blank" href="https://opensource.googleblog.com/2020/01/announcing-2019-second-cycle-google.html">
+            Google Open Source Peer Bonus 2019 Cycle 2
+          </Link>
+        </ListItem>
       </ul>
     </Block>
   </>
