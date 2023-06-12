@@ -41,7 +41,7 @@ const TitleLink = styled(Link)`
 
 const Tag = styled('span')`
   border-radius: 10px;
-  background: ${x => x.background};
+  background: ${x => (x as any).background};
   color: white;
   font-size: 14px;
   padding: 4px 8px;
