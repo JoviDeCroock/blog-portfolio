@@ -39,9 +39,9 @@ const TitleLink = styled(Link)`
   font-weight: 500;
 `
 
-const Tag = styled('span')`
+const Tag = styled<{ background: string }>('span')`
   border-radius: 10px;
-  background: ${x => (x as any).background};
+  background: ${x => x.background};
   color: white;
   font-size: 14px;
   padding: 4px 8px;
@@ -54,7 +54,7 @@ const SubjectSummary = styled('div')`
   }
 `;
 
-const tagBgs = {
+const tagBgs: Record<string, string> = {
   'front-end': '#7842f5',
   vdom: '#6ff542',
   state: '#f5427e',
