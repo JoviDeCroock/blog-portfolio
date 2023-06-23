@@ -123,6 +123,11 @@ export default () => (
       <SubTitle>Achievements</SubTitle>
       <ul>
         <ListItem>
+          <Link rel="nofollow" target="blank" href="https://us.puma.com">
+            During my time at Formidable, technical lead on modernising the tech-stack of Puma
+          </Link>
+        </ListItem>
+        <ListItem>
           <Link rel="nofollow" target="blank" href="https://github.com/FredKSchott/esm-hmr">
             Contributed to the ESM HMR Spec
           </Link>
