@@ -1,0 +1,168 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+/>
+
+# GraphQL Persisted Operations
+
+Lately, I've often heard that it's hard to lock down
+GraphQL API's, this being caused by the infinite depth, breadth, ...
+a GraphQL document can contain.
+
+This is true for the current default learning path of GraphQL, this
+will push you down the path of sending your stringified document over
+the wire and your server to make sense of it.
+
+This however doesn't have to be the end-all be all of GraphQL, in Relay
+[Persisted Queries](https://relay.dev/docs/guides/persisted-queries)
+have always been a thing and Apollo has taken a stab at something they refer to as
+[Automatic Persisted Queries](https://www.apollographql.com/docs/apollo-server/performance/apq/).
+
+The core principle in both is about the same, instead of sending our GraphQL document over the wire
+we'll send a hash of the GraphQL document, our server will take this hash and know that it's dealing
+with a certain document.
+
+The differences start in how this contract is established, in Relay we'll let the compiler do the work.
+The compiler will go through all the documents it can find and create md5 hashes out of them. This
+will give you a mapping that can be used on both the server and client so the client knows what hash
+to send and the server so it knows what the hash means. This is ultimately very locked down as now
+external people can't abuse your API as they would need the MD5 hash and would only be able to run
+those operations.
+
+With Automatic Persisted Queries we are dealing with a handshake protocol, there is no compilation/... going on.
+The document gets hashed at runtime, when the server receives the request it will check whether it knows
+what the hash means and when it doesn't it will send a specific error message `PersistedQueryNotFound` when
+the client receives this as a response it will send the stringified GraphQL document alongside the hash
+and the server can learn the association that way.
+
+The Automatic part trades off the "locking down your API" part for convenience, don't get me wrong sending
+the hashes is still a lot better for both Caching as well as just general lower request payload sizes.
+
+## Persisted operations in practice
+
+We have seen that Relay can do this for us but so can `urql` and `GraphQL-Yoga`, let's take a look how
+we can do this with this stack:
+
+Let's start on the client, we'll use `urql` with the `@urql/exchange-persisted-operations`
+
+```sh
+npm i --save urql graphql @urql/exchange-persisted
+npm i --save-dev @graphql-codegen/cli
+```
+
+we will add a configuration for `graphql-codegen`
+
+```ts
+import { CodegenConfig } from "@graphql-codegen/cli";
+
+const config: CodegenConfig = {
+  schema: "YOUR_GRAPHQL_ENDPOINT",
+  documents: ["./**/*.{ts,tsx}"],
+  ignoreNoDocuments: true,
+  generates: {
+    "./gql/": {
+      preset: "client",
+      plugins: [],
+      presetConfig: {
+        persistedDocuments: true,
+      },
+    },
+  },
+};
+
+export default config;
+```
+
+This will make it so that our front-end outputs a `persisted-documents.json` file
+which maps a hash to the respective operation. Additionally the operations it generates
+for our front-end will have a pre-computed hash, this gets us a lot closer to the Relay workflow.
+
+For our urql configuration we'll need to replace the default `fetchExchange` with the one to
+support persisted-operations.
+
+> urql is very extensible, even the cache is an exchange [which is their kind of plugin](https://formidable.com/open-source/urql/docs/architecture/#the-client-and-exchanges)
+
+```js
+import { Client, cacheExchange } from 'urql';
+import { persistedExchange } from '@urql/exchange-persisted';
+
+const client = new createClient({
+  url: 'http://localhost:1234/graphql',
+  exchanges: [
+    cacheExchange,
+    persistedExchange({
+      // We want to use GET so we can optimise for caching/...
+      preferGetForPersistedQueries: true,
+      // We don't want to use the automatic type
+      enforcePersistedQueries:true,
+      // We want all our operations to be a persisted operation
+      enableForMutation:true,
+      generateHash: (_, document) => {
+        // we need to return a promise, GraphQL Code Generator
+        // will have added this as a property to the document.
+        return Promise.resolve(document.__meta__.hash);
+      }
+    })
+  ],
+});
+```
+
+Now urql knows what hashes to send and that it has to send all operations as persisted. All that's
+left now is to make our GraphQL Server accept these as well.
+
+
+we'll need a few packages on the server
+
+
+```js
+npm i @graphql-yoga/plugin-persisted-operations
+```
+
+We'll also need the file that we generated through `GraphQL codegen` on our front-end.
+
+```js
+import { createYoga, createSchema } from 'graphql-yoga'
+import { createServer } from 'node:http'
+import fs from 'node:fs'
+import { usePersistedOperations } from '@graphql-yoga/plugin-persisted-operations'
+
+const persistedOperations = JSON.parse(fs.readFileSync('./persisted-operations.json', 'utf-8'));
+const store = persistedOperations;
+
+const yoga = createYoga({
+  schema: createSchema({
+    typeDefs: /* GraphQL */ `
+      type Query {
+        hello: String!
+      }
+    `
+  }),
+  plugins: [
+    usePersistedOperations({
+      getPersistedOperation(hash) {
+        return store[hash]
+      }
+    })
+  ]
+})
+
+const server = createServer(yoga)
+server.listen(4000, () => {
+  console.info('Server is running on http://localhost:4000/graphql')
+})
+```
+
+Now there are optimisations to be had here by for instance making the operations dynamic so that
+we can deploy from independent repositories and don't need the file generated by a front-end in specific
+so that we can support a mobile app and a web app, ...
+
+This is personally one of my ideal workflows because of the things it enables.
+
+> Go check out [GraphQL Code Generator](https://the-guild.dev/graphql/codegen), [GraphQL Yoga](https://the-guild.dev/graphql/yoga-server) and [urql](https://urql.dev)
