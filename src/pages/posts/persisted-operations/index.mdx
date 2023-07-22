@@ -133,6 +133,7 @@ import { createServer } from 'node:http'
 import fs from 'node:fs'
 import { usePersistedOperations } from '@graphql-yoga/plugin-persisted-operations'
 
+// You could even go as far as already pre-parsing all of these
 const persistedOperations = JSON.parse(fs.readFileSync('./persisted-operations.json', 'utf-8'));
 const store = persistedOperations;
 
@@ -146,6 +147,8 @@ const yoga = createYoga({
   }),
   plugins: [
     usePersistedOperations({
+      // We assume that these operations are all valid
+      skipDocumentValidation: true,
       getPersistedOperation(hash) {
         return store[hash]
       }
@@ -191,3 +194,7 @@ query {
 Having a format that we agree on for printing these for persisted operations would simplify this process. Additionally
 we have seen md5 hashes as well as SHA-256 hashes. Using one tool like GraphQL codegen helps here but versions _could_
 still give a missmatch.
+
+A lot of GraphQL clients use `__typename` for their caches, the issue here being that we have to add `__typename` to each
+`SelectionSet` we do in a document (or we add an extra plugin to `graphql-codegen` to do this for us.), otherwise our
+client-side cache could start missbehaving.
