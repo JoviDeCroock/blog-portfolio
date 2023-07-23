@@ -17,7 +17,7 @@ const SEO = (props: SEOProps) => {
     name: 'description',
     content: props.description,
   })
-  useMeta({ name: 'keywords', content: props.keywords ? props.keywords.join(', ') : undefined })
+  useMeta({ name: 'keywords', content: props.keywords ? props.keywords.join(', ') : '' })
 
   // Twitta
   useMeta({ name: 'twitter:card', content: props.image ? 'summary_large_image' : 'summary' })
