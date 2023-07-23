@@ -1,0 +1,207 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+/>
+
+# GraphQL Persisted Operations
+
+In GraphQL there's an infinite amount of possible operations that you can create
+and send to your server, this introduces a few concerns:
+
+- API Abuse (depth, breath, ... of operations)
+- Carrying over wisdom from REST/... becomes hard
+
+In REST we have a finite set of operations which yields an isolated result, i.e. if I
+ask for a `GET /todo/1` I will know that I will get 1 todo or a 404 back from the server.
+In the above we are saying that GraphQL has an unlimited amount of paths and the paths
+that will be asked for aren't predictable.
+
+This however already has a few solution in GraphQL. The core principle of this approach is that
+instead of sending our stringified GraphQL document over the wire we'll send a hash of the
+GraphQL document, our server will take this hash and know that it's dealing with a certain document.
+In Relay we call this [Persisted Queries](https://relay.dev/docs/guides/persisted-queries)
+and in Apollo we have a similar principle in [Automatic Persisted Queries](https://www.apollographql.com/docs/apollo-server/performance/apq/).
+
+The differences between APQ and Persisted Queries start in how this contract is established, in Relay we'll let the compiler do the work.
+The compiler will go through all the documents it can find and create md5 hashes out of them. This
+will give you a mapping that can be used on both the server and client so the client knows what hash
+to send and the server so it knows what the hash means. This is ultimately very locked down as now
+external people can't abuse your API as they would need the MD5 hash and would only be able to run
+those operations.
+
+With Automatic Persisted Queries we are dealing with a handshake protocol, there is no compilation/... going on.
+The document gets hashed at runtime, when the server receives the request it will check whether it knows
+what the hash means and when it doesn't it will send a specific error message `PersistedQueryNotFound` when
+the client receives this as a response it will send the stringified GraphQL document alongside the hash
+and the server can learn the association that way.
+
+The Automatic part trades off the "locking down your API" part for convenience, we are not locking down our API
+to a set of paths that we can expect. However sending the hashes is still a lot better for both Caching as well
+as just general lower request payload sizes.
+
+## Persisted operations in practice
+
+We have seen that Relay can do this for us but so can `urql` and `GraphQL-Yoga`, let's take a look how
+we can do this with this stack:
+
+Let's start on the client, we'll use `urql` with the `@urql/exchange-persisted-operations`
+
+```sh
+npm i --save urql graphql @urql/exchange-persisted
+npm i --save-dev @graphql-codegen/cli
+```
+
+we will add a configuration for `graphql-codegen`
+
+```ts
+import { CodegenConfig } from "@graphql-codegen/cli";
+
+const config: CodegenConfig = {
+  schema: "YOUR_GRAPHQL_ENDPOINT",
+  documents: ["./**/*.{ts,tsx}"],
+  ignoreNoDocuments: true,
+  generates: {
+    "./gql/": {
+      preset: "client",
+      plugins: [],
+      presetConfig: {
+        persistedDocuments: true,
+      },
+    },
+  },
+};
+
+export default config;
+```
+
+This will make it so that our front-end outputs a `persisted-documents.json` file
+which maps a hash to the respective operation. Additionally the operations it generates
+for our front-end will have a pre-computed hash, this gets us a lot closer to the Relay workflow.
+
+For our urql configuration we'll need to replace the default `fetchExchange` with the one to
+support persisted-operations.
+
+> urql is very extensible, even the cache is an exchange [which is their kind of plugin](https://formidable.com/open-source/urql/docs/architecture/#the-client-and-exchanges)
+
+```js
+import { Client, cacheExchange } from 'urql';
+import { persistedExchange } from '@urql/exchange-persisted';
+
+const client = new createClient({
+  url: 'http://localhost:1234/graphql',
+  exchanges: [
+    cacheExchange,
+    persistedExchange({
+      // We want to use GET so we can optimise for caching/...
+      preferGetForPersistedQueries: true,
+      // We don't want to use the automatic type
+      enforcePersistedQueries:true,
+      // We want all our operations to be a persisted operation
+      enableForMutation:true,
+      generateHash: (_, document) => {
+        // we need to return a promise, GraphQL Code Generator
+        // will have added this as a property to the document.
+        return Promise.resolve(document.__meta__.hash);
+      }
+    })
+  ],
+});
+```
+
+Now urql knows what hashes to send and that it has to send all operations as persisted. All that's
+left now is to make our GraphQL Server accept these as well.
+
+
+we'll need a few packages on the server
+
+
+```js
+npm i @graphql-yoga/plugin-persisted-operations
+```
+
+We'll also need the file that we generated through `GraphQL codegen` on our front-end.
+
+```js
+import { createYoga, createSchema } from 'graphql-yoga'
+import { createServer } from 'node:http'
+import fs from 'node:fs'
+import { usePersistedOperations } from '@graphql-yoga/plugin-persisted-operations'
+
+// You could even go as far as already pre-parsing all of these
+const persistedOperations = JSON.parse(fs.readFileSync('./persisted-operations.json', 'utf-8'));
+const store = persistedOperations;
+
+const yoga = createYoga({
+  schema: createSchema({
+    typeDefs: /* GraphQL */ `
+      type Query {
+        hello: String!
+      }
+    `
+  }),
+  plugins: [
+    usePersistedOperations({
+      // We assume that these operations are all valid
+      skipDocumentValidation: true,
+      getPersistedOperation(hash) {
+        return store[hash]
+      }
+    })
+  ]
+})
+
+const server = createServer(yoga)
+server.listen(4000, () => {
+  console.info('Server is running on http://localhost:4000/graphql')
+})
+```
+
+Now there are optimisations to be had here by for instance making the operations dynamically added to the server so that
+we can deploy from independent repositories and don't need the file generated by a front-end in specific
+so that we can support a mobile app and a web app, ... In the yoga docs you will find
+[information about external stores](https://the-guild.dev/graphql/yoga-server/docs/features/persisted-operations#using-an-external-persisted-operation-store).
+
+This is personally one of my ideal workflows because of the security and performance it enables. It however includes
+a lot of setup.
+
+> Go check out [GraphQL Code Generator](https://the-guild.dev/graphql/codegen), [GraphQL Yoga](https://the-guild.dev/graphql/yoga-server) and [urql](https://urql.dev)
+
+## Considerations
+
+One of the things that bother me personally is that the lack of a formal spec for printing operations can
+bite this distributed writing quite a bit. GraphQL is very lean on how to delimit selections etc the following
+queries are basically the same.
+
+```
+{todos{ id }}
+query {
+  todos {
+    id
+  }
+}
+query {
+  todos:todos {
+    id:id
+  }
+}
+```
+
+Having a format that we agree on for printing these for persisted operations would simplify this process. Additionally
+we have seen md5 hashes as well as SHA-256 hashes. Using one tool like GraphQL codegen helps here but versions _could_
+still give a missmatch.
+
+A lot of GraphQL clients use `__typename` for their caches, the issue here being that we have to add `__typename` to each
+`SelectionSet` we do in a document (or we add an extra plugin to `graphql-codegen` to do this for us.), otherwise our
+client-side cache could start missbehaving, in Relay this is done for us by the optimising compiler.
+
+Last but not least you will have to agree on a workflow for dev as you could just write every time to the external store, or
+if it's in the same repository set up a watcher for the file but you could also leverage a built-in allow for
+[arbitrary operations in Yoga](https://the-guild.dev/graphql/yoga-server/docs/features/persisted-operations#allowing-arbitrary-graphql-operations)
+and set `enforcePersistedQueries` to `false` in urql.

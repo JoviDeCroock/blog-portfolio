@@ -1,4 +1,5 @@
 import { styled } from 'goober'
+import { Fragment } from 'preact'
 import SEO from '../components/Seo'
 import { Link, Prelude, Title } from '../components/Text'
 
@@ -9,8 +10,10 @@ import { documentProps as stateDocumentProps } from './posts/state-outside-vdom/
 import { documentProps as hydrationDocumentProps } from './posts/hydration/documentProps'
 import { documentProps as timingsDocumentProps } from './posts/browser-timings/documentProps'
 import { documentProps as useIdDocumentProps } from './posts/preact-use-id/documentProps'
+import { documentProps as persistedOperationDocumentProps } from './posts/persisted-operations/documentProps'
 
 const posts = [
+  persistedOperationDocumentProps,
   useIdDocumentProps,
   timingsDocumentProps,
   hydrationDocumentProps,
@@ -63,7 +66,7 @@ const tagBgs: Record<string, string> = {
 }
 
 export default () => (
-  <>
+  <Fragment>
     <SEO
       title='Blog'
       description='Posts about my work and thoughts.'
@@ -84,5 +87,5 @@ export default () => (
         </Summary>
       ))}
     </Block>
-  </>
+  </Fragment>
 )

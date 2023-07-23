@@ -28,6 +28,7 @@ const postsToPrerender = [
   '/blog/hydration-and-preact',
   '/blog/browser-timings',
   '/blog/preact-use-id',
+  '/blog/persisted-operations',
 ]
 
 const generateHead = res => {
