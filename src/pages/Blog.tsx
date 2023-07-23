@@ -58,6 +58,9 @@ const SubjectSummary = styled('div')`
 `;
 
 const tagBgs: Record<string, string> = {
+  security: '#d6e1c2',
+  performance: '#0080bb',
+  graphql: '#E10098',
   'front-end': '#7842f5',
   vdom: '#6ff542',
   state: '#f5427e',
