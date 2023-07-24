@@ -23,11 +23,11 @@ ask for a `GET /todo/1` I will know that I will get 1 todo or a 404 back from th
 In the above we are saying that GraphQL has an unlimited amount of paths and the paths
 that will be asked for aren't predictable.
 
-This however already has a few solution in GraphQL. The core principle of this approach is that
+This however already has a solution in GraphQL, the core principle of this approach is that
 instead of sending our stringified GraphQL document over the wire we'll send a hash of the
 GraphQL document, our server will take this hash and know that it's dealing with a certain document.
 In Relay we call this [Persisted Queries](https://relay.dev/docs/guides/persisted-queries)
-and in Apollo we have a similar principle in [Automatic Persisted Queries](https://www.apollographql.com/docs/apollo-server/performance/apq/).
+and in Apollo we have a similar principle in [Automatic Persisted Queries (APQ)](https://www.apollographql.com/docs/apollo-server/performance/apq/).
 
 The differences between APQ and Persisted Queries start in how this contract is established, in Relay we'll let the compiler do the work.
 The compiler will go through all the documents it can find and create md5 hashes out of them. This
@@ -91,7 +91,7 @@ support persisted-operations.
 > urql is very extensible, even the cache is an exchange [which is their kind of plugin](https://formidable.com/open-source/urql/docs/architecture/#the-client-and-exchanges)
 
 ```js
-import { Client, cacheExchange } from 'urql';
+import { createClient, cacheExchange } from '@urql/core';
 import { persistedExchange } from '@urql/exchange-persisted';
 
 const client = new createClient({
