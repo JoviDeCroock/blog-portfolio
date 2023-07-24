@@ -95,7 +95,7 @@ import { createClient, cacheExchange } from '@urql/core';
 import { persistedExchange } from '@urql/exchange-persisted';
 
 const client = new createClient({
-  url: 'http://localhost:1234/graphql',
+  url: 'YOUR_GRAPHQL_ENDPOINT',
   exchanges: [
     cacheExchange,
     persistedExchange({
