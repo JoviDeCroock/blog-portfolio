@@ -205,7 +205,8 @@ still give a missmatch.
 
 A lot of GraphQL clients use `__typename` for their caches, the issue here being that we have to add `__typename` to each
 `SelectionSet` we do in a document (or we add an extra plugin to `graphql-codegen` to do this for us.), otherwise our
-client-side cache could start missbehaving, in Relay this is done for us by the optimising compiler.
+client-side cache could start missbehaving, in Relay this is done for us by the optimising compiler. GraphQL Codegen addressed
+this now with [this PR](https://github.com/dotansimha/graphql-code-generator/pull/9562) adding a plugin to solve this issue.
 
 Last but not least you will have to agree on a workflow for dev as you could just write every time to the external store, or
 if it's in the same repository set up a watcher for the file but you could also leverage a built-in allow for
