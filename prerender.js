@@ -20,16 +20,17 @@ const routesToPrerender = fs
     return name === 'home' ? '/' :`/${name}`
   }).filter(Boolean)
 
-const postsToPrerender = [
-  '/blog/vdom-compilers',
-  '/blog/controlled-inputs',
-  '/blog/suspense-data-ssr',
-  '/blog/state-in-vdom',
-  '/blog/hydration-and-preact',
-  '/blog/browser-timings',
-  '/blog/preact-use-id',
-  '/blog/persisted-operations',
-]
+const postsToPrerender = fs
+  .readdirSync(toAbsolute('src/pages/posts'))
+  .map((folder) => {
+    let name = folder;
+    switch (folder) {
+      case 'hydration': {
+        name = 'hydration-and-preact'
+      }
+    }
+    return `/blog/${name}`
+  }).filter(Boolean)
 
 const generateHead = res => {
   return `<title>${res.title}</title>

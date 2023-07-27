@@ -82,7 +82,7 @@ export default () => (
       <SkillIndicator title="Terraform" level={8} />
       <SkillIndicator title="AWS" level={7} />
       <SkillIndicator title="SQL" level={7} />
-      <SkillIndicator title="Rust" level={6} />
+      <SkillIndicator title="Rust" level={5} />
     </Block>
     <Block>
       <SubTitle>Open source projects</SubTitle>
