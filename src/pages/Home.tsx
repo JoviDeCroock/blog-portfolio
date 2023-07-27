@@ -24,7 +24,7 @@ export default () => (
     />
     <Hero>
       <Title>Jovi De Croock</Title>
-      <SubTitle>Software Engineer</SubTitle>
+      <SubTitle>Full-stack Software Engineer</SubTitle>
       <Prelude>
         When growing up I discovered a passion for IT, this grew into me working{' '}
         at a hardware store and eventually into finding my passion for{' '}
@@ -45,14 +45,8 @@ export default () => (
       </Prelude>
     </Hero>
     <Block>
-      <SubTitle>Education</SubTitle>
-      <ul>
-        <ListItem>VHTI Dendermonde - Hardware</ListItem>
-        <ListItem>HoGent - Bachelor Computer Science</ListItem>
-      </ul>
       <SubTitle>Experience</SubTitle>
       <ul>
-
         <ListItem>
           <Link rel="nofollow" target="blank" href="https://codifly.be">
             Codifly
@@ -72,6 +66,46 @@ export default () => (
           - Staff Software Engineer (2021-Now)
         </ListItem>
       </ul>
+      <Block>
+      <SubTitle>Open source projects</SubTitle>
+      <ul>
+      <ListItem>
+          I have been maintaining{' '}
+          <Link rel="nofollow" target="blank" href="https://github.com/preactjs/preact">
+            Preact
+          </Link>{' '}
+          since we started on the X release in the start of 2019
+        </ListItem>
+        <ListItem>
+          I created{' '}
+          <Link rel="nofollow" target="blank" href="https://github.com/preactjs/prefresh">
+            Prefresh
+          </Link>{' '}
+          which is like React Fast Refresh but for Preact specifically
+        </ListItem>
+        <ListItem>
+          In June 2019 I started helping out on the{' '}
+          <Link rel="nofollow" target="blank" href="https://github.com/urql-graphql/urql">
+            Urql
+          </Link>{' '}
+          project, a lightweight extensible GraphQL Client
+        </ListItem>
+        <ListItem>
+          I created{' '}
+          <Link rel="nofollow" target="blank" href="https://github.com/0no-co/hoofd">
+            Hoofd
+          </Link>{' '}
+          as I wanted to properly manage my HTML-head through hooks
+        </ListItem>
+         <ListItem>
+          I developed{' '}
+          <Link rel="nofollow" target="blank" href="https://github.com/0no-co/graphqlsp">
+            GraphQLSP
+          </Link>{' '}
+          a TypeScript LSP Plugin to properly support inline-hints/... while developing front-end GraphQL applications
+        </ListItem>
+      </ul>
+    </Block>
     </Block>
     <Block>
       <SubTitle>Skills</SubTitle>
@@ -85,51 +119,16 @@ export default () => (
       <SkillIndicator title="Rust" level={5} />
     </Block>
     <Block>
-      <SubTitle>Open source projects</SubTitle>
-      <ul>
-      <ListItem>
-          <Link rel="nofollow" target="blank" href="https://github.com/preactjs/preact">
-            Preact
-          </Link>{' '}
-          maintainer (core team)
-        </ListItem>
-        <ListItem>
-          <Link rel="nofollow" target="blank" href="https://github.com/preactjs/prefresh">
-            Prefresh
-          </Link>{' '}
-          - Fast-refresh for Preact
-        </ListItem>
-        <ListItem>
-          <Link rel="nofollow" target="blank" href="https://github.com/urql-graphql/urql">
-            Urql
-          </Link>{' '}
-          maintainer
-        </ListItem>
-        <ListItem>
-          <Link rel="nofollow" target="blank" href="https://github.com/0no-co/hoofd">
-            Hoofd
-          </Link>{' '}
-          - Lightweight (P)React head library
-        </ListItem>
-         <ListItem>
-          <Link rel="nofollow" target="blank" href="https://github.com/0no-co/graphqlsp">
-            GraphQLSP
-          </Link>{' '}
-          - TypeScript LSP plugin for GraphQL
-        </ListItem>
-      </ul>
-    </Block>
-    <Block>
       <SubTitle>Achievements</SubTitle>
       <ul>
         <ListItem>
           <Link rel="nofollow" target="blank" href="https://us.puma.com">
-            During my time at Formidable, technical lead on modernising the tech-stack of Puma
+            During my time at Formidable, I functioned as a technical lead on modernising the tech-stack of Puma
           </Link>
         </ListItem>
         <ListItem>
           <Link rel="nofollow" target="blank" href="https://github.com/FredKSchott/esm-hmr">
-            Contributed to the ESM HMR Spec
+            Helped develop the ESM HMR Spec
           </Link>
         </ListItem>
         <ListItem>
@@ -137,6 +136,11 @@ export default () => (
             Google Open Source Peer Bonus 2019 Cycle 2
           </Link>
         </ListItem>
+      </ul>
+      <SubTitle>Education</SubTitle>
+      <ul>
+        <ListItem>VHTI Dendermonde - Hardware</ListItem>
+        <ListItem>HoGent - Bachelor Computer Science</ListItem>
       </ul>
     </Block>
   </>
