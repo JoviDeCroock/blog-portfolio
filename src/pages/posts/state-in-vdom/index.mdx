@@ -29,7 +29,7 @@ In Preact we'll often distribute state across the whole tree by means of the con
 and clean method of just hooking into a piece of state coming from a parent, however context lacks granularity
 let's take a look.
 
-```
+```js
 import { createContext } from 'preact';
 import { useState, useContext } from 'preact/hooks';
 
@@ -125,7 +125,7 @@ For the sake of simplicity I kept this example fairly in line with the above, in
 external state-manager still needs a way to couple back to the Virtual DOM library so we need to give it a way to notify
 that changes are present.
 
-```
+```js
 import { createContext } from 'preact';
 import { useContext, useReducer, useEffect } from 'preact/hooks';
 
