@@ -44,18 +44,18 @@ const TitleLink = styled(Link)`
 
 const Tag = styled<{ background: string }>('span')`
   border-radius: 10px;
-  background: ${x => x.background};
+  background: ${(x) => x.background};
   color: white;
   font-size: 14px;
   padding: 4px 8px;
-`;
+`
 
 const SubjectSummary = styled('div')`
   display: flex;
   & > span:not(:last-child) {
     margin-right: 8px;
   }
-`;
+`
 
 const tagBgs: Record<string, string> = {
   security: '#d6e1c2',
@@ -65,19 +65,16 @@ const tagBgs: Record<string, string> = {
   vdom: '#6ff542',
   state: '#f5427e',
   suspense: '#f54242',
-  thinking: '#f59c42'
+  thinking: '#f59c42',
 }
 
 export default () => (
   <Fragment>
-    <SEO
-      title='Blog'
-      description='Posts about my work and thoughts.'
-    />
+    <SEO title="Blog" description="Posts about my work and thoughts." />
     <Title>Blog</Title>
     <Prelude>
-      My thoughts in a semi-raw form, a lot of these posts contain what goes around
-      in my mind throughout a day.
+      My thoughts in a semi-raw form, a lot of these posts contain what goes
+      around in my mind throughout a day.
     </Prelude>
     <Block>
       {posts.map((post) => (
@@ -85,7 +82,11 @@ export default () => (
           <TitleLink href={post.path}>{post.title}</TitleLink>
           <Prelude>{post.description}</Prelude>
           <SubjectSummary>
-            {post.tags.map(tag => <Tag background={tagBgs[tag]} key={tag}>{tag}</Tag>)}
+            {post.tags.map((tag) => (
+              <Tag background={tagBgs[tag]} key={tag}>
+                {tag}
+              </Tag>
+            ))}
           </SubjectSummary>
         </Summary>
       ))}

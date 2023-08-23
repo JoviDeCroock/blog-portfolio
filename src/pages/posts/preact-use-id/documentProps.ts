@@ -4,5 +4,5 @@ export const documentProps = {
   description:
     'Getting unique tree-identifiers consistent across server and client.',
   path: '/blog/preact-use-id',
-  tags: ['vdom', 'front-end', 'open-source']
+  tags: ['vdom', 'front-end', 'open-source'],
 }

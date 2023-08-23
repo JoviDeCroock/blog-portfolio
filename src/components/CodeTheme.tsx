@@ -1,10 +1,10 @@
-import { useLink } from "hoofd/preact"
+import { useLink } from 'hoofd/preact'
 
 const CodeTheme = () => {
   useLink({
     rel: 'preconnect',
     href: 'https://cdnjs.cloudflare.com/',
-    crossorigin: 'anonymous'
+    crossorigin: 'anonymous',
   })
 
   useLink({

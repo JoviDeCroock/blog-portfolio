@@ -37,7 +37,10 @@ a node can have an endless amount of children and can be at a certain depth. Thi
 uniquely identify a tree by building up the position a child-node is in the parent-children and keep
 that around as a mask we build up for each node.
 
-<img src='/useId.jpg' alt="Diagram showing a root-node which has a base-id of 1, this node has two children which respectively map to 1.1 and 1.2, 1.1 has 1 child becoming 1.1.1 and 1.2 has two children 1.2.1 and 1.2.2 respectively" />
+<img
+  src="/useId.jpg"
+  alt="Diagram showing a root-node which has a base-id of 1, this node has two children which respectively map to 1.1 and 1.2, 1.1 has 1 child becoming 1.1.1 and 1.2 has two children 1.2.1 and 1.2.2 respectively"
+/>
 
 The above diagram shows the reasoning employed here, the depth is accounted for by adding a new number to the mask and
 the position in the array of its parent makes up the number we are appending. This should be sufficient to create

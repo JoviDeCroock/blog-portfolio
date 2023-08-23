@@ -26,21 +26,21 @@ at this possibly being timing-related it was worth looking at how the DOM handle
 > When following along you won't experience this bug if you are using Safari!
 
 ```js
-const defer = Promise.prototype.then.bind(Promise.resolve());
+const defer = Promise.prototype.then.bind(Promise.resolve())
 
 function App() {
   function onChange() {
-    console.log("onChange");
+    console.log('onChange')
     defer(() => {
-      console.log("onChange - microtick delay");
-    });
+      console.log('onChange - microtick delay')
+    })
   }
 
   function onClick() {
-    console.log("onClick");
+    console.log('onClick')
     defer(() => {
-      console.log("onClick - microtick delay");
-    });
+      console.log('onClick - microtick delay')
+    })
   }
 
   return (
@@ -50,9 +50,10 @@ function App() {
       checked={true}
       onClick={onClick}
     />
-  );
+  )
 }
 ```
+
 <Example />
 
 For people who aren't familiar with the above practice of `Promise.prototype.then.bind(Promise.resolve());` we are essentially
@@ -61,25 +62,35 @@ deferring the callback with one microtick, this is intended to let the browser b
 Consider the following example:
 
 ```js
-const defer = Promise.prototype.then.bind(Promise.resolve());
+const defer = Promise.prototype.then.bind(Promise.resolve())
 const commands = []
 
 function addWork(command) {
-  commands.unshift(command);
-  defer(() => { flush(); })
+  commands.unshift(command)
+  defer(() => {
+    flush()
+  })
 }
 
 function flush() {
-  if (!commands.length) return;
+  if (!commands.length) return
   console.log('flushing')
-  let command;
-  while(command = commands.pop()) command()
+  let command
+  while ((command = commands.pop())) command()
 }
 
-addWork(() => { console.log('task 1') })
-addWork(() => { console.log('task 2') })
-addWork(() => { console.log('task 3') })
-addWork(() => { console.log('task 4') })
+addWork(() => {
+  console.log('task 1')
+})
+addWork(() => {
+  console.log('task 2')
+})
+addWork(() => {
+  console.log('task 3')
+})
+addWork(() => {
+  console.log('task 4')
+})
 ```
 
 We will add four items of work before executing on our flush! Feel free to copy paste that in your developer console and you
@@ -90,7 +101,7 @@ Isn't it weird how the `defer` here actually isn't working? We see `click - micr
 also performs it's own delays, let's extend this to our issue report.
 
 ```js
-const defer = Promise.prototype.then.bind(Promise.resolve());
+const defer = Promise.prototype.then.bind(Promise.resolve())
 
 function App() {
   function bubbled() {
@@ -108,9 +119,10 @@ function App() {
     <div onClick={bubbled}>
       <div onClick={original}>Click me!</div>
     </div>
-  );
+  )
 }
 ```
+
 <Issue />
 
 So what we see here in terms of logs would be `original - microtick after original - bubbled`, well that's akward... in

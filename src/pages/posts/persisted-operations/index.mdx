@@ -61,24 +61,24 @@ npm i --save-dev @graphql-codegen/cli
 we will add a configuration for `graphql-codegen`
 
 ```ts
-import { CodegenConfig } from "@graphql-codegen/cli";
+import { CodegenConfig } from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
-  schema: "YOUR_GRAPHQL_ENDPOINT",
-  documents: ["./**/*.{ts,tsx}"],
+  schema: 'YOUR_GRAPHQL_ENDPOINT',
+  documents: ['./**/*.{ts,tsx}'],
   ignoreNoDocuments: true,
   generates: {
-    "./gql/": {
-      preset: "client",
+    './gql/': {
+      preset: 'client',
       plugins: [],
       presetConfig: {
         persistedDocuments: true,
       },
     },
   },
-};
+}
 
-export default config;
+export default config
 ```
 
 This will make it so that our front-end outputs a `persisted-documents.json` file
@@ -91,8 +91,8 @@ support persisted-operations.
 > urql is very extensible, even the cache is an exchange [which is their kind of plugin](https://formidable.com/open-source/urql/docs/architecture/#the-client-and-exchanges)
 
 ```js
-import { createClient, cacheExchange } from '@urql/core';
-import { persistedExchange } from '@urql/exchange-persisted';
+import { createClient, cacheExchange } from '@urql/core'
+import { persistedExchange } from '@urql/exchange-persisted'
 
 const client = new createClient({
   url: 'YOUR_GRAPHQL_ENDPOINT',
@@ -102,25 +102,23 @@ const client = new createClient({
       // We want to use GET so we can optimise for caching/...
       preferGetForPersistedQueries: true,
       // We don't want to use the automatic type
-      enforcePersistedQueries:true,
+      enforcePersistedQueries: true,
       // We want all our operations to be a persisted operation
-      enableForMutation:true,
+      enableForMutation: true,
       generateHash: (_, document) => {
         // we need to return a promise, GraphQL Code Generator
         // will have added this as a property to the document.
-        return Promise.resolve(document.__meta__.hash);
-      }
-    })
+        return Promise.resolve(document.__meta__.hash)
+      },
+    }),
   ],
-});
+})
 ```
 
 Now urql knows what hashes to send and that it has to send all operations as persisted. All that's
 left now is to make our GraphQL Server accept these as well.
 
-
 we'll need a few packages on the server
-
 
 ```js
 npm i graphql-yoga @graphql-yoga/plugin-persisted-operations
@@ -137,8 +135,8 @@ import { usePersistedOperations } from '@graphql-yoga/plugin-persisted-operation
 // You could even go as far as already pre-parsing all of these
 const persistedOperations = JSON.parse(
   fs.readFileSync('./persisted-operations.json', 'utf-8')
-);
-const store = persistedOperations;
+)
+const store = persistedOperations
 
 const yoga = createYoga({
   schema: createSchema({
@@ -146,7 +144,7 @@ const yoga = createYoga({
       type Query {
         hello: String!
       }
-    `
+    `,
   }),
   plugins: [
     usePersistedOperations({
@@ -154,9 +152,9 @@ const yoga = createYoga({
       skipDocumentValidation: true,
       getPersistedOperation(hash) {
         return store[hash]
-      }
-    })
-  ]
+      },
+    }),
+  ],
 })
 
 const server = createServer(yoga)

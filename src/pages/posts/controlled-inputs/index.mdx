@@ -35,20 +35,21 @@ You might ask yourself where this need for controlled components comes from, val
 of the value are some of the main contenders, let's look how this becomes an issue in VDOM-land.
 
 > We use `onInput` as that performs changes in real time while `onChange` is actually debounced by default, in React
-  they patch this by changing `onChange` to behave like `onInput`.
+> they patch this by changing `onChange` to behave like `onInput`.
 
 ```js
 const Input = () => {
   const [value, setValue] = useState('')
 
   const onInput = (e) => {
-    if (e.currentTarget.value.length > 3) return;
+    if (e.currentTarget.value.length > 3) return
     setValue(e.currentTarget.value)
   }
 
   return <input value={value} onInput={onInput} />
 }
 ```
+
 <Issue />
 
 > A diff is Preact looking at the difference between the old and new state and update the DOM accordingly
@@ -73,7 +74,7 @@ previous value.
 
 ```js
 const eventHandler = (e) => {
-  userSuppliedOnInput(e);
+  userSuppliedOnInput(e)
   if (isInput && this.prevValue !== this.value) {
     this.value = this.prevValue
   }
@@ -102,18 +103,19 @@ const Input = () => {
     if (e.currentTarget.value.length <= 3) {
       setValue(e.currentTarget.value)
     } else {
-      const start = inputRef.current.selectionStart;
-      const end = inputRef.current.selectionEnd;
+      const start = inputRef.current.selectionStart
+      const end = inputRef.current.selectionEnd
       const diffLength = Math.abs(e.currentTarget.value.length - value.length)
-      inputRef.current.value = value;
+      inputRef.current.value = value
       // Restore selection
-      inputRef.current.setSelectionRange(start - diffLength, end - diffLength);
+      inputRef.current.setSelectionRange(start - diffLength, end - diffLength)
     }
   }
 
   return <input ref={inputRef} value={value} onInput={onInput} />
 }
 ```
+
 <Solution />
 
 here we manually do the resetting that is now happening in the background for Preact!

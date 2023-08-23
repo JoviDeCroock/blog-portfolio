@@ -32,29 +32,33 @@ let root = document.getElementById('root');
 let suspense = React.createElement(React.Suspense, { fallback: React.createElement('p', {}, 'Loading...') }, React.createElement(App, {}));
 
 render(suspense, root);
-`;
+`
 
 const App = () => {
   const iframe = useRef()
 
   useEffect(() => {
-    if (!iframe.current) return;
+    if (!iframe.current) return
 
-    const iframeDoc = iframe.current.contentDocument;
+    const iframeDoc = iframe.current.contentDocument
     // Root
     const root = document.createElement('div')
     root.setAttribute('id', 'root')
-    iframeDoc.body.appendChild(root);
+    iframeDoc.body.appendChild(root)
 
     // Script
-    const script = document.createElement('script');
-    script.setAttribute('type', 'module');
-    script.innerText = scriptContent;
-    iframeDoc.body.appendChild(script);
+    const script = document.createElement('script')
+    script.setAttribute('type', 'module')
+    script.innerText = scriptContent
+    iframeDoc.body.appendChild(script)
   }, [])
 
   return (
-    <iframe title='suspense-example' style={{ width: '100%', height: 36 }} ref={iframe} />
+    <iframe
+      title="suspense-example"
+      style={{ width: '100%', height: 36 }}
+      ref={iframe}
+    />
   )
 }
 

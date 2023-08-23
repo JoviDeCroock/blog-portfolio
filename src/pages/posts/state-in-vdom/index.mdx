@@ -101,6 +101,7 @@ const App = () => {
   )
 }
 ```
+
 <ContextForm />
 
 You will see that it doesn't matter what form-field you touch, it will re-render all of them.
@@ -111,7 +112,7 @@ This means that every subscriber gets checked when something changes, there have
 this with [context-selector](https://github.com/reactjs/rfcs/pull/119) but this is not present currently.
 
 > We use the optimization of Strict-Equality, read about it in the [previous blog post](https://www.jovidecroock.com/blog/vdom-compilers),
-  on the `FormProvider` so we aren't causing top-down renders when state changes.
+> on the `FormProvider` so we aren't causing top-down renders when state changes.
 
 ## State outside of the Virtual-DOM
 
@@ -222,6 +223,7 @@ const App = () => (
   </FormProvider>
 )
 ```
+
 <ExternalForm />
 
 As you can see the only difference between the two methods is the place where we store

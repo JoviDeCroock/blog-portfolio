@@ -1,12 +1,12 @@
-import { useRef, useState } from "preact/hooks";
+import { useRef, useState } from 'preact/hooks'
 import { RerenderTracker } from './common'
 
 const Issue = () => {
   const [value, setValue] = useState('')
-  const inputRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<HTMLInputElement>()
 
   const onInput = (e) => {
-    if (e.currentTarget.value.length > 3) return;
+    if (e.currentTarget.value.length > 3) return
     setValue(e.currentTarget.value)
   }
 
@@ -19,11 +19,9 @@ const Issue = () => {
 
   return (
     <div style="border: 1px solid black; padding: 4px 8px">
-        <RerenderTracker name='input' />
-        <input ref={inputRef} value={value} onInput={onInput} />
-        <button onClick={printValue}>
-          Console log value of input
-        </button>
+      <RerenderTracker name="input" />
+      <input ref={inputRef} value={value} onInput={onInput} />
+      <button onClick={printValue}>Console log value of input</button>
     </div>
   )
 }

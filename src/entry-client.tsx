@@ -1,6 +1,6 @@
-import { render, hydrate } from "preact"
-import { LocationProvider } from "preact-iso"
-import { App } from "./App"
+import { render, hydrate } from 'preact'
+import { LocationProvider } from 'preact-iso'
+import { App } from './App'
 
 const element = document.getElementById('main')
 let jsx = (

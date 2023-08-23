@@ -23,7 +23,7 @@ const Counter = () => {
 const App = () => {
   return (
     <div style="border: 1px solid black; padding: 4px 8px">
-        <Counter />
+      <Counter />
     </div>
   )
 }

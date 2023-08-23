@@ -15,7 +15,9 @@ const State = lazy(() => import('./pages/posts/state-in-vdom/index.mdx'))
 const Hydration = lazy(() => import('./pages/posts/hydration/index.mdx'))
 const Timings = lazy(() => import('./pages/posts/browser-timings/index.mdx'))
 const UseId = lazy(() => import('./pages/posts/preact-use-id/index.mdx'))
-const PersistedOperations = lazy(() => import('./pages/posts/persisted-operations/index.mdx'))
+const PersistedOperations = lazy(
+  () => import('./pages/posts/persisted-operations/index.mdx')
+)
 
 setup(h)
 
@@ -35,7 +37,10 @@ export function App() {
               <Route component={Hydration} path="/blog/hydration-and-preact" />
               <Route component={Timings} path="/blog/browser-timings" />
               <Route component={UseId} path="/blog/preact-use-id" />
-              <Route component={PersistedOperations} path="/blog/persisted-operations" />
+              <Route
+                component={PersistedOperations}
+                path="/blog/persisted-operations"
+              />
               <Route component={NotFound} default />
             </Router>
           </div>

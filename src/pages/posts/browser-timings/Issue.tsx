@@ -1,4 +1,4 @@
-const defer = Promise.prototype.then.bind(Promise.resolve());
+const defer = Promise.prototype.then.bind(Promise.resolve())
 
 export default function App() {
   function bubbled() {
@@ -13,8 +13,13 @@ export default function App() {
   }
 
   return (
-    <div style="width:100%;border:1px solid black;padding:8px;cursor:pointer;" onClick={bubbled}>
-      <div style="width:100%;" onClick={original}>Click me!</div>
+    <div
+      style="width:100%;border:1px solid black;padding:8px;cursor:pointer;"
+      onClick={bubbled}
+    >
+      <div style="width:100%;" onClick={original}>
+        Click me!
+      </div>
     </div>
-  );
+  )
 }

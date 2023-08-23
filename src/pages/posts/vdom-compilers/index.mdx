@@ -60,12 +60,8 @@ const Counter = () => {
     <div>
       <p>Count: {count}</p>
       <div style="display:flex;">
-        <button onClick={() => setCount((c) => c - 1)}>
-          -1
-        </button>
-        <button onClick={() => setCount((c) => c + 1)}>
-          +1
-        </button>
+        <button onClick={() => setCount((c) => c - 1)}>-1</button>
+        <button onClick={() => setCount((c) => c + 1)}>+1</button>
       </div>
     </div>
   )
@@ -76,10 +72,8 @@ const Layout = (props) => {
 
   return (
     <main>
-      <button
-        onClick={() => setDarkMode((dark) => !dark)}
-      >
-        set {darkMode ? "Light" : "Dark"} Mode
+      <button onClick={() => setDarkMode((dark) => !dark)}>
+        set {darkMode ? 'Light' : 'Dark'} Mode
       </button>
       {props.children}
     </main>
@@ -124,7 +118,7 @@ will most likely be lacking a few pieces of code due to us `lazily importing` th
 Consider the following code
 
 ```jsx
-import { Suspense, lazy, hydrate } from 'preact/compat';
+import { Suspense, lazy, hydrate } from 'preact/compat'
 
 const TodoList = lazy(() => import('./pages/TodoList'))
 

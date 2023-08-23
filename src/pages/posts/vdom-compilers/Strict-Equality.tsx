@@ -33,14 +33,14 @@ const Layout = (props) => {
 const App = () => {
   const [, setRerender] = useState({})
   return (
-      <div style="border: 1px solid black; padding: 4px 8px">
-        <RerenderTracker name="App" />
-        <button onClick={() => setRerender({})}>Rerender App</button>
-        <Layout>
-          <Counter i="1" />
-          <Counter i="2" />
-        </Layout>
-      </div>
+    <div style="border: 1px solid black; padding: 4px 8px">
+      <RerenderTracker name="App" />
+      <button onClick={() => setRerender({})}>Rerender App</button>
+      <Layout>
+        <Counter i="1" />
+        <Counter i="2" />
+      </Layout>
+    </div>
   )
 }
 

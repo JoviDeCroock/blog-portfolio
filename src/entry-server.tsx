@@ -7,7 +7,7 @@ import { App } from './App'
 
 // @ts-ignore
 global.location = {
-  origin: 'http://localhost:3000'
+  origin: 'http://localhost:3000',
 }
 
 export async function render(url) {
@@ -25,6 +25,6 @@ export async function render(url) {
   return {
     body: html,
     meta: toStatic(),
-    css: extractCss()
+    css: extractCss(),
   }
 }

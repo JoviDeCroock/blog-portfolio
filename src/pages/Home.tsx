@@ -19,8 +19,8 @@ const Block = styled('div')`
 export default () => (
   <>
     <SEO
-      title='Portfolio'
-      description='About my career up to now and my skills.'
+      title="Portfolio"
+      description="About my career up to now and my skills."
     />
     <Hero>
       <Title>Jovi De Croock</Title>
@@ -34,12 +34,11 @@ export default () => (
         <br />
         Nowadays I find myself enjoying work on both front-end as well as{' '}
         back-end systems. Finding elegant solutions to complex behavior is my{' '}
-        favorite challenge. In companies I like to empower people to deliver their{' '}
-        best work, a force multiplier for others, be that by working on DX or discovering{' '}
-        solutions to problems together.
+        favorite challenge. In companies I like to empower people to deliver
+        their best work, a force multiplier for others, be that by working on DX
+        or discovering solutions to problems together.
         <br />
-        <br />
-        A second passion that has grown over the years is open-source, I{' '}
+        <br />A second passion that has grown over the years is open-source, I{' '}
         love working in the open and I love collaborating with others to solve{' '}
         common development problems.
       </Prelude>
@@ -67,45 +66,66 @@ export default () => (
         </ListItem>
       </ul>
       <Block>
-      <SubTitle>Open source projects</SubTitle>
-      <ul>
-      <ListItem>
-          I have been maintaining{' '}
-          <Link rel="nofollow" target="blank" href="https://github.com/preactjs/preact">
-            Preact
-          </Link>{' '}
-          since we started on the X release in the start of 2019
-        </ListItem>
-        <ListItem>
-          I created{' '}
-          <Link rel="nofollow" target="blank" href="https://github.com/preactjs/prefresh">
-            Prefresh
-          </Link>{' '}
-          which is like React Fast Refresh but for Preact specifically
-        </ListItem>
-        <ListItem>
-          In June 2019 I started helping out on the{' '}
-          <Link rel="nofollow" target="blank" href="https://github.com/urql-graphql/urql">
-            Urql
-          </Link>{' '}
-          project, a lightweight extensible GraphQL Client
-        </ListItem>
-        <ListItem>
-          I created{' '}
-          <Link rel="nofollow" target="blank" href="https://github.com/0no-co/hoofd">
-            Hoofd
-          </Link>{' '}
-          as I wanted to properly manage my HTML-head through hooks
-        </ListItem>
-         <ListItem>
-          I developed{' '}
-          <Link rel="nofollow" target="blank" href="https://github.com/0no-co/graphqlsp">
-            GraphQLSP
-          </Link>{' '}
-          a TypeScript LSP Plugin to properly support inline-hints/... while developing front-end GraphQL applications
-        </ListItem>
-      </ul>
-    </Block>
+        <SubTitle>Open source projects</SubTitle>
+        <ul>
+          <ListItem>
+            I have been maintaining{' '}
+            <Link
+              rel="nofollow"
+              target="blank"
+              href="https://github.com/preactjs/preact"
+            >
+              Preact
+            </Link>{' '}
+            since we started on the X release in the start of 2019
+          </ListItem>
+          <ListItem>
+            I created{' '}
+            <Link
+              rel="nofollow"
+              target="blank"
+              href="https://github.com/preactjs/prefresh"
+            >
+              Prefresh
+            </Link>{' '}
+            which is like React Fast Refresh but for Preact specifically
+          </ListItem>
+          <ListItem>
+            In June 2019 I started helping out on the{' '}
+            <Link
+              rel="nofollow"
+              target="blank"
+              href="https://github.com/urql-graphql/urql"
+            >
+              Urql
+            </Link>{' '}
+            project, a lightweight extensible GraphQL Client
+          </ListItem>
+          <ListItem>
+            I created{' '}
+            <Link
+              rel="nofollow"
+              target="blank"
+              href="https://github.com/0no-co/hoofd"
+            >
+              Hoofd
+            </Link>{' '}
+            as I wanted to properly manage my HTML-head through hooks
+          </ListItem>
+          <ListItem>
+            I developed{' '}
+            <Link
+              rel="nofollow"
+              target="blank"
+              href="https://github.com/0no-co/graphqlsp"
+            >
+              GraphQLSP
+            </Link>{' '}
+            a TypeScript LSP Plugin to properly support inline-hints/... while
+            developing front-end GraphQL applications
+          </ListItem>
+        </ul>
+      </Block>
     </Block>
     <Block>
       <SubTitle>Skills</SubTitle>
@@ -123,16 +143,25 @@ export default () => (
       <ul>
         <ListItem>
           <Link rel="nofollow" target="blank" href="https://us.puma.com">
-            During my time at Formidable, I functioned as a technical lead on modernising the tech-stack of Puma
+            During my time at Formidable, I functioned as a technical lead on
+            modernising the tech-stack of Puma
           </Link>
         </ListItem>
         <ListItem>
-          <Link rel="nofollow" target="blank" href="https://github.com/FredKSchott/esm-hmr">
+          <Link
+            rel="nofollow"
+            target="blank"
+            href="https://github.com/FredKSchott/esm-hmr"
+          >
             Helped develop the ESM HMR Spec
           </Link>
         </ListItem>
         <ListItem>
-          <Link rel="nofollow" target="blank" href="https://opensource.googleblog.com/2020/01/announcing-2019-second-cycle-google.html">
+          <Link
+            rel="nofollow"
+            target="blank"
+            href="https://opensource.googleblog.com/2020/01/announcing-2019-second-cycle-google.html"
+          >
             Google Open Source Peer Bonus 2019 Cycle 2
           </Link>
         </ListItem>
