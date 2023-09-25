@@ -12,8 +12,8 @@ dependencies:
     specifier: 2.1.13
     version: 2.1.13(csstype@3.1.2)
   hoofd:
-    specifier: ^1.7.0
-    version: 1.7.0(react@18.2.0)
+    specifier: ^1.7.1
+    version: 1.7.1(react@18.2.0)
   preact:
     specifier: ^10.17.1
     version: 10.17.1
@@ -1137,8 +1137,8 @@ packages:
     engines: {node: '>=12.0.0'}
     dev: false
 
-  /hoofd@1.7.0(react@18.2.0):
-    resolution: {integrity: sha512-kh9gSPIqB/xk4lK8q4dEkjPL2mXhrUoTiJqIMfMokOEFV3ZJVounxtuRXxvz9oHIsIUnPNjmmyRsC0ydKkPDOg==}
+  /hoofd@1.7.1(react@18.2.0):
+    resolution: {integrity: sha512-G+RUtbwR/nPRoJu33Fu/agPXax3J3tRZvs/AZ/8eWWqXPfAvhOWETBJRsRZC2dIzJvXZnMiO+6ui5vi+ftKRqw==}
     peerDependencies:
       react: '>= 16.8.0'
     dependencies:
