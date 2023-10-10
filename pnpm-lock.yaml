@@ -18,8 +18,8 @@ dependencies:
     specifier: ^10.18.1
     version: 10.18.1
   preact-iso:
-    specifier: ^2.3.1
-    version: 2.3.1(preact-render-to-string@6.2.2)(preact@10.18.1)
+    specifier: ^2.3.2
+    version: 2.3.2(preact-render-to-string@6.2.2)(preact@10.18.1)
   preact-render-to-string:
     specifier: ^6.2.2
     version: 6.2.2(preact@10.18.1)
@@ -1829,11 +1829,14 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /preact-iso@2.3.1(preact-render-to-string@6.2.2)(preact@10.18.1):
-    resolution: {integrity: sha512-PtiG0dJlyvIDfvqROCybIFq96CS2s8nLg8ZR4Yporx3mPQ5FgWGNKb+ejjewtjEDMdCUlYmMT8SdapWEAxVJ2Q==}
+  /preact-iso@2.3.2(preact-render-to-string@6.2.2)(preact@10.18.1):
+    resolution: {integrity: sha512-OU+6dzX1/qAyWfH4zKVqp/apNLfAr8yx4aBUVKyBWoOyPT08bNJk4o08KWIwyQyEkpayW5q+5+GAkYBSky8ndw==}
     peerDependencies:
       preact: '>=10'
       preact-render-to-string: '>=5'
+    peerDependenciesMeta:
+      preact-render-to-string:
+        optional: true
     dependencies:
       preact: 10.18.1
       preact-render-to-string: 6.2.2(preact@10.18.1)
