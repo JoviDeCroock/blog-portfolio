@@ -15,7 +15,7 @@
   "generate": "vite build --outDir dist && pnpm build:server && node prerender"
  },
  "dependencies": {
-  "@mdx-js/rollup": "^2.3.0",
+  "@mdx-js/rollup": "^3.0.0",
   "goober": "2.1.13",
   "hoofd": "^1.7.1",
   "preact": "^10.18.2",
