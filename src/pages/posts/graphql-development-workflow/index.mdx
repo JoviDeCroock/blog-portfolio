@@ -1,0 +1,229 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+/>
+
+# GraphQL Development Workflow
+
+I think 2023 was the first year where I got my thoughts straight on how
+my ideal GraphQL development workflow looks like. To no surprise the folks working
+on [Relay](https://relay.dev) had already long figured this out.
+
+A common issue that showed up for me when going the non-relay path was that
+a lot of the tools for the aforementioned workflow weren't obvious or were
+hard to combine. This has been improving over the last few years but there's
+still a lot of missing educational content in the GraphQL space on how to
+leverage and combine the existing tools.
+
+This post will largely focus on (P)React but the concepts should be applicable
+to any other component-based framework.
+
+## Query once
+
+When I think about schema-design my goto is to think about entry-points and
+how these entry-points relate to your front-end. Let's put that to practice,
+for instance when we enter [the Puma womens shoes](https://us.puma.com/us/en/women/shoes)
+page we are on a `Category` type, when I open the network-tab I see four GraphQL
+queries fire, I'll focus on `CategoryPLP` for the sake of this example.
+
+When we look at the query we see that it has a root-field called `categoryByURL` which
+describes the intent here, we want to get our category by the URL we are on. This query
+then expands into `products` which is a paginated list of products relating to
+the category, just like we see on the page.
+
+```graphql
+## Simplified version
+query CategoryPLP {
+  categoryByURL(url: $url) {
+    id
+    name
+    description
+    seo {
+      title
+      description
+    }
+    products {
+      filterOptions { label value }
+      nodes {
+        id
+        name
+        imageUrl
+      }
+    }
+  }
+}
+```
+
+This is my goal when I think about GraphQL, we enter a page and for that body
+we fire one query where the selection hierarchy of the query roughly follows
+the information architecture of the page. This makes the query easy to reason
+about and it will act as a means of communication to supply the resources for
+the blueprint expressed by your components and pages code.
+
+### Fragments
+
+During development it would be really difficult when you are working on i.e. a
+`ProductCard` component to have to go to the `CategoryPLP` query to add a field
+every time you notice you are missing some data. This is where [fragments](https://graphql.org/learn/queries/)
+come in and more specifically co-locating fragments with your components.
+
+```tsx
+export const ProductCardFragment = grapql(`
+  fragment ProductCardFields on Product {
+    id
+    name
+    imageUrl
+  }
+`)
+
+export const ProductCard = (props: { product: FragmentType<typeof ProductCardFragment> }) => {
+  const { product } = props
+
+  return (
+    <div>
+      <img src={product.imageUrl} />
+      <h2>{product.name}</h2>
+    </div>
+  )
+}
+```
+
+In the above component when we need to add i.e. the `price` field we can just
+go in the `ProductCardFragment` and add `price` to the selection-set. This is
+being spread into the parent-query and it will be automatically fetched and passed
+into the `ProductCard` component. No more needing to figure out whether something
+is present in the data or not.
+
+### Dynamic components
+
+Not all pieces of the UI will be present on the first render, I refer to these
+as dynamic components, think about pressing a delete button and a modal poppping up.
+These components will also need data and they are not crucial to the first-render
+so it would be wasteful for them to be fetched on the first render.
+
+There are a few options here in terms of how to fetch this data, we can use
+the `@include` [directive](https://graphql.org/learn/queries/#directives)
+to conditionally fetch the data based on the variable that dictates whether
+the component is visible or not. The other option, my preferred one,
+being that the component itself is responsible for fetching the data it needs.
+
+The latter option basically starts a new data-tree where the components of our
+dynamic piece of UI will dictate their data-requirements upwards.
+
+## LSP
+
+Telling you to "just add fields" is all fine, however you might not be aware
+of the fields available on your schema. Historically this could be solved by
+surfing to the [GraphiQL](https://github.com/graphql/graphiql) endpoint of your
+GraphQL server and exploring the schema there. This was a pretty manual process
+and left room for improvement. The [GraphQL VSCode plugin](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql)
+solved a lot of that but doesn't really work with tagged-template literals, ...
+
+This is why we decided to work on [GraphQLSP](https://github.com/0no-co/GraphQLSP)
+which does similar things to the VSCode plugin but works with template interpolations
+and global fragments. It's a TypeScript plugin and it will give you auto-complete,
+diagnostics and hover information for your GraphQL documents. Additionally we wanted
+to have some of those fantastic Relay features, like it for instance telling you
+that a field is unused or a fragment import is missing.
+
+There's probably a lot more we can do here, for instance add warnings for making `$limit`
+a variable as folks can play with this to DOS attack your server, ... This ties back to
+[`persisted-operations`](./persisted-operations) where these checks could mean the
+difference between locking down your API or exposing a vulnerability.
+
+This is all a work-in-progress and we encourage any feature request!
+
+## Types
+
+One of the advantages of GraphQL is that it has a type-system which we can enforce on the client,
+but how do we get our queries to have static typings that work with i.e. TypeScript...
+
+Honestly shoutout to [The Guild](https://the-guild.dev/) who have worked so much on providing us
+with many tools tools that enable people in the GraphQL world both on the client as well as on the server.
+I think [GraphQL Code Generator](https://graphql-code-generator.com/) is one of the most important tools
+when you are working on client-side GraphQL and it's also the tool we'll talk about here to get our static-typings
+into our front-end code.
+
+Some time ago the [client-preset](https://the-guild.dev/blog/unleash-the-power-of-fragments-with-graphql-codegen)
+was introduced as a way to encourage fragment co-location and provide typings that
+lead you to success!
+
+What it enables you to do is the following:
+
+```tsx
+import { graphql, useFragment, FragmentType } from '@/generated/gql'
+import { ProductCard } from './ProductCard'
+import { SEO } from './ProductCard'
+
+const CategoryQuery = graphql(`
+  query CategoryPLP {
+    categoryByURL(url: $url) {
+      id
+      name
+      seo {
+        ...SEOFields
+      }
+      products {
+        nodes {
+          id
+          ...ProductCardFields
+        }
+      }
+    }
+  }
+`)
+
+export function UserProfileRoute_Query() {
+  const [result] = useQuery(CategoryQuery)
+
+  const { categoryByURL: category } = result.data
+
+  return (
+    <main>
+      <h1>{category.name}</h1>
+      <SEO seo={category.seo}>
+      {category.products.nodes.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </main>
+  )
+}
+```
+
+All of the above is statically typed and if we were to i.e. not spread in
+`ProductCardFields` we would get a TypeScript error telling us that we are
+not adhering to the type of `ProductCard`.
+
+They even give you a handy fragment-masking method in the generated types! I personally
+have the `code-generator` running at all times as a bash command or I try to
+incorporate it into `vite`/`next` so that it runs during development.
+
+## Future
+
+In a future post I would love to go more into the runtime and operational
+side of things, I haven't fully gotten my thoughts straightened out on how
+that _should_ look but I have some ideas.
+
+For the runtime I would love to go deeper on partial data and nullability,
+a lot of GraphQL clients leverage normalised caches which more often than not
+enable us to show partial data. In the current state of the art there isn't
+really a good way to tell a cache what can be missing and what can't be. You
+can inform this with the schema but that's not always enough, you also don't
+want any missing data to be allowed as navigating from page x to page z might
+result in different partial data compared to navigating from page y to page z.
+I am a big fan of [client controlled nullability](https://github.com/graphql/client-controlled-nullability-wg)
+but it looks like the working-group is moving to a new direction with
+[strict semantic nullability](https://github.com/graphql/graphql-wg/discussions/1410)
+which might re-introduce the concept of needing a schema (which is also heavy on initial page load...).
+I honestly haven't read up enough about this spec and how it compares to client
+controlled nullability.
+
+For the operational side of things I would need to develop a clearer picture of
+all the things that go into managing a schema, logs, performance, ... at scale.
