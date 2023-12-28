@@ -12,7 +12,7 @@
   "dev": "vite",
   "build": "pnpm run generate",
   "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
-  "generate": "vite build --outDir dist && pnpm build:server && node prerender"
+  "generate": "vite build --outDir dist"
  },
  "dependencies": {
   "@mdx-js/rollup": "^3.0.0",
@@ -25,7 +25,7 @@
   "rehype-highlight": "^7.0.0"
  },
  "devDependencies": {
-  "@preact/preset-vite": "^2.7.0",
+  "@preact/preset-vite": "^2.8.1",
   "@types/react": "^18.2.46",
   "husky": "^8.0.3",
   "lint-staged": "^15.2.0",
