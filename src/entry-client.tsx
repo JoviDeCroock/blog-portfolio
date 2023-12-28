@@ -4,6 +4,7 @@ import { App } from './App'
 
 const element = document.getElementById('main')
 let jsx = (
+  // @ts-expect-error
   <LocationProvider>
     <App />
   </LocationProvider>

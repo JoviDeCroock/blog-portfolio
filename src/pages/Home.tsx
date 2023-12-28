@@ -38,7 +38,8 @@ export default () => (
         their best work, a force multiplier for others, be that by working on DX
         or discovering solutions to problems together.
         <br />
-        <br />A second passion that has grown over the years is open-source, I{' '}
+        <br />
+        A second passion that has grown over the years is open-source, I{' '}
         love working in the open and I love collaborating with others to solve{' '}
         common development problems.
       </Prelude>
@@ -77,7 +78,7 @@ export default () => (
             >
               Preact
             </Link>{' '}
-            since we started on the X release in the start of 2019
+            since we started on the Preact X release-line at the start of 2019
           </ListItem>
           <ListItem>
             I created{' '}
@@ -88,7 +89,7 @@ export default () => (
             >
               Prefresh
             </Link>{' '}
-            which is like React Fast Refresh but for Preact specifically
+            which is like React Fast Refresh but for Preact
           </ListItem>
           <ListItem>
             In June 2019 I started helping out on the{' '}
@@ -110,7 +111,7 @@ export default () => (
             >
               Hoofd
             </Link>{' '}
-            as I wanted to properly manage my HTML-head through hooks
+            as I wanted to properly manage the HTML head element through React hooks
           </ListItem>
           <ListItem>
             I developed{' '}
@@ -135,7 +136,9 @@ export default () => (
       <SkillIndicator title="TypeScript" level={9} />
       <SkillIndicator title="Terraform" level={8} />
       <SkillIndicator title="AWS" level={7} />
+      <SkillIndicator title="Cloudflare" level={7} />
       <SkillIndicator title="SQL" level={7} />
+      <SkillIndicator title="ClickHouse" level={6} />
       <SkillIndicator title="Rust" level={5} />
     </Block>
     <Block>
@@ -153,7 +156,7 @@ export default () => (
             target="blank"
             href="https://github.com/FredKSchott/esm-hmr"
           >
-            Helped develop the ESM HMR Spec
+            I've Helped develop the ESM HMR Spec
           </Link>
         </ListItem>
         <ListItem>
@@ -162,7 +165,7 @@ export default () => (
             target="blank"
             href="https://opensource.googleblog.com/2020/01/announcing-2019-second-cycle-google.html"
           >
-            Google Open Source Peer Bonus 2019 Cycle 2
+            I've received the Google Open Source Peer Bonus 2019 Cycle 2
           </Link>
         </ListItem>
       </ul>
