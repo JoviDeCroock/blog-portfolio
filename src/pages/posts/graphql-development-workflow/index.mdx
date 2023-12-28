@@ -118,7 +118,10 @@ the component is visible or not. The other option, my preferred one,
 being that the component itself is responsible for fetching the data it needs.
 
 The latter option basically starts a new data-tree where the components of our
-dynamic piece of UI will dictate their data-requirements upwards.
+dynamic piece of UI will dictate their data-requirements upwards. In practice
+this could look something like clicking "add to cart" in our PLP, this opens a modal
+which fetches the product with its inventory/... and then renders when everything
+has been loaded.
 
 ## LSP
 
@@ -204,8 +207,8 @@ export function UserProfileRoute_Query() {
 ```
 
 All of the above is statically typed and if we were to i.e. not spread in
-`ProductCardFields` we would get a TypeScript error telling us that we are
-not adhering to the type of `ProductCard`.
+`ProductCardFields` in our GraphQL document we would get a TypeScript error
+telling us that we are not adhering to the props type of `ProductCard`.
 
 They even give you a handy fragment-masking method in the generated types! I personally
 have the `code-generator` running at all times as a bash command or I try to
