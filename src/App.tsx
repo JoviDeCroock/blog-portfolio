@@ -18,6 +18,9 @@ const UseId = lazy(() => import('./pages/posts/preact-use-id/index.mdx'))
 const PersistedOperations = lazy(
   () => import('./pages/posts/persisted-operations/index.mdx')
 )
+const GraphQLDevelopmentWorkflow = lazy(
+  () => import('./pages/posts/graphql-development-workflow/index.mdx')
+)
 
 setup(h)
 
@@ -40,6 +43,10 @@ export function App() {
               <Route
                 component={PersistedOperations}
                 path="/blog/persisted-operations"
+              />
+              <Route
+                component={GraphQLDevelopmentWorkflow}
+                path="/blog/graphql-development-workflow"
               />
               <Route component={NotFound} default />
             </Router>

@@ -11,8 +11,10 @@ import { documentProps as hydrationDocumentProps } from './posts/hydration/docum
 import { documentProps as timingsDocumentProps } from './posts/browser-timings/documentProps'
 import { documentProps as useIdDocumentProps } from './posts/preact-use-id/documentProps'
 import { documentProps as persistedOperationDocumentProps } from './posts/persisted-operations/documentProps'
+import { documentProps as graphqlWorkflowDocumentProps } from './posts/graphql-development-workflow/documentProps'
 
 const posts = [
+  graphqlWorkflowDocumentProps,
   persistedOperationDocumentProps,
   useIdDocumentProps,
   timingsDocumentProps,
