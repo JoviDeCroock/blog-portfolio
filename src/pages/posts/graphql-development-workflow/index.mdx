@@ -67,6 +67,9 @@ the information architecture of the page. This makes the query easy to reason
 about and it will act as a means of communication to supply the resources for
 the blueprint expressed by your components and pages code.
 
+Doing so gets us an "optimal" fetching story where we do one network interaction
+to fufill the requirements for our initial view.
+
 ### Fragments
 
 During development it would be really difficult when you are working on i.e. a
@@ -132,6 +135,9 @@ and global fragments. It's a TypeScript plugin and it will give you auto-complet
 diagnostics and hover information for your GraphQL documents. Additionally we wanted
 to have some of those fantastic Relay features, like it for instance telling you
 that a field is unused or a fragment import is missing.
+
+With the LSP we have validation of the GraphQL execution language and auto-completion of
+our particular schema!
 
 There's probably a lot more we can do here, for instance add warnings for making `$limit`
 a variable as folks can play with this to DOS attack your server, ... This ties back to
@@ -204,6 +210,9 @@ not adhering to the type of `ProductCard`.
 They even give you a handy fragment-masking method in the generated types! I personally
 have the `code-generator` running at all times as a bash command or I try to
 incorporate it into `vite`/`next` so that it runs during development.
+
+With this we tackle the final boss, static typing for our network results which
+from a development standpoint is incredible!
 
 ## Future
 
