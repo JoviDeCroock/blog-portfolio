@@ -28,7 +28,7 @@
   "@preact/preset-vite": "^2.7.0",
   "@types/react": "^18.2.46",
   "husky": "^8.0.3",
-  "lint-staged": "^15.0.2",
+  "lint-staged": "^15.2.0",
   "prettier": "^3.0.3",
   "typescript": "^5.3.3",
   "vite": "^5.0.0"
