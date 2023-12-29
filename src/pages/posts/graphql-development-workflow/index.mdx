@@ -130,17 +130,18 @@ of the fields available on your schema. Historically this could be solved by
 surfing to the [GraphiQL](https://github.com/graphql/graphiql) endpoint of your
 GraphQL server and exploring the schema there. This was a pretty manual process
 and left room for improvement. The [GraphQL VSCode plugin](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql)
-solved a lot of that but doesn't really work with tagged-template literals, ...
+solved a lot of that but doesn't really work with interpolating tagged-template literals
+for fragments, and we also wanted more relay-like features.
 
 This is why we decided to work on [GraphQLSP](https://github.com/0no-co/GraphQLSP)
-which does similar things to the VSCode plugin but works with template interpolations
-and global fragments. It's a TypeScript plugin and it will give you auto-complete,
-diagnostics and hover information for your GraphQL documents. Additionally we wanted
-to have some of those fantastic Relay features, like it for instance telling you
-that a field is unused or a fragment import is missing.
+which does similar things to the VSCode plugin but works with fragment interpolations
+and global fragment definitions. It's a TypeScript plugin and it will give you auto-complete,
+diagnostics and hover information for your GraphQL documents. Additionally in the Relay-spirit
+we wanted it to be able to tell you that a field is unused or that you are using a component
+but not using its co-located fragment.
 
-With the LSP we have validation of the GraphQL execution language and auto-completion of
-our particular schema!
+With the LSP we have validation of the GraphQL execution language and auto-completion as well as
+information about our particular schema!
 
 There's probably a lot more we can do here, for instance add warnings for making `$limit`
 a variable as folks can play with this to DOS attack your server, ... This ties back to
@@ -228,7 +229,7 @@ a lot of GraphQL clients leverage normalised caches which more often than not
 enable us to show partial data. In the current state of the art there isn't
 really a good way to tell a cache what can be missing and what can't be. You
 can inform this with the schema but that's not always enough, you also don't
-want any missing data to be allowed as navigating from page x to page z might
+want all missing data to be allowed, as navigating from page x to page z might
 result in different partial data compared to navigating from page y to page z.
 I am a big fan of [client controlled nullability](https://github.com/graphql/client-controlled-nullability-wg)
 but it looks like the working-group is moving to a new direction with
