@@ -12,7 +12,7 @@ export default defineConfig({
     ssrManifest: true,
   },
   plugins: [
-    preact({ prerender: { enabled: true } }),
+    preact({ prerender: { enabled: true, renderTarget: '#main' } }),
     mdx({
       rehypePlugins: [rehypeHighlight],
     }),
