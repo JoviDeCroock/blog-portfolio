@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import preact from '@preact/preset-vite'
 import mdx from '@mdx-js/rollup'
 import rehypeHighlight from 'rehype-highlight'
-import { PrerenderPlugin } from './prerender'
 
 export default defineConfig({
   // @ts-ignore
@@ -13,10 +12,9 @@ export default defineConfig({
     ssrManifest: true,
   },
   plugins: [
-    preact(),
+    preact({ prerender: { enabled: true } }),
     mdx({
       rehypePlugins: [rehypeHighlight],
     }),
-    PrerenderPlugin({ enabled:true })
   ],
 })

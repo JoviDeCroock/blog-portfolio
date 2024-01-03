@@ -2,23 +2,10 @@ import { render } from 'preact'
 import { LocationProvider, hydrate } from 'preact-iso'
 import { App } from './App'
 
-<<<<<<< HEAD
-const element = document.getElementById('main')
-let jsx = (
-  // @ts-expect-error
-  <LocationProvider>
-    <App />
-  </LocationProvider>
-)
-if (element && element.hasChildNodes()) {
-  hydrate(jsx, element)
-} else if (element) {
-  // Dev
-  render(jsx, element)
-=======
 if (typeof window !== 'undefined') {
   const element = document.getElementById('main')
   let jsx = (
+    // @ts-expect-error
     <LocationProvider>
       <App />
     </LocationProvider>
@@ -37,6 +24,7 @@ export async function prerender() {
   const { extractCss } = await import('goober')
   const { toStatic } = await import('hoofd/preact')
 
+    // @ts-expect-error
 	const { html, links } = await ssr(<LocationProvider><App /></LocationProvider>);
   const styles = extractCss();
   const head = toStatic();
@@ -64,5 +52,4 @@ export async function prerender() {
 			]),
 		},
 	};
->>>>>>> 3cc0701 (try prerender plugin)
 }
