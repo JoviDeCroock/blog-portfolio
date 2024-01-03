@@ -2,14 +2,15 @@ import { render } from 'preact'
 import { LocationProvider, hydrate } from 'preact-iso'
 import { App } from './App'
 
+let jsx = (
+  // @ts-expect-error
+  <LocationProvider>
+    <App />
+  </LocationProvider>
+)
+
 if (typeof window !== 'undefined') {
   const element = document.getElementById('main')
-  let jsx = (
-    // @ts-expect-error
-    <LocationProvider>
-      <App />
-    </LocationProvider>
-  )
   if (element && element.hasChildNodes()) {
     hydrate(jsx, element)
   } else if (element) {
@@ -24,8 +25,7 @@ export async function prerender() {
   const { extractCss } = await import('goober')
   const { toStatic } = await import('hoofd/preact')
 
-    // @ts-expect-error
-	const { html, links } = await ssr(<LocationProvider><App /></LocationProvider>);
+	const { html, links } = await ssr(jsx);
   const styles = extractCss();
   const head = toStatic();
 
