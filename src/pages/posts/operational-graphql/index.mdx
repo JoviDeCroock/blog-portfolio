@@ -1,0 +1,135 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+/>
+
+# Operational GraphQL
+
+In [GraphQL Development Workflow](./graphql-development-workflow) we looked at how a front-end
+workflow could look like where you consume your GraphQL API, have it typed, ... This however
+is only at development-time. In production there will be a lot more operational concerns that
+have to be dealt with.
+
+## Observability
+
+One of, if not the most important part of running a production system is observability. We want
+to be able to see what is happening in our system on a high level by means of metrics, but also
+be able to drill down into requests and see what is happening there. This is where logs come
+into play.
+
+### Logging
+
+GraphQL can make it a bit more complicated to get the correct picture of what is happening during
+a request. This is because a single GraphQL request can result in multiple queries to the database/
+multiple calls to different REST endpoints/... A good logging setup starts with giving each request
+a unique identifier and then logging this identifier with each log message. An example with GraphQL-yoga:
+
+```js
+import { createYoga } from 'graphql-yoga'
+import { v4 as uuidv4 } from 'uuid';
+
+const yoga = createYoga({
+  schema: schema,
+  async context() {
+    return { traceId: uuidv4() }
+  }
+})
+```
+
+When we have this unique identifier we can choose to use a structured logger like [pino](https://github.com/pinojs/pino),
+we have to make sure that we either create the pino-logger with the traceId in the context or we add it to each log message
+in our resolvers and include `ctx.traceId` in the body.
+
+Given that every log-message is now associated to a request we can filter/associate them in our favorite logging solution, an example
+of this could be Datadog, Splunk, ... Every request can be linked to the resolvers that were called and what happened in them.
+
+### metrics
+
+The most important metrics for a GraphQL API are the error rate and the latency. I have found that the granular latency where
+each field is carefully recorded and is showing latency is less useful than the overall latency of a request and the evolution
+of latency.
+
+There are a lot of solutions like [GraphQL Hive](https://the-guild.dev/graphql/hive), [Inigo](https://inigo.io),
+[Stellate](https://stellate.co) (Full disclosure I work here), ... that can get you both the above metrics for your GraphQL API
+we can then monitor these metrics and set alerts when they exceed a certain number.
+
+One feature that I have found to be missing in a lot of these products is the ability to monitor a given operation, let's say we
+have the following operation
+
+```graphql
+query CategoryProducts($id: ID!) {
+  category(id: $id) {
+    id
+    name
+    products {
+      nodes {
+        id
+        name
+        price
+      }
+    }
+  }
+}
+```
+
+We now add a new field called `inventory` and the performance of this operation just drops significantly, rather than
+getting a general alert that performance dropped it would be useful to get an alert that `CategoryProducts` is slow and
+that the executed document evolved to have an `inventory` field. This alert would allow us to quickly identify the problem and
+either acccept it because the service managing `inventory` is slow or optimise it with a dataloader, ... This could be done similarly
+for an added `argument`, when an interface or union resolves to a certain type, ...
+
+Error rates are also hard to get right as we need to know whether this was the fault of an external system or service (the error code or message
+could signal that), if it's isolated to a given operation or whether someone is just trying to do something that is not allowed.
+In an ideal world we can filter out the error when someone is just trying to request our API as an unauthorized user, ... but the risk
+could be that we miss an error where we incorrectly mark a user as unauthorized. This results in a lot of application-specific metadata
+being relevant to the error and we need to be able to deliver these as metrics when an alert arises, these could be things like the amount
+of distinct variable combinations attributing to an alert, the amount of distinct users and the amount of operations. This can help
+make an informed decision whether this is P0, P1, P2, ... and whether we need to fix it now or whether it can wait.
+
+### Clients
+
+TODO: how do different clients tie into this
+
+## Security
+
+There are a few concerns with GraphQL when it comes to security, the first would be that by default we expose everything in our schema
+and the second would be that one request can access multiple resources.
+
+Everything being exposed by default can be addressed by using a plugin like [block-field-suggestions](https://github.com/Escape-Technologies/graphql-armor/tree/main/packages/plugins/block-field-suggestions)
+and disabling the `introspection` when you are in production. This is however a bandaid as people can still visit your application
+and look at the requests in the network-tab of their browser and see what is possible. This is where [Persisted Operations](./persisted-operations)
+come into play, we can extract all the documents from our client-application and create hashes for them and share that with the server so that
+it will only accepts those documents. In doing so we made the selection of our document obscure and we have only a limited amount of documents
+that will be accepted. There are still a few pitfalls to exploit with persisted-operations like the fact that we could have a query with a variable
+named `limit` which allows an attacker to do a DoS attack on our server by setting the limit to a very high number.
+
+The second concern can be addressed by erroring out early, we can limit the depth, breath, ... of a GraphQL Document and error out before we even
+start executing the request, [GraphQL armor](https://github.com/Escape-Technologies/graphql-armor) is a great tool here! Another thing we can do is
+see whether authenticated fields are included in the request as a preflight check and error out if the user isn't authenticated. The last solution here
+would be rate-limiting, request based rate limiting can be a good first line of defense when you are using persisted-operations, however for the normal
+GraphQL execution where large requests can be forged we need a different approach like [complexity](https://github.com/slicknode/graphql-query-complexity)
+where a given document gets assigned a complexity score and we can limit that across requests based on i.e. `ip` or `userId`.
+
+## Documentation
+
+Documentation is important so that people can understand what's possible and onboard to your product. GraphQL is self-documenting is a term that is used a
+lot, it is true that we get a lot of information by default on our graph, like our entry-points and the types they return and the fields on these types, ...
+however adding `descriptions` to our fields is still entirely on the developer, not saying this is a bad thing just want to emphasize that nothing is entirely
+magical. When using a well-described schema in combination with i.e. [`GraphiQL`](https://github.com/graphql/graphiql) you can explore and play with the
+schema as a developer and onboard quite quickly.
+
+When there is a basic understanding of the schema, one can explore the documents used in client-applications and understand the different use-cases the schema
+is used for, heck maybe one day we just give an AI application our executed documents and schema and it will tell us all the use cases that a client has for
+this schema.
+
+## Performance
+
+TODO: dataloader, persisted operations and stellate
+
