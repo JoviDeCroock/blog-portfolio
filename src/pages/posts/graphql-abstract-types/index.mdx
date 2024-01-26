@@ -1,0 +1,141 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+/>
+
+# GraphQL Abstract types and caching
+
+An issue in GraphQL client's normalised caching are abstract types
+and when you as a consumer run into them it can be really hard...
+
+We'll use the terms abstract and concrete types which can be defined as follows:
+
+- Abstract type, an interface or union type, interfaces can be implemented by interfaces/objects
+  making the implementor have a superset of the fields of the implemented interface.
+- Concrete type, an object that possibly implements an interface, these are object-types that
+  represent an eventual returned value.
+
+## Introduction
+
+To get this we need to rewind a bit and look at the fundamentals of normalized caching,
+and how it works conceptually. Let's say we get the following selection-set from our
+client:
+
+```graphql
+query {
+  pokemon(id: "1") {
+    id
+    name
+  }
+}
+```
+
+A normalized cache will go over this and start checking whether or not it contains every field
+by doing the following in order:
+
+- `Cache.read('Query.pokemon(id: 1)')` - this will return either nothing or a pointer to the `Pokemon`
+  in cache.
+- `Cache.read('Pokemon:1.id')` - this will return either nothing or the `id` of the `Pokemon`
+- `Cache.read('Pokemon:1.name')` - this will return either nothing or the `name` of the `Pokemon`
+
+That's the gist of the operations that will be executed, the reason we can uniquely identify these
+entities is because GraphQL exposes the `__typename` field on every object, which allows us to combine
+a unique identifier and the name of the type to create a unique key.
+
+If the entity isn't there we'll reach out to the server and we'll be able to write the response
+in the cache with very similar steps.
+
+Now the above is an ideal case, there are also going to be cases where we can't generate a key
+for a given entity, in `urql` we call them embedded entities. This basically opts out of normalization
+for these objects and will embed the object in the parent field.
+
+```js
+cacheExchange({
+  keys: {
+    Pokemon: p => p.id, // Default
+    PokemonDimension: () => null, // embedded entity, will be embedded into Pokemon.dimension
+  }
+})
+```
+
+Now to add one more piece we'll look at an abstract type being queried...
+
+```graphql
+query {
+  beast(id: "1") {
+    id
+    ... on Beast {
+      name
+    }
+    ... on Pokemon {
+      fleeRate
+    }
+    ... on Digimon {
+      evolutionLevel
+    }
+  }
+}
+```
+
+For clarity the schema looks like
+
+```graphql
+interface Beast {
+  id: ID!
+  name: String!
+}
+
+type Pokemon implements Beast {
+  id: ID!
+  name: String!
+  fleeRate: Float!
+}
+
+type Digimon implements Beast {
+  id: ID!
+  name: String!
+  evolutionLevel: Int!
+}
+
+type Query {
+  beast(id: ID!): Beast
+}
+```
+
+The steps we'll go through to resolve this query will be the following
+
+- `Cache.read('Query.beast(id: 1)')` - this will return either nothing or a pointer to the `Pokemon|Digimon`
+  in cache.
+- `Cache.read('(Pokemon|Digimon):1.id')` - this will return either nothing or the `id` of the `Pokemon|Digimon`
+- `Cache.read('(Beast):1.name')` - this will return either nothing or the `name` of the `Beast` --> Problematic as we'll never
+  see this `__typename` as the server will always reply with a concrete type of `Pokemon` or `Digimon` meaning that we'll never
+  be able to resolve this field as we can't be sure whether this is a concrete or abstract-type.
+- `Cache.read('(Pokemon):1.fleeRate')` - this will return either nothing or the `fleeRate` of the `Pokemon`
+- `Cache.read('(Digimon):1.evolutionLevel')` - this will return either nothing or the `evolutionLevel` of the `Digimon`
+
+When we are writing to the cache we'll always write with the `__typename` we are given and we'll check the fragments
+whether they heuristically match the response. This means that if we get back a `Pokemon`, `fleeRate` will be found in the
+response and `name` will be found in the response meaning that these two responses heuristically match. We won't be able
+to find `evolutionLevel` in the response so we can ignore that fragment.
+
+The issue here becomes that for a Pokemon we'll get the `name` and `fleeRate` returned while for a Digimon we'll get the `name` and
+`evolutionLevel` returned. The Beast Fragment represents the fields they have in common but as an abstract type will never be selection
+explicitly.
+
+## Interface fields
+
+The above shows the issue that normalized caches face, to fix that you'll see solutions like
+[Apollo's possibleTypes](https://www.apollographql.com/docs/react/caching/cache-configuration#possibletypes) or
+[urql's schema-awareness](https://formidable.com/open-source/urql/docs/graphcache/schema/#adding-interfaces-and-unions). Solutions like
+these allow us to lookup each type and see that it's abstract which in turn allows us to resolve the selection-set by means of the
+`__typename` of the implementing types.
+
+Something that can be said is whether we can construct `possibleTypes` at query-time where we would see that `Pokemon` is returned, and
+we see that it has the `name` property which would allow us to derive that by extension Pokemon is implementing the Beast interface.
