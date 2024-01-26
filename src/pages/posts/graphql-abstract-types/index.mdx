@@ -114,7 +114,7 @@ The steps we'll go through to resolve this query will be the following
 - `Cache.read('(Digimon):1.evolutionLevel')` - this will return either nothing or the `evolutionLevel` of the `Digimon`
 
 When we are writing to the cache we'll always write with the `__typename` we are given and we'll check the fragments
-whether they heuristically match the response. This means that if we get back a `Pokemon` `fleeRate` will be found in the
+whether they heuristically match the response. This means that if we get back a `Pokemon`, `fleeRate` will be found in the
 response and `name` will be found in the response meaning that these two responses heuristically match. We won't be able
 to find `evolutionLevel` in the response so we can ignore that fragment.
 
