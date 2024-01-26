@@ -106,10 +106,10 @@ The steps we'll go through to resolve this query will be the following
 
 - `Cache.read('Query.beast(id: 1)')` - this will return either nothing or a pointer to the `Pokemon|Digimon`
   in cache.
-- `
 - `Cache.read('(Pokemon|Digimon):1.id')` - this will return either nothing or the `id` of the `Pokemon|Digimon`
 - `Cache.read('(Beast):1.name')` - this will return either nothing or the `name` of the `Beast` --> Problematic as we'll never
-  see this `__typename` as the server will always reply with a concrete type.
+  see this `__typename` as the server will always reply with a concrete type of `Pokemon` or `Digimon` meaning that we'll never
+  be able to resolve this field as we can't be sure whether this is a concrete or abstract-type.
 - `Cache.read('(Pokemon):1.fleeRate')` - this will return either nothing or the `fleeRate` of the `Pokemon`
 - `Cache.read('(Digimon):1.evolutionLevel')` - this will return either nothing or the `evolutionLevel` of the `Digimon`
 
@@ -118,6 +118,17 @@ whether they heuristically match the response. This means that if we get back a 
 response and `name` will be found in the response meaning that these two responses heuristically match. We won't be able
 to find `evolutionLevel` in the response so we can ignore that fragment.
 
+The issue here becomes that for a Pokemon we'll get the `name` and `fleeRate` returned while for a Digimon we'll get the `name` and
+`evolutionLevel` returned. The Beast Fragment represents the fields they have in common but as an abstract type will never be selection
+explicitly.
+
 ## Interface fields
 
-## Overlapping concrete types
+The above shows the issue that normalized caches face, to fix that you'll see solutions like
+[Apollo's possibleTypes](https://www.apollographql.com/docs/react/caching/cache-configuration#possibletypes) or
+[urql's schema-awareness](https://formidable.com/open-source/urql/docs/graphcache/schema/#adding-interfaces-and-unions). Solutions like
+these allow us to lookup each type and see that it's abstract which in turn allows us to resolve the selection-set by means of the
+`__typename` of the implementing types.
+
+Something that can be said is whether we can construct `possibleTypes` at query-time where we would see that `Pokemon` is returned, and
+we see that it has the `name` property which would allow us to derive that by extension Pokemon is implementing the Beast interface.
