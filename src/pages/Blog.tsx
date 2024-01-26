@@ -12,8 +12,10 @@ import { documentProps as timingsDocumentProps } from './posts/browser-timings/d
 import { documentProps as useIdDocumentProps } from './posts/preact-use-id/documentProps'
 import { documentProps as persistedOperationDocumentProps } from './posts/persisted-operations/documentProps'
 import { documentProps as graphqlWorkflowDocumentProps } from './posts/graphql-development-workflow/documentProps'
+import { documentProps as abstractTypesDocumentProps } from './posts/graphql-abstract-types/documentProps'
 
 const posts = [
+  abstractTypesDocumentProps,
   graphqlWorkflowDocumentProps,
   persistedOperationDocumentProps,
   useIdDocumentProps,

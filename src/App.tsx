@@ -21,6 +21,9 @@ const PersistedOperations = lazy(
 const GraphQLDevelopmentWorkflow = lazy(
   () => import('./pages/posts/graphql-development-workflow/index.mdx')
 )
+const GraphQLAbstractTypes = lazy(
+  () => import('./pages/posts/graphql-abstract-types/index.mdx')
+)
 
 setup(h)
 
@@ -47,6 +50,10 @@ export function App() {
               <Route
                 component={GraphQLDevelopmentWorkflow}
                 path="/blog/graphql-development-workflow"
+              />
+              <Route
+                component={GraphQLAbstractTypes}
+                path="/blog/graphql-abstract-types"
               />
               <Route component={NotFound} default />
             </Router>
