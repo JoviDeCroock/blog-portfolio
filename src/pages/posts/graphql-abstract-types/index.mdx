@@ -15,6 +15,13 @@ import { documentProps } from './documentProps'
 An issue in GraphQL client's normalised caching are abstract types
 and when you as a consumer run into them it can be really hard...
 
+We'll use the terms abstract and concrete types which can be defined as follows:
+
+- Abstract type, an interface or union type, interfaces can be implemented by interfaces/objects
+  making the implementor have a superset of the fields of the implemented interface.
+- Concrete type, an object that possibly implements an interface, these are object-types that
+  represent an eventual returned value.
+
 ## Introduction
 
 To get this we need to rewind a bit and look at the fundamentals of normalized caching,
