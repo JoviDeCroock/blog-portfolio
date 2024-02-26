@@ -13,7 +13,7 @@
   "build": "vite build --outDir dist"
  },
  "dependencies": {
-  "@mdx-js/rollup": "^3.0.0",
+  "@mdx-js/rollup": "^3.0.1",
   "goober": "2.1.13",
   "hoofd": "^1.7.1",
   "preact": "^10.19.6",
