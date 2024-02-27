@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@mdx-js/rollup':
-    specifier: ^3.0.0
-    version: 3.0.0(rollup@4.9.1)
+    specifier: ^3.0.1
+    version: 3.0.1(rollup@4.9.1)
   goober:
     specifier: 2.1.13
     version: 2.1.13(csstype@3.1.2)
@@ -576,8 +576,8 @@ packages:
       - supports-color
     dev: false
 
-  /@mdx-js/rollup@3.0.0(rollup@4.9.1):
-    resolution: {integrity: sha512-ITvGiwPGEBW+D7CCnpSA9brzAosIWHAi4y+Air8wgfLnez8aWue50avHtWMfnFLCp7vt+JQ9UM8nwfuQuuydxw==}
+  /@mdx-js/rollup@3.0.1(rollup@4.9.1):
+    resolution: {integrity: sha512-j0II91OCm4ld+l5QVgXXMQGxVVcAWIQJakYWi1dv5pefDHASJyCYER2TsdH7Alf958GoFSM7ugukWyvDq/UY4A==}
     peerDependencies:
       rollup: '>=2'
     dependencies:
@@ -785,7 +785,7 @@ packages:
   /@types/hast@3.0.0:
     resolution: {integrity: sha512-SoytUJRuf68HXYqcXicQIhCrLQjqeYU2anikr4G3p3Iz+OZO5QDQpDj++gv+RenHsnUBwNZ2dumBArF8VLSk2Q==}
     dependencies:
-      '@types/unist': 2.0.6
+      '@types/unist': 3.0.0
     dev: false
 
   /@types/mdast@4.0.3:
