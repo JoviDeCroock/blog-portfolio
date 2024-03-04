@@ -54,9 +54,9 @@ A fallback will be a tradeoff to ensure resilience and create uptime guarantees.
 
 ## Optimise for reproduction
 
-One last thing we can do is optimise for reproduction, an unreliable vendor does not
-neccesarily go down... They might just introduce a bug in their systems that starts
-behaving unexpectedly. For this case I have personally started thinking about optimising
+One last thing we can do is optimise for reproduction, a vendor does not
+neccesarily go down... They might just introduce a bug in their systems which introduces
+unexpected interactions. For this case I have personally started thinking about optimising
 for reproductions.
 
 It's very hard to contextualise what kind of customer you are, are you doing the most basic
@@ -66,6 +66,10 @@ by a certain issue or are more people affected but is just not that much of a pr
 In whatever bucket you fall here, optimise for reproduction, try to have some tool that generates
 all of the contact points with the third party provider so you can give all of the URL's, SDK calls,..
 to their support team to show the issue.
+
+For infrastructure providers I feel this is really crucial, being able to either spin up some piece
+of infrastructure that highlights the behavior in isolation is crucial for them to understand what
+part of their (distributed) system is buggy.
 
 ---
 
