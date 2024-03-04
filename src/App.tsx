@@ -24,6 +24,9 @@ const GraphQLDevelopmentWorkflow = lazy(
 const GraphQLAbstractTypes = lazy(
   () => import('./pages/posts/graphql-abstract-types/index.mdx')
 )
+const UnreliableVendors = lazy(
+  () => import('./pages/posts/unreliable-vendors/index.mdx')
+)
 
 setup(h)
 
@@ -54,6 +57,10 @@ export function App() {
               <Route
                 component={GraphQLAbstractTypes}
                 path="/blog/graphql-abstract-types"
+              />
+              <Route
+                component={UnreliableVendors}
+                path="/blog/unreliable-vendors"
               />
               <Route component={NotFound} default />
             </Router>

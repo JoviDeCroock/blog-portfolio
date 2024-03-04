@@ -1,0 +1,77 @@
+import SEO from '../../../components/Seo'
+import { documentProps } from './documentProps'
+
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+/>
+
+# Unreliable vendors
+
+Throughout my careers I have had to deal a lot with vendors, be that
+infrastructure, services, ... and one thing shines through, when you
+rely on someone else it is best to assess the impact of said vendor
+and have your contingency plans.
+
+This post is in no way shape or form intending to talk about any
+vendor, it will mainly be an attempt to convey my perspective
+on how I have dealt with the issue of Unreliable vendors.
+When you are running a service, it's easy to shift blame to
+your vendor for being down or introducing a bug but you
+are responsible for the choices of your product. Let that
+sink in, we can't just shift accountability to a third party.
+
+## Reduce impact
+
+One of the most important things would be reducing the impact of a
+third party having downtime. When my billing provider is down should
+unrelated API Calls that happen to have a level of overlap go down? No,
+they really shouldn't we should optimise for providing service without
+that x% of our API surface not working.
+
+In the GraphQL world this could be done by i.e. having that part of the
+API response be nullable and providing an appropriate `GraphQLError` to
+highlight that billing is currently not available.
+
+Reducing impact is ofcourse not possible for every vendor, if your
+infrastructure goes down well... You can convey that to your user but
+the impact will be hard to reduce.
+
+## Fallbacks
+
+Another common thing might be having a fallback, a slower read-only database
+or another infrastructure provider deployed in parallel that just requires
+a DNS switch. A lot of these things can be controlled with little switches
+and should be as automatic as possible.
+
+One example of this could be that you have a distributed KV store that sometimes goes down,
+when it does go down you fallback to some blob storage like S3 to get the data
+you need... Yes it will be slower but your customers won't be impacted.
+
+A fallback will be a tradeoff to ensure resilience and create uptime guarantees.
+
+## Optimise for reproduction
+
+One last thing we can do is optimise for reproduction, an unreliable vendor does not
+neccesarily go down... They might just introduce a bug in their systems that starts
+behaving unexpectedly. For this case I have personally started thinking about optimising
+for reproductions.
+
+It's very hard to contextualise what kind of customer you are, are you doing the most basic
+thing with their software or are you living on the bleeding edge. Are you the only one impacted
+by a certain issue or are more people affected but is just not that much of a problem for them?
+
+In whatever bucket you fall here, optimise for reproduction, try to have some tool that generates
+all of the contact points with the third party provider so you can give all of the URL's, SDK calls,..
+to their support team to show the issue.
+
+---
+
+None of this is easy and building for resilience takes deep knowledge of what you're building and
+what your most critical pieces are but... It's better than having to blame your vendors at every
+incident.
+
+All of this doesn't need to be isolated to vendors, heck optimising for reproduction might
+as well be applied to open-source.
