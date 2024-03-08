@@ -11,6 +11,13 @@ export default defineConfig({
   build: {
     ssrManifest: true,
   },
+  server: {
+    headers: {
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'X-Frame-Options': 'ALLOW-FROM https://unpkg.com/'
+    }
+  },
   plugins: [
     preact({ prerender: { enabled: true, renderTarget: '#main' } }),
     mdx({

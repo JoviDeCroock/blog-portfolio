@@ -14,6 +14,7 @@
  },
  "dependencies": {
   "@mdx-js/rollup": "^3.0.1",
+  "@webcontainer/api": "^1.1.9",
   "goober": "2.1.13",
   "hoofd": "^1.7.1",
   "preact": "^10.19.6",

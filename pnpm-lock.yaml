@@ -8,6 +8,9 @@ dependencies:
   '@mdx-js/rollup':
     specifier: ^3.0.1
     version: 3.0.1(rollup@4.9.1)
+  '@webcontainer/api':
+    specifier: ^1.1.9
+    version: 1.1.9
   goober:
     specifier: 2.1.13
     version: 2.1.13(csstype@3.1.2)
@@ -828,6 +831,10 @@ packages:
 
   /@ungap/structured-clone@1.2.0:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
+    dev: false
+
+  /@webcontainer/api@1.1.9:
+    resolution: {integrity: sha512-Sp6PV0K9D/3f8fSbCubqhfmBFH8XbngZCBOCF+aExyGqnz2etmw+KYvbQ/JxYvYX5KPaSxM+asFQwoP2RHl5cg==}
     dev: false
 
   /acorn-jsx@5.3.2(acorn@8.8.2):

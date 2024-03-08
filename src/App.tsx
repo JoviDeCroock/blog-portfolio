@@ -28,6 +28,10 @@ const UnreliableVendors = lazy(
   () => import('./pages/posts/unreliable-vendors/index.mdx')
 )
 
+const Test = lazy(
+  () => import('./pages/posts/test/index.mdx')
+)
+
 setup(h)
 
 export function App() {
@@ -61,6 +65,10 @@ export function App() {
               <Route
                 component={UnreliableVendors}
                 path="/blog/unreliable-vendors"
+              />
+              <Route
+                component={Test}
+                path="/blog/test"
               />
               <Route component={NotFound} default />
             </Router>
