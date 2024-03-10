@@ -3,7 +3,6 @@ import { LocationProvider, hydrate } from 'preact-iso'
 import { App } from './App'
 
 let jsx = (
-  // @ts-expect-error
   <LocationProvider>
     <App />
   </LocationProvider>

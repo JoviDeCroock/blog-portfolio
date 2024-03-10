@@ -14,7 +14,7 @@
  },
  "dependencies": {
   "@mdx-js/rollup": "^3.0.1",
-  "goober": "2.1.13",
+  "goober": "2.1.14",
   "hoofd": "^1.7.1",
   "preact": "^10.19.6",
   "preact-iso": "^2.3.2",
@@ -39,6 +39,11 @@
  "husky": {
   "hooks": {
    "pre-commit": "lint-staged"
+  }
+ },
+ "pnpm": {
+  "patchedDependencies": {
+   "hoofd@1.7.1": "patches/hoofd@1.7.1.patch"
   }
  }
 }

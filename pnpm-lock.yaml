@@ -4,16 +4,21 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  hoofd@1.7.1:
+    hash: tazfis7egocnrotfa3dt3hz3pq
+    path: patches/hoofd@1.7.1.patch
+
 dependencies:
   '@mdx-js/rollup':
     specifier: ^3.0.1
     version: 3.0.1(rollup@4.9.1)
   goober:
-    specifier: 2.1.13
-    version: 2.1.13(csstype@3.1.2)
+    specifier: 2.1.14
+    version: 2.1.14(csstype@3.1.2)
   hoofd:
     specifier: ^1.7.1
-    version: 1.7.1(react@18.2.0)
+    version: 1.7.1(patch_hash=tazfis7egocnrotfa3dt3hz3pq)(react@18.2.0)
   preact:
     specifier: ^10.19.6
     version: 10.19.6
@@ -1231,8 +1236,8 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /goober@2.1.13(csstype@3.1.2):
-    resolution: {integrity: sha512-jFj3BQeleOoy7t93E9rZ2de+ScC4lQICLwiAQmKMg9F6roKGaLSHoCDYKkWlSafg138jejvq/mTdvmnwDQgqoQ==}
+  /goober@2.1.14(csstype@3.1.2):
+    resolution: {integrity: sha512-4UpC0NdGyAFqLNPnhCT2iHpza2q+RAY3GV85a/mRPdzyPQMsj0KmMMuetdIkzWRbJ+Hgau1EZztq8ImmiMGhsg==}
     peerDependencies:
       csstype: ^3.0.10
     dependencies:
@@ -1327,13 +1332,14 @@ packages:
     engines: {node: '>=12.0.0'}
     dev: false
 
-  /hoofd@1.7.1(react@18.2.0):
+  /hoofd@1.7.1(patch_hash=tazfis7egocnrotfa3dt3hz3pq)(react@18.2.0):
     resolution: {integrity: sha512-G+RUtbwR/nPRoJu33Fu/agPXax3J3tRZvs/AZ/8eWWqXPfAvhOWETBJRsRZC2dIzJvXZnMiO+6ui5vi+ftKRqw==}
     peerDependencies:
       react: '>= 16.8.0'
     dependencies:
       react: 18.2.0
     dev: false
+    patched: true
 
   /human-signals@5.0.0:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
