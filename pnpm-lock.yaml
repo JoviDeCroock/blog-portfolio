@@ -23,8 +23,8 @@ dependencies:
     specifier: ^10.19.6
     version: 10.19.6
   preact-iso:
-    specifier: ^2.3.2
-    version: 2.3.2(preact-render-to-string@6.3.1)(preact@10.19.6)
+    specifier: ^2.4.0
+    version: 2.4.0(preact-render-to-string@6.3.1)(preact@10.19.6)
   preact-render-to-string:
     specifier: ^6.3.1
     version: 6.3.1(preact@10.19.6)
@@ -2030,8 +2030,8 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /preact-iso@2.3.2(preact-render-to-string@6.3.1)(preact@10.19.6):
-    resolution: {integrity: sha512-OU+6dzX1/qAyWfH4zKVqp/apNLfAr8yx4aBUVKyBWoOyPT08bNJk4o08KWIwyQyEkpayW5q+5+GAkYBSky8ndw==}
+  /preact-iso@2.4.0(preact-render-to-string@6.3.1)(preact@10.19.6):
+    resolution: {integrity: sha512-m/xT9oTvNRZ4K/C05Ha91HdT8OPZCjf6Rs4y9arTALYYb1O1qfmygaJHXzkXFVkpDItHnpXMcisiwLn7CsZoLg==}
     peerDependencies:
       preact: '>=10'
       preact-render-to-string: '>=5'

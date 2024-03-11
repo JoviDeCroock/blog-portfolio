@@ -17,7 +17,7 @@
   "goober": "2.1.14",
   "hoofd": "^1.7.1",
   "preact": "^10.19.6",
-  "preact-iso": "^2.3.2",
+  "preact-iso": "^2.4.0",
   "preact-render-to-string": "^6.3.1",
   "preact-ssr-prepass": "^1.2.1",
   "rehype-highlight": "^7.0.0"
