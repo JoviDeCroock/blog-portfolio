@@ -1,0 +1,13 @@
+diff --git a/package.json b/package.json
+index fc917d776dbd7fc77b295b4851cf7428b3a5ffb6..50197259daba235f1c7bc07aa6b8cb4e46a0761b 100644
+--- a/package.json
++++ b/package.json
+@@ -42,7 +42,7 @@
+       "require": "./dist/hoofd.js"
+     },
+     "./preact": {
+-      "types": "./preact/dist/index.d.ts",
++      "types": "./preact/index.d.ts",
+       "browser": "./preact/dist/hoofd.module.js",
+       "umd": "./preact/dist/hoofd.umd.js",
+       "import": "./preact/dist/hoofd.mjs",

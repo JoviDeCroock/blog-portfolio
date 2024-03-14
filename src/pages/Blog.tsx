@@ -13,9 +13,13 @@ import { documentProps as useIdDocumentProps } from './posts/preact-use-id/docum
 import { documentProps as persistedOperationDocumentProps } from './posts/persisted-operations/documentProps'
 import { documentProps as graphqlWorkflowDocumentProps } from './posts/graphql-development-workflow/documentProps'
 import { documentProps as operationalGraphQL } from './posts/operational-graphql/documentProps'
+import { documentProps as abstractTypesDocumentProps } from './posts/graphql-abstract-types/documentProps'
+import { documentProps as unreliableVendorsDocumentProps } from './posts/unreliable-vendors/documentProps'
 
 const posts = [
   operationalGraphQL,
+  unreliableVendorsDocumentProps,
+  abstractTypesDocumentProps,
   graphqlWorkflowDocumentProps,
   persistedOperationDocumentProps,
   useIdDocumentProps,
@@ -65,6 +69,7 @@ const tagBgs: Record<string, string> = {
   security: '#d6e1c2',
   performance: '#0080bb',
   graphql: '#E10098',
+  'engineering': '#302221',
   'front-end': '#7842f5',
   vdom: '#6ff542',
   state: '#f5427e',

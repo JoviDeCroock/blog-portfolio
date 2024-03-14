@@ -125,6 +125,18 @@ export default () => (
             a TypeScript LSP Plugin to properly support inline-hints/... while
             developing front-end GraphQL applications
           </ListItem>
+          <ListItem>
+            I maintain{' '}
+            <Link
+              rel="nofollow"
+              target="blank"
+              href="https://github.com/0no-co/gql.tada"
+            >
+              GQL.tada
+            </Link>{' '}
+            The magical GraphQL parser written in TS types, this tool
+            automatically types your GraphQL Documents without codegen.
+          </ListItem>
         </ul>
       </Block>
     </Block>

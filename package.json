@@ -13,23 +13,23 @@
   "build": "vite build --outDir dist"
  },
  "dependencies": {
-  "@mdx-js/rollup": "^3.0.0",
-  "goober": "2.1.13",
+  "@mdx-js/rollup": "^3.0.1",
+  "goober": "2.1.14",
   "hoofd": "^1.7.1",
-  "preact": "^10.19.3",
-  "preact-iso": "^2.3.2",
+  "preact": "^10.19.6",
+  "preact-iso": "^2.4.0",
   "preact-render-to-string": "^6.3.1",
   "preact-ssr-prepass": "^1.2.1",
   "rehype-highlight": "^7.0.0"
  },
  "devDependencies": {
   "@preact/preset-vite": "^2.8.1",
-  "@types/react": "^18.2.46",
-  "husky": "^8.0.3",
-  "lint-staged": "^15.2.0",
+  "@types/react": "^18.2.64",
+  "husky": "^9.0.11",
+  "lint-staged": "^15.2.2",
   "prettier": "^3.1.1",
   "typescript": "^5.3.3",
-  "vite": "^5.0.0"
+  "vite": "^5.1.5"
  },
  "lint-staged": {
   "src/**/.{ts,tsx,mdx}": [
@@ -39,6 +39,11 @@
  "husky": {
   "hooks": {
    "pre-commit": "lint-staged"
+  }
+ },
+ "pnpm": {
+  "patchedDependencies": {
+   "hoofd@1.7.1": "patches/hoofd@1.7.1.patch"
   }
  }
 }

@@ -24,6 +24,12 @@ const GraphQLDevelopmentWorkflow = lazy(
 const OperationalGraphQL = lazy(
   () => import('./pages/posts/operational-graphql/index.mdx')
 )
+const GraphQLAbstractTypes = lazy(
+  () => import('./pages/posts/graphql-abstract-types/index.mdx')
+)
+const UnreliableVendors = lazy(
+  () => import('./pages/posts/unreliable-vendors/index.mdx')
+)
 
 setup(h)
 
@@ -51,9 +57,17 @@ export function App() {
                 component={GraphQLDevelopmentWorkflow}
                 path="/blog/graphql-development-workflow"
               />
-                            <Route
+              <Route
                 component={OperationalGraphQL}
                 path="/blog/operational-graphql"
+              />
+              <Route
+                component={GraphQLAbstractTypes}
+                path="/blog/graphql-abstract-types"
+              />
+              <Route
+                component={UnreliableVendors}
+                path="/blog/unreliable-vendors"
               />
               <Route component={NotFound} default />
             </Router>
