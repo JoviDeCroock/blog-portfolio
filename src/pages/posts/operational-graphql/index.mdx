@@ -21,15 +21,18 @@ have to be dealt with.
 
 One of, if not the most important part of running a production system is observability. We want
 to be able to see what is happening in our system on a high level by means of metrics, but also
-be able to drill down into requests and see what is happening there. This is where logs come
+be able to drill down into requests and see what is happening as they play out, this is where logs come
 into play.
 
 ### Logging
 
 GraphQL can make it a bit more complicated to get the correct picture of what is happening during
 a request. This is because a single GraphQL request can result in multiple queries to the database/
-multiple calls to different REST endpoints/... A good logging setup starts with giving each request
-a unique identifier and then logging this identifier with each log message. An example with GraphQL-yoga:
+multiple calls to REST endpoints/... A good logging setup starts with giving each request
+a unique identifier and then using this identifier in every log, this allows us to correlate
+logs to a given request.
+
+An example with GraphQL-yoga:
 
 ```js
 import { createYoga } from 'graphql-yoga'
@@ -44,11 +47,11 @@ const yoga = createYoga({
 ```
 
 When we have this unique identifier we can choose to use a structured logger like [pino](https://github.com/pinojs/pino),
-we have to make sure that we either create the pino-logger with the traceId in the context or we add it to each log message
-in our resolvers and include `ctx.traceId` in the body.
+we have to make sure that we either create the pino-logger with the `traceId` in the context or we add it to each log message
+in our resolvers by means of including `ctx.traceId` in the body of the structured log.
 
-Given that every log-message is now associated to a request we can filter/associate them in our favorite logging solution, an example
-of this could be Datadog, Splunk, ... Every request can be linked to the resolvers that were called and what happened in them.
+Given that every log-message is now associated to a request we can filter/associate them in our favorite logging solution like Datadog, Splunk, ...
+Every request can be linked to the resolvers that were called, the requests that resulted and the eventual warning/error you are tracing towards.
 
 ### metrics
 
@@ -57,8 +60,8 @@ each field is carefully recorded and is showing latency is less useful than the 
 of latency.
 
 There are a lot of solutions like [GraphQL Hive](https://the-guild.dev/graphql/hive), [Inigo](https://inigo.io),
-[Stellate](https://stellate.co) (Full disclosure I work here), ... that can get you both the above metrics for your GraphQL API
-we can then monitor these metrics and set alerts when they exceed a certain number.
+[Stellate](https://stellate.co) (Full disclosure I work here), ... that can get you both the above metrics for your GraphQL API.
+These solutions allow us to then monitor these metrics and set alerts when they exceed a certain number.
 
 One feature that I have found to be missing in a lot of these products is the ability to monitor a given operation, let's say we
 have the following operation
@@ -85,7 +88,9 @@ that the executed document evolved to have an `inventory` field. This alert woul
 either acccept it because the service managing `inventory` is slow or optimise it with a dataloader, ... This could be done similarly
 for an added `argument`, when an interface or union resolves to a certain type, ...
 
-Error rates are also hard to get right as we need to know whether this was the fault of an external system or service (the error code or message
+### Identifying errors
+
+Error rates are hard to get right as we need to know whether this was the fault of an external system or service (the error code or message
 could signal that), if it's isolated to a given operation or whether someone is just trying to do something that is not allowed.
 In an ideal world we can filter out the error when someone is just trying to request our API as an unauthorized user, ... but the risk
 could be that we miss an error where we incorrectly mark a user as unauthorized. This results in a lot of application-specific metadata
@@ -93,9 +98,33 @@ being relevant to the error and we need to be able to deliver these as metrics w
 of distinct variable combinations attributing to an alert, the amount of distinct users and the amount of operations. This can help
 make an informed decision whether this is P0, P1, P2, ... and whether we need to fix it now or whether it can wait.
 
+A common solution to this problem is to introduce an error-code pattern where we use the `extensions` property on the `GraphQLError` object
+to define the category of our error.
+
+An example of this could be
+
+```
+{
+  "errors": [
+    {
+      "message": "Payment failed",
+      "path": "checkout",
+      "extensions": { "code": "EXTERNAL_PROVIDER_STRIPE" }
+    }
+  ]
+}
+```
+
+Seeing the above error in our logs gives us a quick hint as to where to look as we know we failed in the `checkout` resolver and
+our error-code points at our external-provider erroring, we can see where we touch base with the provider and trace that way. We can
+now also expand our metrics by grouping on error-path or error-code.
+
 ### Clients
 
-TODO: how do different clients tie into this
+Another important aspect of metrics is identifying what kind of client is requesting certain fields, seeing certain errors, ... With GraphQL
+we'll often have a lot of consumers of a given endpoint, think about your mobile app that could have a lot of versions on the app store, your
+web-app and maybe even some CLI. To know which fields/types we can deprecate we need to be aware of who's using them, to track this we can
+add a header or something similar to our requests and include them in the logs.
 
 ## Security
 
@@ -128,8 +157,3 @@ schema as a developer and onboard quite quickly.
 When there is a basic understanding of the schema, one can explore the documents used in client-applications and understand the different use-cases the schema
 is used for, heck maybe one day we just give an AI application our executed documents and schema and it will tell us all the use cases that a client has for
 this schema.
-
-## Performance
-
-TODO: dataloader, persisted operations and stellate
-
