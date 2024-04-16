@@ -114,7 +114,7 @@ export default () => (
             as I wanted to properly manage the HTML head element through React hooks
           </ListItem>
           <ListItem>
-            I developed{' '}
+            I maintain{' '}
             <Link
               rel="nofollow"
               target="blank"
@@ -122,7 +122,7 @@ export default () => (
             >
               GraphQLSP
             </Link>{' '}
-            a TypeScript LSP Plugin to properly support inline-hints/... while
+            a TypeScript LSP Plugin to properly support inline-hints/diagnostics/... while
             developing front-end GraphQL applications
           </ListItem>
           <ListItem>
