@@ -24,7 +24,7 @@
  },
  "devDependencies": {
   "@preact/preset-vite": "^2.8.2",
-  "@types/react": "^18.2.74",
+  "@types/react": "^18.2.79",
   "husky": "^9.0.11",
   "lint-staged": "^15.2.2",
   "prettier": "^3.2.5",
