@@ -20,17 +20,17 @@ dependencies:
     specifier: ^1.7.1
     version: 1.7.1(patch_hash=tazfis7egocnrotfa3dt3hz3pq)(react@18.2.0)
   preact:
-    specifier: ^10.21.0
-    version: 10.21.0
+    specifier: 10.20.1
+    version: 10.20.1
   preact-iso:
     specifier: ^2.4.0
-    version: 2.4.0(preact-render-to-string@6.3.1)(preact@10.21.0)
+    version: 2.4.0(preact-render-to-string@6.3.1)(preact@10.20.1)
   preact-render-to-string:
     specifier: ^6.3.1
-    version: 6.3.1(preact@10.21.0)
+    version: 6.3.1(preact@10.20.1)
   preact-ssr-prepass:
     specifier: ^1.2.1
-    version: 1.2.1(preact@10.21.0)
+    version: 1.2.1(preact@10.20.1)
   rehype-highlight:
     specifier: ^7.0.0
     version: 7.0.0
@@ -38,7 +38,7 @@ dependencies:
 devDependencies:
   '@preact/preset-vite':
     specifier: ^2.8.2
-    version: 2.8.2(@babel/core@7.22.1)(preact@10.21.0)(vite@5.2.11)
+    version: 2.8.2(@babel/core@7.22.1)(preact@10.20.1)(vite@5.2.11)
   '@types/react':
     specifier: ^18.3.2
     version: 18.3.2
@@ -595,7 +595,7 @@ packages:
       - supports-color
     dev: false
 
-  /@preact/preset-vite@2.8.2(@babel/core@7.22.1)(preact@10.21.0)(vite@5.2.11):
+  /@preact/preset-vite@2.8.2(@babel/core@7.22.1)(preact@10.20.1)(vite@5.2.11):
     resolution: {integrity: sha512-m3tl+M8IO8jgiHnk+7LSTFl8axdPXloewi7iGVLdmCwf34XOzEUur0bZVewW4DUbUipFjTS2CXu27+5f/oexBA==}
     peerDependencies:
       '@babel/core': 7.x
@@ -604,7 +604,7 @@ packages:
       '@babel/core': 7.22.1
       '@babel/plugin-transform-react-jsx': 7.22.15(@babel/core@7.22.1)
       '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.22.1)
-      '@prefresh/vite': 2.4.1(preact@10.21.0)(vite@5.2.11)
+      '@prefresh/vite': 2.4.1(preact@10.20.1)(vite@5.2.11)
       '@rollup/pluginutils': 4.2.1
       babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.22.1)
       debug: 4.3.4
@@ -624,19 +624,19 @@ packages:
     resolution: {integrity: sha512-joAwpkUDwo7ZqJnufXRGzUb+udk20RBgfA8oLPBh5aJH2LeStmV1luBfeJTztPdyCscC2j2SmZ/tVxFRMIxAEw==}
     dev: true
 
-  /@prefresh/core@1.5.1(preact@10.21.0):
+  /@prefresh/core@1.5.1(preact@10.20.1):
     resolution: {integrity: sha512-e0mB0Oxtog6ZpKPDBYbzFniFJDIktuKMzOHp7sguntU+ot0yi6dbhJRE9Css1qf0u16wdSZjpL2W2ODWuU05Cw==}
     peerDependencies:
       preact: ^10.0.0
     dependencies:
-      preact: 10.21.0
+      preact: 10.20.1
     dev: true
 
   /@prefresh/utils@1.2.0:
     resolution: {integrity: sha512-KtC/fZw+oqtwOLUFM9UtiitB0JsVX0zLKNyRTA332sqREqSALIIQQxdUCS1P3xR/jT1e2e8/5rwH6gdcMLEmsQ==}
     dev: true
 
-  /@prefresh/vite@2.4.1(preact@10.21.0)(vite@5.2.11):
+  /@prefresh/vite@2.4.1(preact@10.20.1)(vite@5.2.11):
     resolution: {integrity: sha512-vthWmEqu8TZFeyrBNc9YE5SiC3DVSzPgsOCp/WQ7FqdHpOIJi7Z8XvCK06rBPOtG4914S52MjG9Ls22eVAiuqQ==}
     peerDependencies:
       preact: ^10.4.0
@@ -644,10 +644,10 @@ packages:
     dependencies:
       '@babel/core': 7.22.1
       '@prefresh/babel-plugin': 0.5.0
-      '@prefresh/core': 1.5.1(preact@10.21.0)
+      '@prefresh/core': 1.5.1(preact@10.20.1)
       '@prefresh/utils': 1.2.0
       '@rollup/pluginutils': 4.2.1
-      preact: 10.21.0
+      preact: 10.20.1
       vite: 5.2.11
     transitivePeerDependencies:
       - supports-color
@@ -2026,7 +2026,7 @@ packages:
       source-map-js: 1.2.0
     dev: true
 
-  /preact-iso@2.4.0(preact-render-to-string@6.3.1)(preact@10.21.0):
+  /preact-iso@2.4.0(preact-render-to-string@6.3.1)(preact@10.20.1):
     resolution: {integrity: sha512-m/xT9oTvNRZ4K/C05Ha91HdT8OPZCjf6Rs4y9arTALYYb1O1qfmygaJHXzkXFVkpDItHnpXMcisiwLn7CsZoLg==}
     peerDependencies:
       preact: '>=10'
@@ -2035,29 +2035,29 @@ packages:
       preact-render-to-string:
         optional: true
     dependencies:
-      preact: 10.21.0
-      preact-render-to-string: 6.3.1(preact@10.21.0)
+      preact: 10.20.1
+      preact-render-to-string: 6.3.1(preact@10.20.1)
     dev: false
 
-  /preact-render-to-string@6.3.1(preact@10.21.0):
+  /preact-render-to-string@6.3.1(preact@10.20.1):
     resolution: {integrity: sha512-NQ28WrjLtWY6lKDlTxnFpKHZdpjfF+oE6V4tZ0rTrunHrtZp6Dm0oFrcJalt/5PNeqJz4j1DuZDS0Y6rCBoqDA==}
     peerDependencies:
       preact: '>=10'
     dependencies:
-      preact: 10.21.0
+      preact: 10.20.1
       pretty-format: 3.8.0
     dev: false
 
-  /preact-ssr-prepass@1.2.1(preact@10.21.0):
+  /preact-ssr-prepass@1.2.1(preact@10.20.1):
     resolution: {integrity: sha512-bLgbUfy8nL+PZghAPpyk9MF+cmXjdwEnxYPaJBmwbzFQqzIz8dQVBqjwB60RqZ9So/vIf6BRfHCiwFGuMCyfbQ==}
     peerDependencies:
       preact: '>=10 || ^10.0.0-beta.0 || ^10.0.0-alpha.0'
     dependencies:
-      preact: 10.21.0
+      preact: 10.20.1
     dev: false
 
-  /preact@10.21.0:
-    resolution: {integrity: sha512-aQAIxtzWEwH8ou+OovWVSVNlFImL7xUCwJX3YMqA3U8iKCNC34999fFOnWjYNsylgfPgMexpbk7WYOLtKr/mxg==}
+  /preact@10.20.1:
+    resolution: {integrity: sha512-JIFjgFg9B2qnOoGiYMVBtrcFxHqn+dNXbq76bVmcaHYJFYR4lW67AOcXgAYQQTDYXDOg/kTZrKPNCdRgJ2UJmw==}
 
   /prettier@3.2.5:
     resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
