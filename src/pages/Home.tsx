@@ -63,7 +63,7 @@ export default () => (
           <Link rel="nofollow" target="blank" href="https://stellate.co/">
             Stellate
           </Link>{' '}
-          - Staff Software Engineer (2021-Now)
+          - Staff Software Engineer (2021-2024)
         </ListItem>
       </ul>
       <Block>
