@@ -114,7 +114,7 @@ export default () => (
             as I wanted to properly manage the HTML head element through React hooks
           </ListItem>
           <ListItem>
-            I maintain{' '}
+            I co-created{' '}
             <Link
               rel="nofollow"
               target="blank"
@@ -126,7 +126,7 @@ export default () => (
             developing front-end GraphQL applications
           </ListItem>
           <ListItem>
-            I maintain{' '}
+            I co-created{' '}
             <Link
               rel="nofollow"
               target="blank"
