@@ -71,7 +71,7 @@ export default () => (
       <p>
         I love working in the open, collaborating, being a force multiplier with others and
         finding elegant solutions to complex problems. I'm passionate about open-source and maintain
-        several projects, core team of <b>Preact</b>, <b>urql</b>, and <b>GQL.tada</b>
+        several projects, core team of <b>Preact</b>, <b>urql</b>, and <b>GQL.tada</b>.
       </p>
     </Hero>
     <Block>
