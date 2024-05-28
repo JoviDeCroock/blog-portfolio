@@ -42,11 +42,15 @@ const Grid = styled('ul')`
 
 const Box = styled('li')`
   border: 1px solid #2D2C2C;
-  padding: 8px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 `;
+
+const H3 = styled('h3')`
+  margin-top: 0;
+`
 
 export default () => (
   <>
@@ -55,8 +59,6 @@ export default () => (
       description="About my career up to now and my skills."
     />
     <Hero>
-      <Title>Jovi De Croock</Title>
-      <SubTitle>Full-stack Software Engineer</SubTitle>
       <Prelude>
         TODO: reword highlighting
       </Prelude>
@@ -85,7 +87,7 @@ export default () => (
         <Grid>
           <Box>
             <div>
-              <h3>Preact</h3>
+              <H3>Preact</H3>
               <p>A fast and tiny alternative to React with a modern API.</p>
             </div>
             <Link
@@ -98,7 +100,7 @@ export default () => (
           </Box>
           <Box>
             <div>
-              <h3>urql</h3>
+              <H3>urql</H3>
               <p>The highly customizable and versatile GraphQL client for React, Svelte, Vue, or plain JavaScript, with which you add on features like normalized caching as you grow.</p>
             </div>
             <Link
@@ -111,7 +113,7 @@ export default () => (
           </Box>
           <Box>
             <div>
-              <h3>GQL.tada</h3>
+              <H3>GQL.tada</H3>
               <p>The magical GraphQL parser written in TS types, this tool automatically types your GraphQL Documents without codegen.</p>
             </div>
             <Link
@@ -124,7 +126,7 @@ export default () => (
           </Box>
           <Box>
             <div>
-              <h3>Prefresh</h3>
+              <H3>Prefresh</H3>
               <p>React Fast Refresh for PreactJS.</p>
             </div>
             <Link
@@ -137,7 +139,7 @@ export default () => (
           </Box>
           <Box>
             <div>
-              <h3>GraphQLSP</h3>
+              <H3>GraphQLSP</H3>
               <p>A TypeScript LSP Plugin to properly support inline-hints/diagnostics/... while developing front-end GraphQL applications.</p>
             </div>
             <Link

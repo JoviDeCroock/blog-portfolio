@@ -32,8 +32,26 @@ const Nav = styled('nav')`
   margin-bottom: 1rem;
 `
 
+const FloatingDiv = styled('div')`
+  position: absolute;
+  left: 16px;
+  top: 40px;
+`;
+
+const FloatingTitle = styled('h3')`
+  margin: 0;
+`
+
+const FloatingUnderline = styled('p')`
+  margin: 0;
+`
+
 const Header = () => (
   <header>
+    <FloatingDiv>
+      <FloatingTitle>Jovi De Croock</FloatingTitle>
+      <FloatingUnderline>Software Engineer</FloatingUnderline>
+    </FloatingDiv>
     <Nav>
       <Link href="/">Home</Link>
       <Link href="/blog">Blog</Link>
