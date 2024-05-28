@@ -1,5 +1,4 @@
 import { styled } from 'goober'
-import { Link, Prelude, SubTitle, Title } from '../components/Text'
 import SEO from '../components/Seo'
 
 const Hero = styled('div')`
@@ -22,7 +21,7 @@ const QuoteListItem = styled('li')`
   padding-bottom: 4px;
 `
 
-const QuoteLink = styled(Link)`
+const QuoteLink = styled('a')`
   color: #FCFCFD;
   font-weight: bold;
 `;
@@ -76,7 +75,7 @@ export default () => (
       </p>
     </Hero>
     <Block>
-      <SubTitle>Work experience</SubTitle>
+      <h2>Work experience</h2>
       <QuoteList>
         <QuoteListItem>
           <QuoteLink rel="nofollow" target="blank" href="https://stellate.co/">
@@ -95,78 +94,78 @@ export default () => (
         </QuoteListItem>
       </QuoteList>
       <Block>
-        <SubTitle>Open source work</SubTitle>
+        <h2>Open source work</h2>
         <Grid>
           <Box>
             <div>
               <H3>Preact</H3>
               <P>A fast and tiny alternative to React with a modern API.</P>
             </div>
-            <Link
+            <a
               rel="nofollow"
               target="blank"
               href="https://preactjs.com"
             >
               https://preactjs.com
-            </Link>
+            </a>
           </Box>
           <Box>
             <div>
               <H3>urql</H3>
               <P>The highly customizable and versatile GraphQL client for React, Svelte, Vue, or plain JavaScript, with which you add on features like normalized caching as you grow.</P>
             </div>
-            <Link
+            <a
               rel="nofollow"
               target="blank"
               href="https://urql.dev"
             >
               https://urql.dev
-            </Link>
+            </a>
           </Box>
           <Box>
             <div>
               <H3>GQL.tada</H3>
               <P>The magical GraphQL parser written in TS types, this tool automatically types your GraphQL Documents without codegen.</P>
             </div>
-            <Link
+            <a
               rel="nofollow"
               target="blank"
               href="https://gql-tada.0no.co/"
             >
               https://gql-tada.0no.co/
-            </Link>
+            </a>
           </Box>
           <Box>
             <div>
               <H3>Prefresh</H3>
               <P>React Fast Refresh for PreactJS.</P>
             </div>
-            <Link
+            <a
               rel="nofollow"
               target="blank"
               href="https://github.com/preactjs/prefresh"
             >
               https://github.com/preactjs/prefresh
-            </Link>
+            </a>
           </Box>
           <Box>
             <div>
               <H3>GraphQLSP</H3>
               <P>A TypeScript LSP Plugin to properly support inline-hints/diagnostics/... while developing front-end GraphQL applications.</P>
             </div>
-            <Link
+            <a
               rel="nofollow"
               target="blank"
               href="https://github.com/0no-co/graphqlsp"
             >
               https://github.com/0no-co/graphqlsp
-            </Link>
+            </a>
           </Box>
         </Grid>
       </Block>
     </Block>
     <Block>
-      <SubTitle>Achievements</SubTitle>
+      <h2>Achievements</h2>
       <QuoteList>
         <QuoteListItem>
           <QuoteLink rel="nofollow" target="blank" href="https://us.puma.com">

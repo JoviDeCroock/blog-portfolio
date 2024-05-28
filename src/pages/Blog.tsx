@@ -1,7 +1,6 @@
 import { styled } from 'goober'
 import { Fragment } from 'preact'
 import SEO from '../components/Seo'
-import { Link, Prelude, Title } from '../components/Text'
 
 import { documentProps as VDomDocumentProps } from './posts/vdom-compilers/documentProps'
 import { documentProps as inputsDocumentProps } from './posts/controlled-inputs/documentProps'
@@ -42,7 +41,7 @@ const Summary = styled('div')`
   flex-direction: column;
 `
 
-const TitleLink = styled(Link)`
+const TitleLink = styled('a')`
   font-size: 2.5rem;
   text-decoration: underline;
   font-weight: 500;
@@ -78,16 +77,16 @@ const tagBgs: Record<string, string> = {
 export default () => (
   <Fragment>
     <SEO title="Blog" description="Posts about my work and thoughts." />
-    <Title>Blog</Title>
-    <Prelude>
+    <h1>Blog</h1>
+    <p>
       My thoughts in a semi-raw form, a lot of these posts contain what goes
       around in my mind throughout a day.
-    </Prelude>
+    </p>
     <Block>
       {posts.map((post) => (
         <Summary>
           <TitleLink href={post.path}>{post.title}</TitleLink>
-          <Prelude>{post.description}</Prelude>
+          <p>{post.description}</p>
           <SubjectSummary>
             {post.tags.map((tag) => (
               <Tag background={tagBgs[tag]} key={tag}>

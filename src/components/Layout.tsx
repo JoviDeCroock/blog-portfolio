@@ -1,7 +1,6 @@
 import { styled } from 'goober'
 import { VNode } from 'preact'
 import Footer from './Footer'
-import { Link } from './Text'
 
 const Wrapper = styled('div')`
   margin-left: auto;
@@ -53,8 +52,8 @@ const Header = () => (
       <FloatingUnderline>Software Engineer</FloatingUnderline>
     </FloatingDiv>
     <Nav>
-      <Link href="/">Home</Link>
-      <Link href="/blog">Blog</Link>
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
     </Nav>
   </header>
 )
