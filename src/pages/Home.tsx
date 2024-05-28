@@ -65,7 +65,7 @@ export default () => (
     />
     <Hero>
       <p>
-        Hey, I am Jovi De Croock, a software engineer and technology enthusiast.
+        Hey, I am Jovi De Croock, a software engineer and technology enthusiast from Belgium.
         A <b>React</b>, <b>GraphQL</b>, and <b>TypeScript</b> specialist, currently
         Staff Engineer at X, previously worked at Stellate, Formidable and Codifly.
       </p>
