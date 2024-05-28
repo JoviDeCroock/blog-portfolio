@@ -29,12 +29,20 @@ const Nav = styled('nav')`
   text-transform: uppercase;
   font-weight: 500;
   margin-bottom: 1rem;
+  @media(max-width: 768px) {
+    margin-right: unset;
+  }
 `
 
 const FloatingDiv = styled('div')`
   position: absolute;
   left: 16px;
   top: 40px;
+  @media(max-width: 768px) {
+    position: relative;
+    left: 0;
+    top: 0;
+  }
 `;
 
 const FloatingTitle = styled('h3')`
@@ -45,8 +53,12 @@ const FloatingUnderline = styled('p')`
   margin: 0;
 `
 
+const DomHeader = styled('header')`
+  display: flex;
+`
+
 const Header = () => (
-  <header>
+  <DomHeader>
     <FloatingDiv>
       <FloatingTitle>Jovi De Croock</FloatingTitle>
       <FloatingUnderline>Software Engineer</FloatingUnderline>
@@ -55,7 +67,7 @@ const Header = () => (
       <a href="/">Home</a>
       <a href="/blog">Blog</a>
     </Nav>
-  </header>
+  </DomHeader>
 )
 
 export type LayoutProps = {
