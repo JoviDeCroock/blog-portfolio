@@ -75,7 +75,7 @@ const tagBgs: Record<string, string> = {
 }
 
 export default () => (
-  <Fragment>
+  <main>
     <SEO title="Blog" description="Posts about my work and thoughts." />
     <h1>Blog</h1>
     <p>
@@ -97,5 +97,5 @@ export default () => (
         </Summary>
       ))}
     </Block>
-  </Fragment>
+  </main>
 )

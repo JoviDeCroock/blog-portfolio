@@ -57,7 +57,7 @@ const P = styled('p')`
 `
 
 export default () => (
-  <>
+  <main>
     <SEO
       title="Portfolio"
       description="About my career up to now and my skills."
@@ -192,5 +192,5 @@ export default () => (
         </QuoteListItem>
       </QuoteList>
     </Block>
-  </>
+  </main>
 )
