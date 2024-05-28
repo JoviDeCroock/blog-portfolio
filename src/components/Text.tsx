@@ -9,7 +9,10 @@ export const Prelude = styled('p')``
 export const Link = styled('a')`
   color: #FCFCFD;
   text-decoration: none;
-  &:visited {
+  &:hover {
+    color: #EB29A9;
+  }
+  &:focus {
     color: #EB29A9;
   }
 `

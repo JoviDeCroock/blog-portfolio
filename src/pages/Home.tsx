@@ -50,6 +50,11 @@ const Box = styled('li')`
 
 const H3 = styled('h3')`
   margin-top: 0;
+  margin-bottom: 0;
+`
+
+const P = styled('p')`
+  margin-top: 0;
 `
 
 export default () => (
@@ -59,9 +64,16 @@ export default () => (
       description="About my career up to now and my skills."
     />
     <Hero>
-      <Prelude>
-        TODO: reword highlighting
-      </Prelude>
+      <p>
+        Hey, I am Jovi De Croock, a software engineer and technology enthusiast.
+        A <b>React</b>, <b>GraphQL</b>, and <b>TypeScript</b> specialist, currently
+        Staff Engineer at X, previously worked at Stellate, Formidable and Codifly.
+      </p>
+      <p>
+        I love working in the open, collaborating, being a force multiplier with others and
+        finding elegant solutions to complex problems. I'm passionate about open-source and maintain
+        several projects, core team of <b>Preact</b>, <b>urql</b>, and <b>GQL.tada</b>
+      </p>
     </Hero>
     <Block>
       <SubTitle>Work experience</SubTitle>
@@ -88,7 +100,7 @@ export default () => (
           <Box>
             <div>
               <H3>Preact</H3>
-              <p>A fast and tiny alternative to React with a modern API.</p>
+              <P>A fast and tiny alternative to React with a modern API.</P>
             </div>
             <Link
               rel="nofollow"
@@ -101,7 +113,7 @@ export default () => (
           <Box>
             <div>
               <H3>urql</H3>
-              <p>The highly customizable and versatile GraphQL client for React, Svelte, Vue, or plain JavaScript, with which you add on features like normalized caching as you grow.</p>
+              <P>The highly customizable and versatile GraphQL client for React, Svelte, Vue, or plain JavaScript, with which you add on features like normalized caching as you grow.</P>
             </div>
             <Link
               rel="nofollow"
@@ -114,7 +126,7 @@ export default () => (
           <Box>
             <div>
               <H3>GQL.tada</H3>
-              <p>The magical GraphQL parser written in TS types, this tool automatically types your GraphQL Documents without codegen.</p>
+              <P>The magical GraphQL parser written in TS types, this tool automatically types your GraphQL Documents without codegen.</P>
             </div>
             <Link
               rel="nofollow"
@@ -127,7 +139,7 @@ export default () => (
           <Box>
             <div>
               <H3>Prefresh</H3>
-              <p>React Fast Refresh for PreactJS.</p>
+              <P>React Fast Refresh for PreactJS.</P>
             </div>
             <Link
               rel="nofollow"
@@ -140,7 +152,7 @@ export default () => (
           <Box>
             <div>
               <H3>GraphQLSP</H3>
-              <p>A TypeScript LSP Plugin to properly support inline-hints/diagnostics/... while developing front-end GraphQL applications.</p>
+              <P>A TypeScript LSP Plugin to properly support inline-hints/diagnostics/... while developing front-end GraphQL applications.</P>
             </div>
             <Link
               rel="nofollow"
@@ -158,8 +170,7 @@ export default () => (
       <QuoteList>
         <QuoteListItem>
           <QuoteLink rel="nofollow" target="blank" href="https://us.puma.com">
-            During my time at Formidable, I functioned as a technical lead on
-            modernising the tech-stack of Puma
+            The modernisation of the tech-stack of Puma.com
           </QuoteLink>
         </QuoteListItem>
         <QuoteListItem>
@@ -168,7 +179,7 @@ export default () => (
             target="blank"
             href="https://github.com/FredKSchott/esm-hmr"
           >
-            I've Helped develop the ESM HMR Spec
+            Collaboration on the ESM HMR Spec
           </QuoteLink>
         </QuoteListItem>
         <QuoteListItem>
@@ -177,7 +188,7 @@ export default () => (
             target="blank"
             href="https://opensource.googleblog.com/2020/01/announcing-2019-second-cycle-google.html"
           >
-            I've received the Google Open Source Peer Bonus 2019 Cycle 2
+            The Google Open Source Peer Bonus 2019 Cycle 2
           </QuoteLink>
         </QuoteListItem>
       </QuoteList>
