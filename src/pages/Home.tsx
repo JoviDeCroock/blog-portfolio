@@ -43,6 +43,9 @@ const Grid = styled('ul')`
 const Box = styled('li')`
   border: 1px solid #2D2C2C;
   padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 export default () => (
@@ -81,8 +84,10 @@ export default () => (
         <SubTitle>Open source work</SubTitle>
         <Grid>
           <Box>
-            <h3>Preact</h3>
-            <p>A fast and tiny alternative to React with a modern API.</p>
+            <div>
+              <h3>Preact</h3>
+              <p>A fast and tiny alternative to React with a modern API.</p>
+            </div>
             <Link
               rel="nofollow"
               target="blank"
@@ -92,8 +97,10 @@ export default () => (
             </Link>
           </Box>
           <Box>
-            <h3>urql</h3>
-            <p>The highly customizable and versatile GraphQL client for React, Svelte, Vue, or plain JavaScript, with which you add on features like normalized caching as you grow.</p>
+            <div>
+              <h3>urql</h3>
+              <p>The highly customizable and versatile GraphQL client for React, Svelte, Vue, or plain JavaScript, with which you add on features like normalized caching as you grow.</p>
+            </div>
             <Link
               rel="nofollow"
               target="blank"
