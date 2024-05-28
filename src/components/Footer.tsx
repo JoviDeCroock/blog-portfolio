@@ -1,5 +1,4 @@
 import { styled } from 'goober'
-import { Link } from './Text'
 
 const Wrapper = styled('footer')`
   align-items: center;
@@ -7,7 +6,7 @@ const Wrapper = styled('footer')`
   justify-content: center;
 `
 
-const FooterLink = styled(Link)`
+const FooterLink = styled('a')`
   margin: 0 6px;
 `
 
