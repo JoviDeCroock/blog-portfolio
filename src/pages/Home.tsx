@@ -109,6 +109,45 @@ export default () => (
               https://urql.dev
             </Link>
           </Box>
+          <Box>
+            <div>
+              <h3>GQL.tada</h3>
+              <p>The magical GraphQL parser written in TS types, this tool automatically types your GraphQL Documents without codegen.</p>
+            </div>
+            <Link
+              rel="nofollow"
+              target="blank"
+              href="https://gql-tada.0no.co/"
+            >
+              https://gql-tada.0no.co/
+            </Link>
+          </Box>
+          <Box>
+            <div>
+              <h3>Prefresh</h3>
+              <p>React Fast Refresh for PreactJS.</p>
+            </div>
+            <Link
+              rel="nofollow"
+              target="blank"
+              href="https://github.com/preactjs/prefresh"
+            >
+              https://github.com/preactjs/prefresh
+            </Link>
+          </Box>
+          <Box>
+            <div>
+              <h3>GraphQLSP</h3>
+              <p>A TypeScript LSP Plugin to properly support inline-hints/diagnostics/... while developing front-end GraphQL applications.</p>
+            </div>
+            <Link
+              rel="nofollow"
+              target="blank"
+              href="https://github.com/0no-co/graphqlsp"
+            >
+              https://github.com/0no-co/graphqlsp
+            </Link>
+          </Box>
         </Grid>
       </Block>
     </Block>
