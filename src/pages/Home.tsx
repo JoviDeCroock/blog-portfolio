@@ -1,5 +1,6 @@
 import { styled } from 'goober'
 import SEO from '../components/Seo'
+import { useRef } from 'preact/hooks'
 
 const Hero = styled('div')`
   width: 100%;
@@ -45,6 +46,29 @@ const Box = styled('li')`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+
+  &:hover::before {
+    opacity: 1;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    filter: blur(60px);
+    transition: all 0.25s ease-in-out;
+    opacity: 0;
+    background: transparent;
+    background-repeat: no-repeat;
+    background-image: radial-gradient(
+      circle at calc(var(--mouse-x, 0) * 100%) calc(var(--mouse-y, 0) * 100%),
+      #EB29A9,
+      #0b0b0c 20%,
+      transparent 100%
+    );
+  }
 `;
 
 const H3 = styled('h3')`
@@ -56,7 +80,7 @@ const P = styled('p')`
   margin-top: 0;
 `
 
-export default () => (
+const Home = () => (
   <main>
     <SEO
       title="Portfolio"
@@ -96,71 +120,11 @@ export default () => (
       <Block>
         <h2>Open source work</h2>
         <Grid>
-          <Box>
-            <div>
-              <H3>Preact</H3>
-              <P>A fast and tiny alternative to React with a modern API.</P>
-            </div>
-            <a
-              rel="nofollow"
-              target="blank"
-              href="https://preactjs.com"
-            >
-              https://preactjs.com
-            </a>
-          </Box>
-          <Box>
-            <div>
-              <H3>urql</H3>
-              <P>The highly customizable and versatile GraphQL client for React, Svelte, Vue, or plain JavaScript, with which you add on features like normalized caching as you grow.</P>
-            </div>
-            <a
-              rel="nofollow"
-              target="blank"
-              href="https://urql.dev"
-            >
-              https://urql.dev
-            </a>
-          </Box>
-          <Box>
-            <div>
-              <H3>GQL.tada</H3>
-              <P>The magical GraphQL parser written in TS types, this tool automatically types your GraphQL Documents without codegen.</P>
-            </div>
-            <a
-              rel="nofollow"
-              target="blank"
-              href="https://gql-tada.0no.co/"
-            >
-              https://gql-tada.0no.co/
-            </a>
-          </Box>
-          <Box>
-            <div>
-              <H3>Prefresh</H3>
-              <P>React Fast Refresh for PreactJS.</P>
-            </div>
-            <a
-              rel="nofollow"
-              target="blank"
-              href="https://github.com/preactjs/prefresh"
-            >
-              https://github.com/preactjs/prefresh
-            </a>
-          </Box>
-          <Box>
-            <div>
-              <H3>GraphQLSP</H3>
-              <P>A TypeScript LSP Plugin to properly support inline-hints/diagnostics/... while developing front-end GraphQL applications.</P>
-            </div>
-            <a
-              rel="nofollow"
-              target="blank"
-              href="https://github.com/0no-co/graphqlsp"
-            >
-              https://github.com/0no-co/graphqlsp
-            </a>
-          </Box>
+          <OSSBox name="Preact" description='A fast and tiny alternative to React with a modern API.' link='https://preactjs.com' />
+          <OSSBox name="urql" description='The highly customizable and versatile GraphQL client for React, Svelte, Vue, or plain JavaScript, with which you add on features like normalized caching as you grow.' link='https://urql.dev' />
+          <OSSBox name="GQL.tada" description='The magical GraphQL parser written in TS types, this tool automatically types your GraphQL Documents without codegen.' link='https://gql-tada.0no.co/' />
+          <OSSBox name="Prefresh" description='React Fast Refresh for PreactJS.' link='https://github.com/preactjs/prefresh' />
+          <OSSBox name="GraphQLSP" description='A TypeScript LSP Plugin to properly support inline-hints/diagnostics/... while developing front-end GraphQL applications.' link='https://github.com/0no-co/graphqlsp' />
         </Grid>
       </Block>
     </Block>
@@ -194,3 +158,40 @@ export default () => (
     </Block>
   </main>
 )
+
+const OSSBox = (props: { name: string; description: string; link: string }) => {
+  const box = useRef<HTMLLIElement>(null);
+
+  const onMouseMove = (evt: any) => {
+    if (!box.current) return;
+
+    // The styled thing gives us a VNode rather than
+    // forwarding the ref
+    const b = (box.current as any).base as any;
+    const rect = b.getBoundingClientRect()
+    const x = (evt.clientX - rect.left) / rect.width;
+    const y = (evt.clientY - rect.top) / rect.height;
+    b.style.setProperty("--mouse-x", `${x}`);
+    b.style.setProperty("--mouse-y", `${y}`);
+    console.log(b.style.getPropertyValue("--mouse-x"));
+  }
+
+  return (
+    <Box ref={box} onMouseMove={onMouseMove}>
+      <div>
+        <H3>{props.name}</H3>
+        <P>{props.description}</P>
+      </div>
+      <a
+        rel="nofollow"
+        target="blank"
+        href={props.link}
+      >
+        {props.link}
+      </a>
+    </Box>
+  )
+}
+
+
+export default Home;
