@@ -7,8 +7,12 @@ export const SubTitle = styled('h2')``
 export const Prelude = styled('p')``
 
 export const Link = styled('a')`
-  color: #0c5bdb;
-  &:visited {
-    color: #0c5bdb;
+  color: #FCFCFD;
+  text-decoration: none;
+  &:hover {
+    color: #EB29A9;
+  }
+  &:focus {
+    color: #EB29A9;
   }
 `
