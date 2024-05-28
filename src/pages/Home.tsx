@@ -43,9 +43,6 @@ const Grid = styled('ul')`
 const Box = styled('li')`
   border: 1px solid #2D2C2C;
   padding: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   position: relative;
   overflow: hidden;
 
@@ -159,6 +156,14 @@ const Home = () => (
   </main>
 )
 
+const RelativeDiv = styled('div')`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position:relative;
+  height: 100%;
+`
+
 const OSSBox = (props: { name: string; description: string; link: string }) => {
   const box = useRef<HTMLLIElement>(null);
 
@@ -178,17 +183,19 @@ const OSSBox = (props: { name: string; description: string; link: string }) => {
 
   return (
     <Box ref={box} onMouseMove={onMouseMove}>
-      <div>
-        <H3>{props.name}</H3>
-        <P>{props.description}</P>
-      </div>
-      <a
-        rel="nofollow"
-        target="blank"
-        href={props.link}
-      >
-        {props.link}
-      </a>
+      <RelativeDiv>
+        <div>
+          <H3>{props.name}</H3>
+          <P>{props.description}</P>
+        </div>
+        <a
+          rel="nofollow"
+          target="blank"
+          href={props.link}
+        >
+          {props.link}
+        </a>
+      </RelativeDiv>
     </Box>
   )
 }
