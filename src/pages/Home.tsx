@@ -22,7 +22,7 @@ const QuoteListItem = styled('li')`
   padding-bottom: 4px;
 `
 
-const QuoteLink = styled('a')`
+const BoldLink = styled('a')`
   color: #FCFCFD;
   font-weight: bold;
 `;
@@ -38,34 +38,6 @@ const Grid = styled('ul')`
   gap: 24px;
   padding: 0;
   grid-template-columns: 1fr 1fr;
-`;
-
-const Box = styled('li')`
-  border: 1px solid #2D2C2C;
-  padding: 16px;
-  position: relative;
-  overflow: hidden;
-
-  &:hover::before {
-    opacity: 1;
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    filter: blur(60px);
-    transition: all 0.25s ease-in-out;
-    opacity: 0;
-    background: transparent;
-    background-repeat: no-repeat;
-    background-image: radial-gradient(
-      circle at calc(var(--mouse-x, 0) * 100%) calc(var(--mouse-y, 0) * 100%),
-      #EB29A9,
-      #0b0b0c 20%,
-      transparent 100%
-    );
-  }
 `;
 
 const H3 = styled('h3')`
@@ -99,19 +71,19 @@ const Home = () => (
       <h2>Work experience</h2>
       <QuoteList>
         <QuoteListItem>
-          <QuoteLink rel="nofollow" target="blank" href="https://stellate.co/">
+          <BoldLink rel="nofollow" target="blank" href="https://stellate.co/">
             Stellate
-          </QuoteLink> Staff Software Engineer - Director of R&D (2021-2024)
+          </BoldLink> Staff Software Engineer - Director of R&D (2021-2024)
         </QuoteListItem>
         <QuoteListItem>
-          <QuoteLink rel="nofollow" target="blank" href="https://formidable.com/">
+          <BoldLink rel="nofollow" target="blank" href="https://formidable.com/">
             Formidable
-          </QuoteLink> Senior software engineer - Tech lead (2019-2021)
+          </BoldLink> Senior software engineer - Tech lead (2019-2021)
         </QuoteListItem>
         <QuoteListItem>
-          <QuoteLink rel="nofollow" target="blank" href="https://codifly.be">
+          <BoldLink rel="nofollow" target="blank" href="https://codifly.be">
             Codifly
-          </QuoteLink> Web and Mobile engineer (2017-2019)
+          </BoldLink> Web and Mobile engineer (2017-2019)
         </QuoteListItem>
       </QuoteList>
       <Block>
@@ -129,34 +101,65 @@ const Home = () => (
       <h2>Achievements</h2>
       <QuoteList>
         <QuoteListItem>
-          <QuoteLink rel="nofollow" target="blank" href="https://us.puma.com">
+          <BoldLink rel="nofollow" target="blank" href="https://us.puma.com">
             The modernisation of the tech-stack of Puma.com
-          </QuoteLink>
+          </BoldLink>
         </QuoteListItem>
         <QuoteListItem>
-          <QuoteLink
+          <BoldLink
             rel="nofollow"
             target="blank"
             href="https://github.com/FredKSchott/esm-hmr"
           >
             Collaboration on the ESM HMR Spec
-          </QuoteLink>
+          </BoldLink>
         </QuoteListItem>
         <QuoteListItem>
-          <QuoteLink
+          <BoldLink
             rel="nofollow"
             target="blank"
             href="https://opensource.googleblog.com/2020/01/announcing-2019-second-cycle-google.html"
           >
             The Google Open Source Peer Bonus 2019 Cycle 2
-          </QuoteLink>
+          </BoldLink>
         </QuoteListItem>
       </QuoteList>
     </Block>
   </main>
 )
 
-const RelativeDiv = styled('div')`
+const Box = styled('li')`
+  border: 1px solid #2D2C2C;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+
+  &:hover::before {
+    opacity: 1;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    filter: blur(60px);
+    transition: all 0.25s ease-in-out;
+    opacity: 0;
+    background: transparent;
+    background-repeat: no-repeat;
+    background-image: radial-gradient(
+      circle at calc(var(--mouse-x, 0) * 100%) calc(var(--mouse-y, 0) * 100%),
+      #EB29A9,
+      #0b0b0c 20%,
+      transparent 100%
+    );
+  }
+`;
+
+// This wrapper exists to reset the stacking
+// context, without this present the :before
+// hover of the Box will clip the content.
+const Wrapper = styled('div')`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -174,16 +177,13 @@ const OSSBox = (props: { name: string; description: string; link: string }) => {
     // forwarding the ref
     const b = (box.current as any).base as any;
     const rect = b.getBoundingClientRect()
-    const x = (evt.clientX - rect.left) / rect.width;
-    const y = (evt.clientY - rect.top) / rect.height;
-    b.style.setProperty("--mouse-x", `${x}`);
-    b.style.setProperty("--mouse-y", `${y}`);
-    console.log(b.style.getPropertyValue("--mouse-x"));
+    b.style.setProperty("--mouse-x", `${(evt.clientX - rect.left) / rect.width}`);
+    b.style.setProperty("--mouse-y", `${(evt.clientY - rect.top) / rect.height}`);
   }
 
   return (
     <Box ref={box} onMouseMove={onMouseMove}>
-      <RelativeDiv>
+      <Wrapper>
         <div>
           <H3>{props.name}</H3>
           <P>{props.description}</P>
@@ -195,7 +195,7 @@ const OSSBox = (props: { name: string; description: string; link: string }) => {
         >
           {props.link}
         </a>
-      </RelativeDiv>
+      </Wrapper>
     </Box>
   )
 }
