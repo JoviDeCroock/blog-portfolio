@@ -1,5 +1,4 @@
 import { styled } from 'goober'
-import { Fragment } from 'preact'
 import SEO from '../components/Seo'
 
 import { documentProps as VDomDocumentProps } from './posts/vdom-compilers/documentProps'

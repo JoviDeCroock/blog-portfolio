@@ -3,6 +3,9 @@ import { setup } from 'goober'
 import { Router, Route, lazy, ErrorBoundary } from 'preact-iso'
 import Layout from './components/Layout'
 
+setup(h)
+
+// Pages
 const NotFound = lazy(() => import('./pages/404'))
 const Blog = lazy(() => import('./pages/Blog'))
 const Home = lazy(() => import('./pages/Home'))
@@ -27,8 +30,6 @@ const GraphQLAbstractTypes = lazy(
 const UnreliableVendors = lazy(
   () => import('./pages/posts/unreliable-vendors/index.mdx')
 )
-
-setup(h)
 
 export function App() {
   return (
