@@ -90,6 +90,7 @@ const tagBgs: Record<string, string> = {
   suspense: '#f54242',
   thinking: '#f59c42',
   external: '#4c01fe',
+  'server-side-rendering': "#07a8f8",
 } as const
 
 export default () => (
