@@ -13,7 +13,24 @@ import { documentProps as graphqlWorkflowDocumentProps } from './posts/graphql-d
 import { documentProps as abstractTypesDocumentProps } from './posts/graphql-abstract-types/documentProps'
 import { documentProps as unreliableVendorsDocumentProps } from './posts/unreliable-vendors/documentProps'
 
-const posts = [
+interface Post {
+  title: string,
+  description: string,
+  image: string,
+  path: string,
+  tags: Array<keyof typeof tagBgs>,
+  external?: boolean,
+}
+
+const posts: Array<Post> = [
+  {
+    title: 'Preact X, a story of stability',
+    description: `Preact X has been released for five years, let's go over all the exciting things that have happened.`,
+    image: 'https://www.jovidecroock.com/preact-x.png',
+    path: 'https://preactjs.com/blog/preact-x',
+    tags: ['external', 'thinking'],
+    external: true
+  },
   unreliableVendorsDocumentProps,
   abstractTypesDocumentProps,
   graphqlWorkflowDocumentProps,
@@ -51,6 +68,7 @@ const Tag = styled<{ background: string }>('span')`
   background: ${(x) => x.background};
   color: white;
   font-size: 14px;
+  font-weight: bold;
   padding: 4px 8px;
 `
 
@@ -71,7 +89,8 @@ const tagBgs: Record<string, string> = {
   state: '#f5427e',
   suspense: '#f54242',
   thinking: '#f59c42',
-}
+  external: '#4c01fe',
+} as const
 
 export default () => (
   <main>
@@ -84,7 +103,7 @@ export default () => (
     <Block>
       {posts.map((post) => (
         <Summary>
-          <TitleLink href={post.path}>{post.title}</TitleLink>
+          <TitleLink target={post.external ? "blank" : undefined} href={post.path}>{post.title}</TitleLink>
           <p>{post.description}</p>
           <SubjectSummary>
             {post.tags.map((tag) => (
