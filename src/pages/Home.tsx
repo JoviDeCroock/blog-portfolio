@@ -59,7 +59,7 @@ const Home = () => (
       <p>
         Hey, I am Jovi De Croock, a software engineer and technology enthusiast from Belgium.
         A <b>React</b>, <b>GraphQL</b>, and <b>TypeScript</b> specialist, currently
-        Staff Engineer at X, previously worked at Stellate, Formidable and Codifly.
+        Staff Software Engineer at Shopify, previously worked at Stellate, Formidable and Codifly.
       </p>
       <p>
         I love working in the open, collaborating, being a force multiplier with others and
@@ -70,6 +70,11 @@ const Home = () => (
     <Block>
       <h2>Work experience</h2>
       <QuoteList>
+      <QuoteListItem>
+          <BoldLink rel="nofollow" target="blank" href="https://shopify.com/">
+            Shopify
+          </BoldLink> Staff Software Engineer (2024-Now)
+        </QuoteListItem>
         <QuoteListItem>
           <BoldLink rel="nofollow" target="blank" href="https://stellate.co/">
             Stellate
