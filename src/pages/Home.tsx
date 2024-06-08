@@ -106,6 +106,11 @@ const Home = () => (
       <h2>Achievements</h2>
       <QuoteList>
         <QuoteListItem>
+          <BoldLink rel="nofollow" target="blank" href="https://stellate.co">
+            Partial Query Caching in GraphQL at Stellate
+          </BoldLink>
+        </QuoteListItem>
+        <QuoteListItem>
           <BoldLink rel="nofollow" target="blank" href="https://us.puma.com">
             The modernisation of the tech-stack of Puma.com
           </BoldLink>
