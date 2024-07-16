@@ -109,7 +109,7 @@ const Home = () => (
       <QuoteList>
         <QuoteListItem>
           <BoldLink rel="nofollow" target="blank" href="https://stellate.co">
-            Partial Query Caching in GraphQL at Stellate
+            Partial Query Caching GraphQL at Stellate
           </BoldLink>
         </QuoteListItem>
         <QuoteListItem>
