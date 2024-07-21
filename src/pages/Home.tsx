@@ -99,7 +99,6 @@ const Home = () => (
           <OSSBox name="GQL.tada" description='The magical GraphQL parser written in TS types, this tool automatically types your GraphQL Documents without codegen.' link='https://gql-tada.0no.co/' />
           <OSSBox name="Prefresh" description='React Fast Refresh for PreactJS.' link='https://github.com/preactjs/prefresh' />
           <OSSBox name="GraphQLSP" description='A TypeScript LSP Plugin to properly support inline-hints/diagnostics/... while developing front-end GraphQL applications.' link='https://github.com/0no-co/graphqlsp' />
-          <OSSBox name="GraphQL" description='I contribute to the core GraphQL Specification, currently working on the fragment-arguments specification.' link='https://github.com/graphql/graphql-spec' />
           <OSSBox name="GraphQL JS" description='I contribute to the GraphQL reference implementation, currently working on the fragment-arguments specification and general chores.' link='https://github.com/graphql/graphql-js' />
         </Grid>
       </Block>
