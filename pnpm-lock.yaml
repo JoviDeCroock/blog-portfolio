@@ -24,10 +24,10 @@ dependencies:
     version: 10.22.1
   preact-iso:
     specifier: ^2.6.0
-    version: 2.6.0(preact-render-to-string@6.5.0)(preact@10.22.1)
+    version: 2.6.0(preact-render-to-string@6.5.6)(preact@10.22.1)
   preact-render-to-string:
-    specifier: ^6.5.0
-    version: 6.5.0(preact@10.22.1)
+    specifier: ^6.5.6
+    version: 6.5.6(preact@10.22.1)
   rehype-highlight:
     specifier: ^7.0.0
     version: 7.0.0
@@ -2024,7 +2024,7 @@ packages:
       source-map-js: 1.2.0
     dev: true
 
-  /preact-iso@2.6.0(preact-render-to-string@6.5.0)(preact@10.22.1):
+  /preact-iso@2.6.0(preact-render-to-string@6.5.6)(preact@10.22.1):
     resolution: {integrity: sha512-qdt+5pZCt6+16Tzj6TTF4sTYkmbL3uA0rqpvymYtRWOn7YvPL2Mu+M022jIcZx1FFy240VqemFfqijKKtyYn+A==}
     peerDependencies:
       preact: '>=10'
@@ -2034,16 +2034,15 @@ packages:
         optional: true
     dependencies:
       preact: 10.22.1
-      preact-render-to-string: 6.5.0(preact@10.22.1)
+      preact-render-to-string: 6.5.6(preact@10.22.1)
     dev: false
 
-  /preact-render-to-string@6.5.0(preact@10.22.1):
-    resolution: {integrity: sha512-4vTsKlL51D6zAJObcyjDEnFCY5OBH/oaW+97X8z4IM6DK/BYD6exzaRZblTZhCeqzdBpQejPsfoS20xFc05SPA==}
+  /preact-render-to-string@6.5.6(preact@10.22.1):
+    resolution: {integrity: sha512-msFdv7/ooTV6OIodAnU87V4ct+m2DA1rwaRYV+DNvTYpm/ZInQfoGrcHmbTkV7TOcJaHh5wt1NjiALA46Jyxhw==}
     peerDependencies:
       preact: '>=10'
     dependencies:
       preact: 10.22.1
-      pretty-format: 3.8.0
     dev: false
 
   /preact@10.22.1:
@@ -2054,10 +2053,6 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
     dev: true
-
-  /pretty-format@3.8.0:
-    resolution: {integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==}
-    dev: false
 
   /property-information@6.2.0:
     resolution: {integrity: sha512-kma4U7AFCTwpqq5twzC1YVIDXSqg6qQK6JN0smOw8fgRy1OkMi0CYSzFmsy6dnqSenamAtj0CyXMUJ1Mf6oROg==}
