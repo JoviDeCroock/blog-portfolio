@@ -30,6 +30,9 @@ const GraphQLAbstractTypes = lazy(
 const UnreliableVendors = lazy(
   () => import('./pages/posts/unreliable-vendors/index.mdx')
 )
+const GraphQLMissingFeature = lazy(
+  () => import('./pages/posts/document-authoring-missing-feature/index.mdx')
+)
 
 export function App() {
   return (
@@ -62,6 +65,10 @@ export function App() {
               <Route
                 component={UnreliableVendors}
                 path="/blog/unreliable-vendors"
+              />
+              <Route
+                component={GraphQLMissingFeature}
+                path="/blog/graphqls-missing-feature"
               />
               <Route component={NotFound} default />
             </Router>

@@ -12,6 +12,7 @@ import { documentProps as persistedOperationDocumentProps } from './posts/persis
 import { documentProps as graphqlWorkflowDocumentProps } from './posts/graphql-development-workflow/documentProps'
 import { documentProps as abstractTypesDocumentProps } from './posts/graphql-abstract-types/documentProps'
 import { documentProps as unreliableVendorsDocumentProps } from './posts/unreliable-vendors/documentProps'
+import { documentProps as graphqlsMissingFeatureDocumentProps } from './posts/document-authoring-missing-feature/documentProps'
 
 interface Post {
   title: string,
@@ -23,6 +24,7 @@ interface Post {
 }
 
 const posts: Array<Post> = [
+  graphqlsMissingFeatureDocumentProps,
   {
     title: 'Preact X, a story of stability',
     description: `Preact X has been released for five years, let's go over all the exciting things that have happened.`,
