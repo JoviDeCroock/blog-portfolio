@@ -1,0 +1,168 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+/>
+
+# The missing feature
+
+We often hear folks mention "fetching everything you need in one
+network request" as a superpower of GraphQL and honestly it _really_
+is. It can however be very difficult when we enter a route to know
+what data every component will need to render their content, let's be
+honest, if we'd have to check the root GraphQL query every time we
+add new logic that's not a great developer experience.
+
+When we think about how we author for instance our front-end
+web-applications we define our components and what data they return.
+GraphQL has a similar concept named [Fragments](https://graphql.org/learn/queries/#fragments),
+in a fragment we can specify a condition and when that condition is met
+what data we want to receive.
+
+```graphql
+fragment Avatar_UserFields on User {
+  avatar {
+    url
+    isCircular
+  }
+}
+```
+
+When the above example fragment is used in a GraphQL document it will be "spread"
+into a field, asking for the fields specified in this fragment. Fragments
+enable us to specify the data-requirements of a component and bubble it up
+alongside our component tree so it can be composed into a set of root requirements.
+
+```graphql
+query {
+  users(first: 10) {
+    edges {
+      node {
+        id
+        name
+        ...Avatar_UserFields
+      }
+    }
+  }
+}
+```
+
+The above case however fails to show how arguments would work in fragments, imagine
+we can specify dimensions to our `url` which will influence what kidn of URL our server
+returns.
+
+```graphql
+fragment Avatar_UserFields on User {
+  avatar {
+    url(width: $width, height: $height)
+    isCircular
+  }
+}
+```
+
+Now... We kind of have an issue as we're back to the initial problem, we'd have to bubble up
+our variables to the root-query as well as ensure that the variables we use in the fragment
+are actually present where this fragment is used...
+
+```graphql
+query ($width: Int!, $height: Int) {
+  users(first: 10) {
+    edges {
+      node {
+        id
+        name
+        ...Avatar_UserFields
+      }
+    }
+  }
+}
+```
+
+This doesn't quite feel right, when we'd alter the query in any way or use this fragment in a different query
+we'd have to recursively check all fragments whether the variable actually exist. We'd see runtime
+issues yes, this type of issue however is something we want to catch when we are developing.
+
+Relay has had a proven solution to this problem for a while, in the shape of
+[two directives named argumetns and argumentDefinitions](https://relay.dev/docs/api-reference/graphql-and-directives/#arguments).
+These can be apllied on a fragment-spread and fragment-definition, if we'd apply this to the above example
+we'd get
+
+```graphql
+query ($width: Int!, $height: Int) {
+  users(first: 10) {
+    edges {
+      node {
+        id
+        name
+        ...Avatar_UserFields @arguments(width: $width, height: $height)
+      }
+    }
+  }
+}
+
+fragment Avatar_UserFields on User @argumentDefinitions(
+  width: {type: "Int"},
+  height: {type: "Int"}
+) {
+  avatar {
+    url(width: $width, height: $height)
+    isCircular
+  }
+}
+```
+
+The above is statically analysable and will be able to warn in our editor.
+Relays compiler will ensure that this is properly validated and transpiled
+to a format that our GraphQL server can understand.
+The issue here being that it's only available in Relay...
+While this seems to be a fundamental missing piece in how we author
+our GraphQL documents...
+
+There has been a proposal for [fragment-arguments](https://github.com/graphql/graphql-spec/pull/1010)
+from 2023 and my own 2024 [amended version](https://github.com/graphql/graphql-spec/pull/1081) of the aformentioned proposal.
+With this proposal we'd effectively allow fragments to define variables similar
+to what we can do on an operation level:
+
+```graphql
+fragment Avatar_UserFields on User (
+  $width: Int
+  $height: Int
+) {
+  avatar {
+    url(width: $width, height: $height)
+    isCircular
+  }
+}
+```
+
+When a fragment defines variables we'll be able to pass them on through the fragment-spread
+
+```graphql
+query ($width: Int!, $height: Int) {
+  users(first: 10) {
+    edges {
+      node {
+        id
+        name
+        ...Avatar_UserFields(width: $width, height: $height)
+      }
+    }
+  }
+}
+```
+
+This looks a bit more GraphQL native and would allow for any GraphQL client
+to support this missing piece to fragment composition.
+
+I would love any thoughts on the [Spec](https://github.com/graphql/graphql-spec/pull/1081)
+and [JS-implementation](https://github.com/graphql/graphql-js/pull/4015) pull requests if you have any!
+
+As an aside, one missing DX feature to the above proposal currently would be an integration into GraphiQL's
+language service package, this would enable tools like GraphQLSP and vscode-graphql to recognise this feature
+and provide hints while authoring fragment-spreads.
