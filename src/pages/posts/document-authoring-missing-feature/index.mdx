@@ -130,10 +130,10 @@ With this proposal we'd effectively allow fragments to define variables similar
 to what we can do on an operation level:
 
 ```graphql
-fragment Avatar_UserFields on User (
+fragment Avatar_UserFields (
   $width: Int
   $height: Int
-) {
+) on User {
   avatar {
     url(width: $width, height: $height)
     isCircular
