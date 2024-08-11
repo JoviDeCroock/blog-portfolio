@@ -24,10 +24,10 @@ dependencies:
     version: 10.23.1
   preact-iso:
     specifier: ^2.6.0
-    version: 2.6.0(preact-render-to-string@6.5.6)(preact@10.23.1)
+    version: 2.6.0(preact-render-to-string@6.5.7)(preact@10.23.1)
   preact-render-to-string:
-    specifier: ^6.5.6
-    version: 6.5.6(preact@10.23.1)
+    specifier: ^6.5.7
+    version: 6.5.7(preact@10.23.1)
   rehype-highlight:
     specifier: ^7.0.0
     version: 7.0.0
@@ -2041,7 +2041,7 @@ packages:
       source-map-js: 1.2.0
     dev: true
 
-  /preact-iso@2.6.0(preact-render-to-string@6.5.6)(preact@10.23.1):
+  /preact-iso@2.6.0(preact-render-to-string@6.5.7)(preact@10.23.1):
     resolution: {integrity: sha512-qdt+5pZCt6+16Tzj6TTF4sTYkmbL3uA0rqpvymYtRWOn7YvPL2Mu+M022jIcZx1FFy240VqemFfqijKKtyYn+A==}
     peerDependencies:
       preact: '>=10'
@@ -2051,11 +2051,11 @@ packages:
         optional: true
     dependencies:
       preact: 10.23.1
-      preact-render-to-string: 6.5.6(preact@10.23.1)
+      preact-render-to-string: 6.5.7(preact@10.23.1)
     dev: false
 
-  /preact-render-to-string@6.5.6(preact@10.23.1):
-    resolution: {integrity: sha512-msFdv7/ooTV6OIodAnU87V4ct+m2DA1rwaRYV+DNvTYpm/ZInQfoGrcHmbTkV7TOcJaHh5wt1NjiALA46Jyxhw==}
+  /preact-render-to-string@6.5.7(preact@10.23.1):
+    resolution: {integrity: sha512-nACZDdv/ZZciuldVYMcfGqr61DKJeaAfPx96hn6OXoBGhgtU2yGQkA0EpTzWH4SvnwF0syLsL4WK7AIp3Ruc1g==}
     peerDependencies:
       preact: '>=10'
     dependencies:
