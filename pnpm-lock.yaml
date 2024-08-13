@@ -35,7 +35,7 @@ dependencies:
 devDependencies:
   '@preact/preset-vite':
     specifier: ^2.9.0
-    version: 2.9.0(@babel/core@7.22.1)(preact@10.23.1)(vite@5.3.3)
+    version: 2.9.0(@babel/core@7.22.1)(preact@10.23.1)(vite@5.4.0)
   '@types/react':
     specifier: ^18.3.3
     version: 18.3.3
@@ -52,8 +52,8 @@ devDependencies:
     specifier: ^5.5.2
     version: 5.5.2
   vite:
-    specifier: ^5.3.3
-    version: 5.3.3
+    specifier: ^5.4.0
+    version: 5.4.0
 
 packages:
 
@@ -592,7 +592,7 @@ packages:
       - supports-color
     dev: false
 
-  /@preact/preset-vite@2.9.0(@babel/core@7.22.1)(preact@10.23.1)(vite@5.3.3):
+  /@preact/preset-vite@2.9.0(@babel/core@7.22.1)(preact@10.23.1)(vite@5.4.0):
     resolution: {integrity: sha512-B9yVT7AkR6owrt84K3pLNyaKSvlioKdw65VqE/zMiR6HMovPekpsrwBNs5DJhBFEd5cvLMtCjHNHZ9P7Oblveg==}
     peerDependencies:
       '@babel/core': 7.x
@@ -602,7 +602,7 @@ packages:
       '@babel/core': 7.22.1
       '@babel/plugin-transform-react-jsx': 7.22.15(@babel/core@7.22.1)
       '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.22.1)
-      '@prefresh/vite': 2.4.1(preact@10.23.1)(vite@5.3.3)
+      '@prefresh/vite': 2.4.1(preact@10.23.1)(vite@5.4.0)
       '@rollup/pluginutils': 4.2.1
       babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.22.1)
       debug: 4.3.4
@@ -612,7 +612,7 @@ packages:
       resolve: 1.22.8
       source-map: 0.7.4
       stack-trace: 1.0.0-pre2
-      vite: 5.3.3
+      vite: 5.4.0
     transitivePeerDependencies:
       - preact
       - supports-color
@@ -634,7 +634,7 @@ packages:
     resolution: {integrity: sha512-KtC/fZw+oqtwOLUFM9UtiitB0JsVX0zLKNyRTA332sqREqSALIIQQxdUCS1P3xR/jT1e2e8/5rwH6gdcMLEmsQ==}
     dev: true
 
-  /@prefresh/vite@2.4.1(preact@10.23.1)(vite@5.3.3):
+  /@prefresh/vite@2.4.1(preact@10.23.1)(vite@5.4.0):
     resolution: {integrity: sha512-vthWmEqu8TZFeyrBNc9YE5SiC3DVSzPgsOCp/WQ7FqdHpOIJi7Z8XvCK06rBPOtG4914S52MjG9Ls22eVAiuqQ==}
     peerDependencies:
       preact: ^10.4.0
@@ -646,7 +646,7 @@ packages:
       '@prefresh/utils': 1.2.0
       '@rollup/pluginutils': 4.2.1
       preact: 10.23.1
-      vite: 5.3.3
+      vite: 5.4.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2032,8 +2032,8 @@ packages:
     hasBin: true
     dev: true
 
-  /postcss@8.4.39:
-    resolution: {integrity: sha512-0vzE+lAiG7hZl1/9I8yzKLx3aR9Xbof3fBHKunvMfOCYAtMhrsnccJY2iTURb9EZd5+pLuiNV9/c/GZJOHsgIw==}
+  /postcss@8.4.41:
+    resolution: {integrity: sha512-TesUflQ0WKZqAvg52PWL6kHgLKP6xB6heTOdoYM0Wt2UHyxNa4K25EZZMgKns3BH1RLVbZCREPpLY0rhnNoHVQ==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.7
@@ -2395,8 +2395,8 @@ packages:
       vfile-message: 4.0.2
     dev: false
 
-  /vite@5.3.3:
-    resolution: {integrity: sha512-NPQdeCU0Dv2z5fu+ULotpuq5yfCS1BzKUIPhNbP3YBfAMGJXbt2nS+sbTFu+qchaqWTD+H3JK++nRwr6XIcp6A==}
+  /vite@5.4.0:
+    resolution: {integrity: sha512-5xokfMX0PIiwCMCMb9ZJcMyh5wbBun0zUzKib+L65vAZ8GY9ePZMXxFrHbr/Kyll2+LSCY7xtERPpxkBDKngwg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -2404,6 +2404,7 @@ packages:
       less: '*'
       lightningcss: ^1.21.0
       sass: '*'
+      sass-embedded: '*'
       stylus: '*'
       sugarss: '*'
       terser: ^5.4.0
@@ -2416,6 +2417,8 @@ packages:
         optional: true
       sass:
         optional: true
+      sass-embedded:
+        optional: true
       stylus:
         optional: true
       sugarss:
@@ -2424,7 +2427,7 @@ packages:
         optional: true
     dependencies:
       esbuild: 0.21.5
-      postcss: 8.4.39
+      postcss: 8.4.41
       rollup: 4.13.0
     optionalDependencies:
       fsevents: 2.3.3
