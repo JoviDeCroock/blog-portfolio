@@ -37,8 +37,8 @@ devDependencies:
     specifier: ^2.9.0
     version: 2.9.0(@babel/core@7.22.1)(preact@10.23.2)(vite@5.4.2)
   '@types/react':
-    specifier: ^18.3.3
-    version: 18.3.3
+    specifier: ^18.3.5
+    version: 18.3.5
   husky:
     specifier: ^9.1.5
     version: 9.1.5
@@ -831,8 +831,8 @@ packages:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
     dev: true
 
-  /@types/react@18.3.3:
-    resolution: {integrity: sha512-hti/R0pS0q1/xx+TsI73XIqk26eBsISZ2R0wUijXIngRK9R/e7Xw/cXVxQK7R5JjW+SV4zGcn5hXjudkN/pLIw==}
+  /@types/react@18.3.5:
+    resolution: {integrity: sha512-WeqMfGJLGuLCqHGYRGHxnKrXcTitc6L/nBUWfWPcTarG3t9PsquqUMuVeXZeca+mglY4Vo5GZjCi0A3Or2lnxA==}
     dependencies:
       '@types/prop-types': 15.7.5
       csstype: 3.1.2
