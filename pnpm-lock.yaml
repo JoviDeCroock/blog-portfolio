@@ -35,7 +35,7 @@ dependencies:
 devDependencies:
   '@preact/preset-vite':
     specifier: ^2.9.0
-    version: 2.9.0(@babel/core@7.22.1)(preact@10.23.2)(vite@5.4.2)
+    version: 2.9.0(@babel/core@7.22.1)(preact@10.23.2)(vite@5.4.3)
   '@types/react':
     specifier: ^18.3.5
     version: 18.3.5
@@ -52,8 +52,8 @@ devDependencies:
     specifier: ^5.5.4
     version: 5.5.4
   vite:
-    specifier: ^5.4.2
-    version: 5.4.2
+    specifier: ^5.4.3
+    version: 5.4.3
 
 packages:
 
@@ -592,7 +592,7 @@ packages:
       - supports-color
     dev: false
 
-  /@preact/preset-vite@2.9.0(@babel/core@7.22.1)(preact@10.23.2)(vite@5.4.2):
+  /@preact/preset-vite@2.9.0(@babel/core@7.22.1)(preact@10.23.2)(vite@5.4.3):
     resolution: {integrity: sha512-B9yVT7AkR6owrt84K3pLNyaKSvlioKdw65VqE/zMiR6HMovPekpsrwBNs5DJhBFEd5cvLMtCjHNHZ9P7Oblveg==}
     peerDependencies:
       '@babel/core': 7.x
@@ -602,7 +602,7 @@ packages:
       '@babel/core': 7.22.1
       '@babel/plugin-transform-react-jsx': 7.22.15(@babel/core@7.22.1)
       '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.22.1)
-      '@prefresh/vite': 2.4.1(preact@10.23.2)(vite@5.4.2)
+      '@prefresh/vite': 2.4.1(preact@10.23.2)(vite@5.4.3)
       '@rollup/pluginutils': 4.2.1
       babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.22.1)
       debug: 4.3.4
@@ -612,7 +612,7 @@ packages:
       resolve: 1.22.8
       source-map: 0.7.4
       stack-trace: 1.0.0-pre2
-      vite: 5.4.2
+      vite: 5.4.3
     transitivePeerDependencies:
       - preact
       - supports-color
@@ -634,7 +634,7 @@ packages:
     resolution: {integrity: sha512-KtC/fZw+oqtwOLUFM9UtiitB0JsVX0zLKNyRTA332sqREqSALIIQQxdUCS1P3xR/jT1e2e8/5rwH6gdcMLEmsQ==}
     dev: true
 
-  /@prefresh/vite@2.4.1(preact@10.23.2)(vite@5.4.2):
+  /@prefresh/vite@2.4.1(preact@10.23.2)(vite@5.4.3):
     resolution: {integrity: sha512-vthWmEqu8TZFeyrBNc9YE5SiC3DVSzPgsOCp/WQ7FqdHpOIJi7Z8XvCK06rBPOtG4914S52MjG9Ls22eVAiuqQ==}
     peerDependencies:
       preact: ^10.4.0
@@ -646,7 +646,7 @@ packages:
       '@prefresh/utils': 1.2.0
       '@rollup/pluginutils': 4.2.1
       preact: 10.23.2
-      vite: 5.4.2
+      vite: 5.4.3
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2053,8 +2053,8 @@ packages:
     hasBin: true
     dev: true
 
-  /postcss@8.4.41:
-    resolution: {integrity: sha512-TesUflQ0WKZqAvg52PWL6kHgLKP6xB6heTOdoYM0Wt2UHyxNa4K25EZZMgKns3BH1RLVbZCREPpLY0rhnNoHVQ==}
+  /postcss@8.4.45:
+    resolution: {integrity: sha512-7KTLTdzdZZYscUc65XmjFiB73vBhBfbPztCYdUNvlaso9PrzjzcmjqBPR0lNGkcVlcO4BjiO5rK/qNz+XAen1Q==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.7
@@ -2419,8 +2419,8 @@ packages:
       vfile-message: 4.0.2
     dev: false
 
-  /vite@5.4.2:
-    resolution: {integrity: sha512-dDrQTRHp5C1fTFzcSaMxjk6vdpKvT+2/mIdE07Gw2ykehT49O0z/VHS3zZ8iV/Gh8BJJKHWOe5RjaNrW5xf/GA==}
+  /vite@5.4.3:
+    resolution: {integrity: sha512-IH+nl64eq9lJjFqU+/yrRnrHPVTlgy42/+IzbOdaFDVlyLgI/wDlf+FCobXLX1cT0X5+7LMyH1mIy2xJdLfo8Q==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -2451,7 +2451,7 @@ packages:
         optional: true
     dependencies:
       esbuild: 0.21.5
-      postcss: 8.4.41
+      postcss: 8.4.45
       rollup: 4.21.0
     optionalDependencies:
       fsevents: 2.3.3
