@@ -1,4 +1,5 @@
 export const documentProps = {
+  createdAt: '2022-04-07',
   title: 'Suspense, data and SSR',
   description:
     'How do we handle Asynchronous data in a situation where it feels the runtime is idle, how does Suspense tie into this and extending into ssr.',

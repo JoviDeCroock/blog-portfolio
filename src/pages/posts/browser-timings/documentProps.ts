@@ -1,4 +1,5 @@
 export const documentProps = {
+  createdAt: '2022-07-07',
   title: 'Browser timings',
   image: 'https://www.jovidecroock.com/browser-timings.png',
   description:
