@@ -33,6 +33,9 @@ const UnreliableVendors = lazy(
 const GraphQLMissingFeature = lazy(
   () => import('./pages/posts/document-authoring-missing-feature/index.mdx')
 )
+const FragmentsInVDOM = lazy(
+  () => import('./pages/posts/fragments-in-vdom/index.mdx')
+)
 
 export function App() {
   return (
@@ -69,6 +72,10 @@ export function App() {
               <Route
                 component={GraphQLMissingFeature}
                 path="/blog/graphqls-missing-feature"
+              />
+              <Route
+                component={FragmentsInVDOM}
+                path="/blog/fragments-in-vdom"
               />
               <Route component={NotFound} default />
             </Router>

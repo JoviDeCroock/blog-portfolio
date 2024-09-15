@@ -13,6 +13,7 @@ import { documentProps as graphqlWorkflowDocumentProps } from './posts/graphql-d
 import { documentProps as abstractTypesDocumentProps } from './posts/graphql-abstract-types/documentProps'
 import { documentProps as unreliableVendorsDocumentProps } from './posts/unreliable-vendors/documentProps'
 import { documentProps as graphqlsMissingFeatureDocumentProps } from './posts/document-authoring-missing-feature/documentProps'
+import { documentProps as fragmentVdomDocumentProps } from './posts/fragments-in-vdom/documentProps'
 
 interface Post {
   title: string,
@@ -24,6 +25,7 @@ interface Post {
 }
 
 const posts: Array<Post> = [
+  fragmentVdomDocumentProps,
   graphqlsMissingFeatureDocumentProps,
   {
     title: 'Preact X, a story of stability',

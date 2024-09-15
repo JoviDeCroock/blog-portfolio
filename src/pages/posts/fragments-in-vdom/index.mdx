@@ -1,0 +1,158 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+/>
+
+# Fragments in Virtual DOM
+
+One thing that I've been amazed by while working on Preact is the
+complexity introduced by something seemingly simple, the Fragment.
+
+For people unfamiliar with the `Fragment` in Preact/React, it's a
+Virtual DOM-structure that allows a component to return multiple
+children.
+
+> Not to be confused with the [GraphQL Fragment](../graphqls-missing-feature)
+
+If you'd have a component that does the following
+
+```jsx
+const App = () => (
+  <span>Hello</span>
+  <span>World</span>
+)
+```
+
+We'd complain and tell you that it would need to be wrapped with a
+`Fragment` which essentially comes down to wrapping it with `Fragment`
+or `\<\>`.
+
+Now if we look at how a `Fragment` is implemented in Preact it's just a
+component that returns its children.
+
+```jsx
+export const Fragment = props => props.children
+```
+
+> Any component that just returns its children can be considered a Fragment.
+
+What makes this so complex? It creates an additional distinction between
+the DOM and our virtual equivalent. When we would initially mount a component
+that looks like the aforementioned `App` we'd do the following operations:
+
+- Call `<App />` so we get the resulting VNodes
+- We traverse them, first item we encounter is a `Fragment`
+- We render the `Fragment` just to see it return its children
+- We perform `appendChild()` twice for the `<span>`
+- We populate each span with a text-node
+
+```
+VDOM:
+<App>
+  <Fragment>
+    <span>hello</span>
+    <span>world</span>
+
+DOM:
+<span>hello</span>
+<span>world</span>
+
+```
+
+That wasn't complex at all, and I am completely with you. The complexity starts
+when we are unmounting and guaranteeing the correct ordering, when we are mounting
+new nodes. Let's expand this sample a bit:
+
+```jsx
+const Todos = () => (
+  <Fragment>
+    <h1>Todos</h1>
+    <ul></ul>
+    <button></button>
+  </Fragment>
+)
+
+const Persons = () => (
+  <Fragment>
+    <h1>People</h1>
+    <ul></ul>
+    <button></button>
+  </Fragment>
+)
+
+const App = () => (
+  <main>
+    <Persons />
+    <Todos />
+  </main>
+)
+```
+
+Which would result in
+
+```
+VDOM:
+<App>
+  <main>
+    <Fragment>
+      <h1>People</h1>
+      <ul></ul>
+      <button></button>
+    <Fragment>
+      <h1>Todos</h1>
+      <ul></ul>
+      <button></button>
+
+DOM:
+<main>
+  <h1>People</h1>
+  <ul></ul>
+  <button></button>
+  <h1>Todos</h1>
+  <ul></ul>
+  <button></button>
+</main>
+```
+
+When we'd switch `<Todos />` to live in front of `<Persons />` we'd have to move all
+three of its Dom-nodes in front of the first DOM-node wrapped with this `Fragment`
+so we'd have to perform `insertBefore(x, <h1>People</h1>) three times. This however
+means that we have to store the `firstDomChild` of this `Fragment` to effectively
+perform this operation.
+
+That still sounds quite... convenient, doesn't it? Well this nesting could be any number,
+think about the amount of `Context` wrappers or components that just fetch data until
+you reach your first DOM-node? In most applications this isn't trivial, and there
+are many more operations we have to consider, this is mainly a `moveBefore`
+while there are many more operations to consider here.
+
+The move from `<Todos />` before `<Persons />` could have been accompanied by a different
+state change that results in us returning `null` from `<Todos />` which means we'd have to
+unmount all of that DOM so the most efficient course of action here is to not
+perform the three insertions at all and just unmount all of the DOM-nodes.
+
+Linearly if we're moving something between two components we have to discover where the first component
+ends and the next begins, this means that we'd need to look through their existing children and find out
+which is the last DOM-child, however, as we have discussed earlier some of those children could be null,
+some could be fragments and some could be DOM-nodes. Exploring these deeply for each and every operation
+would be quite expensive, luckily for a lot of these operation we can keep our `firstDomChild` heuristic
+where we'd look at the first DOM-node of the component that will come after the node we are inserting and
+perform an `insertBefore`.
+
+All of these are small insights into what Preact, React, Vue and many others are abstracting away
+from you, the declarative way of writing web-applications comes with a cost and a lot of hidden complexity.
+Knowing all of these isn't needed when you are writing your web-applications but I do think that it
+builds some empathy for the people who actively work on this.
+
+I have been exploring optimisations to the Preact diffing algortihm for quite a while, I've been a maintainer
+on the project now for 5'ish years (since 2019). In our v11 explorations we settled on a new diffing algorithm
+for Preact-children, which we refer to as skew-based diffing, this has since 10.16.0 been backported to Preact.
+In the future I'd love to write about everything we've discovered there but I wanted to collect my thoughts
+about Fragments first.
