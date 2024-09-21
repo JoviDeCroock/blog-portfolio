@@ -146,6 +146,9 @@ would be quite expensive, luckily for a lot of these operation we can keep our `
 where we'd look at the first DOM-node of the component that will come after the node we are inserting and
 perform an `insertBefore`.
 
+Now you know why we store `_nextDom` and have namings like `firstChildDom` in our
+[`diffChildren`](https://github.com/preactjs/preact/blob/10.24.0/src/diff/children.js#L118) algorithm.
+
 All of these are small insights into what Preact, React, Vue and many others are abstracting away
 from you, the declarative way of writing web-applications comes with a cost and a lot of hidden complexity.
 Knowing all of these isn't needed when you are writing your web-applications but I do think that it
