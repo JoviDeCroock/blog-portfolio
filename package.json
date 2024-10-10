@@ -16,7 +16,7 @@
   "@mdx-js/rollup": "^3.0.1",
   "goober": "2.1.14",
   "hoofd": "^1.7.1",
-  "preact": "10.24.0",
+  "preact": "10.24.2",
   "preact-iso": "^2.6.0",
   "preact-render-to-string": "^6.5.11",
   "rehype-highlight": "^7.0.0"
