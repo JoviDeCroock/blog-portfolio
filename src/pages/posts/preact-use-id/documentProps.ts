@@ -1,4 +1,5 @@
 export const documentProps = {
+  createdAt: '2022-09-11',
   title: 'Unique identifier in Preact',
   image: 'https://www.jovidecroock.com/preact-use-id.jpg',
   description:

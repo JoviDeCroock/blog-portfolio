@@ -1,5 +1,6 @@
 import SEO from '../../../components/Seo'
 import CodeTheme from '../../../components/CodeTheme'
+import Dates from '../../../components/Dates'
 import { documentProps } from './documentProps'
 
 <CodeTheme />
@@ -9,6 +10,8 @@ import { documentProps } from './documentProps'
   keywords={documentProps.tags}
   image={documentProps.image}
 />
+
+<Dates updatedAt={documentProps.updatedAt} createdAt={documentProps.createdAt} />
 
 # The missing feature
 

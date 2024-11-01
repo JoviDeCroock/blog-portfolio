@@ -1,4 +1,5 @@
 export const documentProps = {
+  createdAt: '2023-12-28',
   title: 'GraphQL Development Workflow',
   description:
     'An opinionated development workflow I have enjoyed using when it comes to GraphQL.',
