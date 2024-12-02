@@ -22,7 +22,7 @@
   "rehype-highlight": "^7.0.0"
  },
  "devDependencies": {
-  "@preact/preset-vite": "^2.9.0",
+  "@preact/preset-vite": "^2.9.2",
   "@types/react": "^18.3.12",
   "husky": "^9.1.7",
   "lint-staged": "^15.2.10",
