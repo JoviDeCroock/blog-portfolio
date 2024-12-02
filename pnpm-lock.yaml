@@ -34,8 +34,8 @@ dependencies:
 
 devDependencies:
   '@preact/preset-vite':
-    specifier: ^2.9.0
-    version: 2.9.1(@babel/core@7.26.0)(preact@10.24.3)(vite@5.4.10)
+    specifier: ^2.9.2
+    version: 2.9.2(@babel/core@7.26.0)(preact@10.24.3)(vite@5.4.10)
   '@types/react':
     specifier: ^18.3.12
     version: 18.3.12
@@ -545,11 +545,11 @@ packages:
       - supports-color
     dev: false
 
-  /@preact/preset-vite@2.9.1(@babel/core@7.26.0)(preact@10.24.3)(vite@5.4.10):
-    resolution: {integrity: sha512-JecWzrOx7ogFhklSMhY+aH/24pajL0Vx+beEgau3WDMUUAo32cpUo/UqerPhLOyhCKXlxK9a3cRoa8g68ZAp5g==}
+  /@preact/preset-vite@2.9.2(@babel/core@7.26.0)(preact@10.24.3)(vite@5.4.10):
+    resolution: {integrity: sha512-Gtp0pPd4s/bZiPAvn4Lhd/on5YZXd/AaXoO03MMtLTmH7nsH3BuXFZnBqvXpqozBDthjxwDWwGEJcf129ctY+g==}
     peerDependencies:
       '@babel/core': 7.x
-      vite: 2.x || 3.x || 4.x || 5.x
+      vite: 2.x || 3.x || 4.x || 5.x || 6.x
     dependencies:
       '@babel/code-frame': 7.26.2
       '@babel/core': 7.26.0
