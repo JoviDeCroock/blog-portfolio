@@ -19,7 +19,8 @@
   "preact": "10.24.3",
   "preact-iso": "^2.8.1",
   "preact-render-to-string": "^6.5.11",
-  "rehype-highlight": "^7.0.0"
+  "rehype-highlight": "^7.0.0",
+  "remark-gfm": "^4.0.0"
  },
  "devDependencies": {
   "@preact/preset-vite": "^2.9.0",
