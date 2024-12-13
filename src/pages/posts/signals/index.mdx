@@ -67,6 +67,10 @@ count.value++; // Update the value
 console.log(count.value); // Access the value
 ```
 
+Signals can be declared anywhere, you can add them to the global scope and once you use them in a component/computed/...
+it will be subscribed to upates. This means that we also reduce GC pressure as the lifetime of the value won't be bound
+to the component lifecycle.
+
 Computed Signals, derived state can be created using computed(). These computed signals automatically recalculate
 their values when signals accessed inside the closure are updated:
 
