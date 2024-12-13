@@ -3,7 +3,7 @@ export const documentProps = {
   title: 'Signals, pull-based values',
   description:
     "Let's look at how signals can offer wins over hooks.",
-  image: 'https://www.jovidecroock.com/state-vdom.png',
+  image: 'https://www.jovidecroock.com/signals.png',
   path: '/blog/signals',
   tags: ['vdom', 'state', 'front-end'],
 }
