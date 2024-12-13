@@ -1,0 +1,99 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+/>
+
+
+# Preact Signals, why it matters
+
+State management is a highly debated topic in front-end development, we as developers often face trade-offs
+between performance and simplicity. React hooks like `useMemo` and `useCallback` are widely used as ways
+of handling computed values and referrential integrity of those values.
+
+Preact Signals offer a different approach, let's explores how Preact Signals' pull-based model
+contrasts with the eager nature of React hooks.
+
+## The Problem with Hooks: Push-Based State Management
+
+React hooks such as `useMemo` are designed to optimize performance by memoizing expensive computations. However, they come with certain inefficiencies:
+
+- Eager Evaluation: Hooks like `useMemo` calculate their values during the render cycle. Even if the computed value is only used later (e.g., inside a callback), it is still calculated upfront before the JSX is returned.
+- Dependency Management: Developers must manually specify dependencies in hooks like `useMemo` or `useCallback`. Incorrect dependency arrays can lead to stale or unnecessary computations.
+
+For example, consider the following React code:
+
+```javascript
+import React, { useMemo } from 'react';
+
+const Component = ({ input }) => {
+  const expensiveValue = useMemo(() => {
+    // Expensive computation
+    return input * 2;
+  }, [input]);
+
+  const onClick = () => {
+    console.log(expensiveValue)
+  }
+
+  return <button onClick={onClick}>Send value</button>;
+};
+```
+
+Here, the computation is performed on every render where input changes, even if the result is only used when the button
+gets clicked.
+
+## The Pull-Based Model of Preact Signals
+
+Preact Signals take a different approach by shifting to a pull-based model, rather than eagerly computing values during rendering,
+Signals calculate derived values only when they are accessed. This lazy evaluation ensures that computations happen just in time,
+reducing unnecessary overhead.
+
+Here’s how Preact Signals work:
+
+Signals as State Primitives, a signal represents a piece of state that can be read or updated. For example:
+
+```javascript
+import { signal } from "@preact/signals";
+
+const count = signal(0);
+count.value++; // Update the value
+console.log(count.value); // Access the value
+```
+
+Computed Signals, derived state can be created using computed(). These computed signals automatically recalculate
+their values when signals accessed inside the closure are updated:
+
+```javascript
+import { computed, signal } from "@preact/signals";
+
+const count = signal(0);
+const double = computed(() => count.value * 2);
+
+console.log(double.value); // Computed
+console.log(double.value); // Just returns value without computing
+count.value = 2;           // Value is updated
+console.log(double.value); // Computed lazily
+```
+
+You can play with it in [this stackblitz](https://stackblitz.com/edit/stackblitz-starters-fx2kzp1j?file=index.mjs), just run
+`node index.mjs` and look at the console output.
+
+## Comparison: Hooks vs. Signals
+
+| Feature | Hooks (useMemo) | Signals (computed) |
+|---|---|---|
+| Evaluation Timing  | eager  | lazy  |
+|  Dependency Management | manual  | autoamtic  |
+| Re-Renders  | Requires optimization (React.memo)  | Granular updates without re-renders  |
+
+## Conclusion
+
+I won't claim any technology to be a silver bullet but, it's worth giving signals a spin! You
+can use this in both React as well as Preact or use signals-core to make your own implementation.

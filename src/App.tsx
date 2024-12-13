@@ -36,6 +36,9 @@ const GraphQLMissingFeature = lazy(
 const FragmentsInVDOM = lazy(
   () => import('./pages/posts/fragments-in-vdom/index.mdx')
 )
+const Signals = lazy(
+  () => import('./pages/posts/signals/index.mdx')
+)
 
 export function App() {
   return (
@@ -76,6 +79,10 @@ export function App() {
               <Route
                 component={FragmentsInVDOM}
                 path="/blog/fragments-in-vdom"
+              />
+              <Route
+                component={Signals}
+                path="/blog/signals"
               />
               <Route component={NotFound} default />
             </Router>
