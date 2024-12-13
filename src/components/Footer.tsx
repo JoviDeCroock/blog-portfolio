@@ -15,9 +15,9 @@ const Footer = () => (
     <FooterLink
       rel="nofollow"
       target="blank"
-      href="https://bsky.app/profile/jovidc.bsky.social"
+      href="https://bsky.app/profile/jovidecroock.com"
     >
-      BlueSky @jovidc
+      BlueSky @jovidecroock.com
     </FooterLink>
     -
     <FooterLink
@@ -34,10 +34,6 @@ const Footer = () => (
       href="https://jovidecroock.com/blog"
     >
       Blog
-    </FooterLink>
-    -
-    <FooterLink rel="me" target="blank" href="https://fosstodon.org/@jovi">
-      Mastodon
     </FooterLink>
   </Wrapper>
 )
