@@ -1,6 +1,6 @@
 export const documentProps = {
   createdAt: '2024-12-13',
-  title: 'Signals, pull based values',
+  title: 'Signals, pull-based values',
   description:
     "Let's look at how signals can offer wins over hooks.",
   image: 'https://www.jovidecroock.com/state-vdom.png',
