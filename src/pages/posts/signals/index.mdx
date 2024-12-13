@@ -69,10 +69,12 @@ console.log(count.value); // Access the value
 
 Signals can be declared anywhere, you can add them to the global scope and once you use them in a component/computed/...
 it will be subscribed to upates. This means that we also reduce GC pressure as the lifetime of the value won't be bound
-to the component lifecycle.
+to the component lifecycle. A signal won't be active until it's used which makes it primed for usage as global state.
 
 On top of that, in Preact for example we make the updates a bit more granular where we do direct upates to HTML text
-and element-attributes and avoid subscribing the component to rerender as much as possible.
+and element-attributes so we can avoid subscribing the component as a whole as much as possible. subscribing
+the component completely would result in rerenders which are more expensive compared to just updating to what
+the result of said rerender would be.
 
 Computed Signals, derived state can be created using computed(). These computed signals automatically recalculate
 their values when signals accessed inside the closure are updated:
