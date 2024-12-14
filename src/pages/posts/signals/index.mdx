@@ -68,7 +68,7 @@ console.log(count.value); // Access the value
 ```
 
 Signals can be declared anywhere, you can add them to the global scope and once you use them in a component/computed/...
-it will be subscribed to upates. This means that we also reduce GC pressure as the lifetime of the value won't be bound
+it will be subscribed to updates. This means that we also reduce GC pressure as the lifetime of the value won't be bound
 to the component lifecycle. A signal won't be active until it's used which makes it primed for usage as global state.
 
 On top of that, in Preact for example we make the updates a bit more granular where we do direct upates to HTML text
