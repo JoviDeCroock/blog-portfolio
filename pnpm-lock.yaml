@@ -38,7 +38,7 @@ dependencies:
 devDependencies:
   '@preact/preset-vite':
     specifier: ^2.9.0
-    version: 2.9.3(@babel/core@7.26.0)(preact@10.25.2)(vite@6.0.3)
+    version: 2.9.3(@babel/core@7.26.0)(preact@10.25.2)(vite@6.0.5)
   '@types/react':
     specifier: ^18.3.12
     version: 18.3.16
@@ -55,8 +55,8 @@ devDependencies:
     specifier: ^5.6.3
     version: 5.7.2
   vite:
-    specifier: ^6.0.3
-    version: 6.0.3
+    specifier: ^6.0.5
+    version: 6.0.5
 
 packages:
 
@@ -557,7 +557,7 @@ packages:
       - supports-color
     dev: false
 
-  /@preact/preset-vite@2.9.3(@babel/core@7.26.0)(preact@10.25.2)(vite@6.0.3):
+  /@preact/preset-vite@2.9.3(@babel/core@7.26.0)(preact@10.25.2)(vite@6.0.5):
     resolution: {integrity: sha512-uVDSKsFnPa/bmRTAcPiYpTvC04T1lhIH2ho3CJZLYibwcwliElS/i64iyATZkgR4DJxSc/JwOCSQS4IF/a03OQ==}
     peerDependencies:
       '@babel/core': 7.x
@@ -567,7 +567,7 @@ packages:
       '@babel/core': 7.26.0
       '@babel/plugin-transform-react-jsx': 7.25.9(@babel/core@7.26.0)
       '@babel/plugin-transform-react-jsx-development': 7.25.9(@babel/core@7.26.0)
-      '@prefresh/vite': 2.4.6(preact@10.25.2)(vite@6.0.3)
+      '@prefresh/vite': 2.4.6(preact@10.25.2)(vite@6.0.5)
       '@rollup/pluginutils': 4.2.1
       babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.26.0)
       debug: 4.4.0
@@ -576,7 +576,7 @@ packages:
       node-html-parser: 6.1.13
       source-map: 0.7.4
       stack-trace: 1.0.0-pre2
-      vite: 6.0.3
+      vite: 6.0.5
     transitivePeerDependencies:
       - preact
       - supports-color
@@ -598,7 +598,7 @@ packages:
     resolution: {integrity: sha512-KtC/fZw+oqtwOLUFM9UtiitB0JsVX0zLKNyRTA332sqREqSALIIQQxdUCS1P3xR/jT1e2e8/5rwH6gdcMLEmsQ==}
     dev: true
 
-  /@prefresh/vite@2.4.6(preact@10.25.2)(vite@6.0.3):
+  /@prefresh/vite@2.4.6(preact@10.25.2)(vite@6.0.5):
     resolution: {integrity: sha512-miYbTl2J1YNaQJWyWHJzyIpNh7vKUuXC1qCDRzPeWjhQ+9bxeXkUBGDGd9I1f37R5GQYi1S65AN5oR0BR2WzvQ==}
     peerDependencies:
       preact: ^10.4.0
@@ -610,7 +610,7 @@ packages:
       '@prefresh/utils': 1.2.0
       '@rollup/pluginutils': 4.2.1
       preact: 10.25.2
-      vite: 6.0.3
+      vite: 6.0.5
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2541,8 +2541,8 @@ packages:
       vfile-message: 4.0.2
     dev: false
 
-  /vite@6.0.3:
-    resolution: {integrity: sha512-Cmuo5P0ENTN6HxLSo6IHsjCLn/81Vgrp81oaiFFMRa8gGDj5xEjIcEpf2ZymZtZR8oU0P2JX5WuUp/rlXcHkAw==}
+  /vite@6.0.5:
+    resolution: {integrity: sha512-akD5IAH/ID5imgue2DYhzsEwCi0/4VKY31uhMLEYJwPP4TiUp8pL5PIK+Wo7H8qT8JY9i+pVfPydcFPYD1EL7g==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
