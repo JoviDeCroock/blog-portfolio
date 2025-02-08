@@ -23,7 +23,7 @@
   "remark-gfm": "^4.0.0"
  },
  "devDependencies": {
-  "@preact/preset-vite": "^2.10.0",
+  "@preact/preset-vite": "^2.10.1",
   "@types/react": "^19.0.8",
   "husky": "^9.1.7",
   "lint-staged": "^15.4.3",
