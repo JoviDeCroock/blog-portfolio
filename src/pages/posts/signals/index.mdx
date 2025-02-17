@@ -8,6 +8,7 @@ import { documentProps } from './documentProps'
   description={documentProps.description}
   keywords={documentProps.tags}
   image={documentProps.image}
+  url={documentProps.path}
 />
 
 
@@ -55,7 +56,7 @@ Preact Signals take a different approach by shifting to a pull-based model, rath
 Signals calculate derived values only when they are accessed. This lazy evaluation ensures that computations happen just in time,
 reducing unnecessary overhead.
 
-Here’s how Preact Signals work:
+Here's how Preact Signals work:
 
 Signals as State Primitives, a signal represents a piece of state that can be read or updated. For example:
 

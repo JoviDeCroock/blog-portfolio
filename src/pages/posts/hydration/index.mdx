@@ -8,6 +8,7 @@ import { documentProps } from './documentProps'
   description={documentProps.description}
   keywords={documentProps.tags}
   image={documentProps.image}
+  url={documentProps.path}
 />
 
 # Hydration
@@ -98,43 +99,4 @@ really generalize one day).
 
 For the sake of familiarity let's look at the `Suspense` approach, when a route isn't loaded `lazy` will throw a `Promise` which follows a similar
 pattern to error boundaries in that when we see `Suspense` we can stop there, render the `fallback` and go on with our lives. What if instead of just
-rendering the fallback we look at whether there is DOM and mark this `Suspense` root as a pending hydration? At that point we have a deferred hydration
-going on that progressively hydrates the whole application as components are coming in.
-
-When we apply that to the deferred routes we see that our application becomes interactive in the following order:
-
-```html
-<body>
-  <header><!-- some links --></header> <!-- Interactive in the first pass -->
-  <main>
-    <!--
-      route content
-      Interactive in the second pass
-      when the route specific code arrives
-    -->
-  </main>
-  </footer><!-- some links --></footer> <!-- Interactive in the first pass -->
-</body>
-```
-
-This is a little known trick that currently actually already lives in Preact, I have actually created [a small demo](https://github.com/JoviDeCroock/realworld/blob/main/src/index.js#L4)
-years ago to show this. The demo goes a bit further as it also introduces the above concept for data-loading, as long as data isn't loaded it will suspend and use
-the existing non-hydrated DOM.
-
-## Islands of interactivity
-
-There is another alternative in the [islands approach](https://jasonformat.com/islands-architecture), conceptually we can approach this as
-removing all the parts we don't need and only hydrating little roots in our Virtual DOM. This all can happen at build-time and mainly introduces
-heuristics to play with, for instance only hydrate when this island becomes visible. This works out well in
-Tools pioneering this approach are [Astro](https://astro.build/), [Fresh](https://fresh.deno.dev/) and [Capri](https://capri.build), these are definitley worth checking out
-for your next project!
-
-Hell, I have considered rewriting this very blog in either of them just because I love seeing these tools in action and
-honestly I really should get some static-site generation in here for SEO... Oh and probably some styling as well as I am starting to notice that
-my minimalism is even starting to disturb me...
-
-Before choosing one of these approaches I always advise people to read up on the [different rendering techniques](https://web.dev/rendering-on-the-web/).
-After writing about all of this I do want to shoutout my fellow maintainers on Preact [Jason](https://twitter.com/_developit) and [Marvin](https://twitter.com/marvinhagemeist)
-as I would have never learned this much about all of the rendering techniques, hydration and Virtual-DOM without them.
-
-There is so much innovation coming to this space when I look at streaming rendering, islands, ... and it honestly excites me beyond belief!
+rendering the fallback we look at whether there is DOM and mark this `Suspense`
