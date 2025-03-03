@@ -33,6 +33,15 @@ leading to the needless re-insertion.
 Skew-based diffing as the name implies will hold onto a numerical skew for each set of children,
 this skew represents the numerical offset we have found for a given set of children.
 
+Conceptually when we approach this concept, we can imagine a list of items, we can remove/insert/move
+items in the list. Our diffing algorithm will observe these observations in the virtual representation
+and reflect them onto the real DOM representation. Our goal with the virtual representation is to be
+as smart as we possibly can to reduce the amount of operations we have to reflect, the former
+is cheaper than the latter.
+If a new item is inserted into a list, all the items indexes shift by the same amount, this is a 'skew'.
+We can simply exploit this by assuming that if we see a newly added or missing item, we can still expect
+the rest of the items to be the same, more or less, if they aren't we will act accordingly.
+
 This means that when I would insert a child at the front of our new array of children we'd be dealing
 with a skew of -1 as we want to compare the child of our new children at index 1 with the child of
 old children at index 0.

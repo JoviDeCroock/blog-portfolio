@@ -39,6 +39,9 @@ const FragmentsInVDOM = lazy(
 const Signals = lazy(
   () => import('./pages/posts/signals/index.mdx')
 )
+const SkewBasedDiff = lazy(
+  () => import('./pages/posts/skew-based-diff/index.mdx')
+)
 
 export function App() {
   return (
@@ -83,6 +86,10 @@ export function App() {
               <Route
                 component={Signals}
                 path="/blog/signals"
+              />
+              <Route
+                component={SkewBasedDiff}
+                path="/blog/skew-based-diffing"
               />
               <Route component={NotFound} default />
             </Router>
