@@ -92,7 +92,26 @@ When the matched- and skewedIndex don't match we know we'll be moving an element
 - We are one off to the right
 - We are very very off
 
-The main goal of this is that it correctly identifies the need for moves more than immediately targetting the correct node.
+The main goal of [the algorithm](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L282-L314) is that it correctly identifies the need
+for moves more than immediately targetting the correct node. What we are doing here might look a bit wasteful at first glance, let's apply it to an example
+
+```
+old children: [1, 2, 3]
+new children: [2, 1, 3]
+```
+
+We'll see that when we start diffing new children that we will find
+
+- when we diff 2, matchedIndex 1, skewedIndex 0 this means that we have a 1 offset and increment our skew, we won't mark
+  this vnode for insertion.
+- when we diff 1, we'll start at a skewedIndex of 2 because skew of 1 + position 1, our matchedIndex will be 0 meaning we fall
+  in the `else` case and specifically the one where we increment the skew _again_ and we'll mark this vnode for insertion.
+- when we diff 3, we'll have a skewedIndex of 4 and a matchedIndex of 2, we'll do the same of the above.
+
+We have two vnodes marked for insertion but when you apply the actual insertion you'll see that we only did a single DOM operation,
+which is move the 1 before the 2.
+
+---
 
 Now that we have finished comparing the old and new children there is the possibility that we have some remaining old-children, the only thing
 we can do with them is to unmount them to avoid having artefacts that do not correspond to the virtual dom representation.
@@ -116,3 +135,16 @@ us.
 
 When we are done inserting we assign a new `oldDom` value which is the current vnodes `_dom` and start a [loop](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L368-L370)
 we'll get the next non-comment sibling of `_dom` so that the next child we diff has a correct corresponding vnode.
+
+---
+
+Let's rewind a bit now, to our example of when we updated [1, 2, 3] to [2, 1, 3], when we apply the DOM insertion logic we will skip the operation at 2 because we have not marked
+it as `INSERT_VNODE`, this means that [we'll mark `<p>3</p>` as the new `oldDom` because it's the sibling to the `<p>2</p>` DOM-node which is now at position 0](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L135).
+When we continue and get to the VNode representing 1 we'll insert it _before_ `oldDom` which is now at `<p>3</p>`, after this operation our DOM is already correct, however we have one
+more DOM node to traverse, which is 3... When we get to 3 our `oldDom` won't have changed, which means we'll hit this [bail](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L360) and
+we'll do nothing.
+
+This is actually, despite the construction being counter-intuitive, the most optimal set of DOM-operations!
+
+I hope this was a at least a bit educational and sheds some light in the amount of thought that we, the Preact team, put into having a low-byte overhead while also being pretty
+optimal when it comes to diffing.
