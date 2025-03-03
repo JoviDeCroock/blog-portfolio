@@ -15,6 +15,7 @@ import { documentProps as unreliableVendorsDocumentProps } from './posts/unrelia
 import { documentProps as graphqlsMissingFeatureDocumentProps } from './posts/document-authoring-missing-feature/documentProps'
 import { documentProps as fragmentVdomDocumentProps } from './posts/fragments-in-vdom/documentProps'
 import { documentProps as signalsDocumentProps } from './posts/signals/documentProps'
+import { documentProps as skewDocumentProps } from './posts/skew-based-diff/documentProps'
 
 interface Post {
   title: string,
@@ -26,6 +27,7 @@ interface Post {
 }
 
 const posts: Array<Post> = [
+  skewDocumentProps,
   signalsDocumentProps,
   fragmentVdomDocumentProps,
   graphqlsMissingFeatureDocumentProps,

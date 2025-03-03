@@ -1,0 +1,159 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+
+# Skew based diffing
+
+As of the Preact 10.16 release we started backporting a new diffing algorithm
+that we found in our journey to Preact 11. It addressed a lot of correctness
+mistakes that our old diffing algorithm used to have.
+
+Some examples of these issues can be found in [here](https://github.com/preactjs/preact/pull/4010),
+look at the issues getting fixed. A lot of the issues come down to us needlessly
+re-inserting children which when solved has the additional benefit of boosting performance.
+Creating, inserting and unmounting DOM children is quite expensive as it stands.
+
+One of the main failures of our algorithm was that we matched vnodes one by one in a single pass
+which means that we could match less ideal candidates, a second short-coming was found in
+the way we determined [where to insert or append the element](https://github.com/preactjs/preact/blob/10.15.1/src/diff/children.js#L309-L313)
+leading to the needless re-insertion.
+
+## New algorithm, who dis?
+
+Skew-based diffing as the name implies will hold onto a numerical skew for each set of children,
+this skew represents the numerical offset we have found for a given set of children.
+
+Conceptually when we approach this concept, we can imagine a list of items, we can remove/insert/move
+items in the list. Our diffing algorithm will observe these observations in the virtual representation
+and reflect them onto the real DOM representation. Our goal with the virtual representation is to be
+as smart as we possibly can to reduce the amount of operations we have to reflect, the former
+is cheaper than the latter.
+If a new item is inserted into a list, all the items indexes shift by the same amount, this is a 'skew'.
+We can simply exploit this by assuming that if we see a newly added or missing item, we can still expect
+the rest of the items to be the same, more or less, if they aren't we will act accordingly.
+
+This means that when I would insert a child at the front of our new array of children we'd be dealing
+with a skew of -1 as we want to compare the child of our new children at index 1 with the child of
+old children at index 0.
+
+Additionally we introduce two phases of diffing our list of children, the first where we try to find
+each childs old position compared to its new positon and then the second phase where we execute
+the operations needed to make the visible dom a correct representation of the virtual one.
+This means that compared to our old algorithm we'll be executing `2n` in time complexity
+as we execute the loop twice, the saved DOM-operations are well worth this tradeoff.
+
+> There are a lot of complexities when we look at i.e. `Fragments` in children diffing
+> but we'll leave those out for now, I invite you to read [my other post on that](../fragments-in-vdom/index.mdx).
+
+In the following sections we'll go over the code, how it works and how we have certain optimisations in place for
+the common cases.
+
+### Comparing new to old
+
+We start off by comparing [our new array of children to our old one](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L73-L79)
+as a result we expect `oldDom` which is the pointer where we want to start our DOM-operations.
+
+In the start of `constructNewChildrenArray` you can find a [neat little optimization](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L171)
+we'll initialise our array to the expected size this prevents us having to resize the array when new elements get added and hence saves us some overhead.
+
+When we are comparing our new child iteratively we'll skip over any placeholders (null'ish nodes) and upgrade any plain values like text/numbers/... to a VNode.
+
+The first thing we encounter that relates to our skew-based diffing is the [`skewedIndex`](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L226) which is
+the position where we want to start looking in `oldChildren` for the previous state of our new VNode. We dive into [`findMatchingIndex`](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L233)
+where we will either look for the element on the `skewedIndex` position _or_ we'll search the oldChildren for an equivalent VNode. We allow ourselves to search if our oldVNode wasn't already
+matched and there is more than 1 child remaining.
+
+You can see that when we search we'll do [a forwards- and backwards search](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L438-L463) over the old children to find the best suited candidate to diff against.
+
+When we find a VNode we'll set a flag on the oldVNode to convey that it has an associated candidate for diffing, this mainly to prevent us from using an old vnode more than once to diff against which could have some... disastrous...
+consequences. There are two cases in which we'll consider a new child to require mounting and that is when it is recovering from an error/suspension at which time the `_original` property will be strictly null or when the old vnode
+we are matched against is nullish.
+
+**Mounting**
+
+For the case of mounting, we'll see our first optimization [here](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L256-L274), we check whether the array is growing or shrinking to update our `skew`
+when we grow we will decrement the skew and when we shrink we'll increment it. Let's look at this one with an example...
+
+```
+old children: [1, 2, 3]
+new children: [0, 1, 2, 3]
+```
+
+Intuitively in the above we can see that the list grew longer, and that we inserted the element 0 at position 0, this means that when we want to compare the item 1
+to the item 1 in the old array that we need to compare index 1 with index 0. Our skew being -1 at this point will account for that. The reverse is also true, if we'd
+have the reverse applied then we'd want the new children index of 0 to look at the old children index of 1 which would be handled with incrementing the skew.
+
+**Updating**
+
+When the matched- and skewedIndex don't match we know we'll be moving an element around and we have optimised for three cases here
+
+- We are one off to the left
+- We are one off to the right
+- We are very very off
+
+The main goal of [the algorithm](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L282-L314) is that it correctly identifies the need
+for moves more than immediately targetting the correct node. What we are doing here might look a bit wasteful at first glance, let's apply it to an example
+
+```
+old children: [1, 2, 3]
+new children: [2, 1, 3]
+```
+
+We'll see that when we start diffing new children that we will find
+
+- when we diff 2, matchedIndex 1, skewedIndex 0 this means that we have a 1 offset and increment our skew, we won't mark
+  this vnode for insertion.
+- when we diff 1, we'll start at a skewedIndex of 2 because skew of 1 + position 1, our matchedIndex will be 0 meaning we fall
+  in the `else` case and specifically the one where we increment the skew _again_ and we'll mark this vnode for insertion.
+- when we diff 3, we'll have a skewedIndex of 4 and a matchedIndex of 2, we'll do the same of the above.
+
+We have two vnodes marked for insertion but when you apply the actual insertion you'll see that we only did a single DOM operation,
+which is move the 1 before the 2.
+
+---
+
+Now that we have finished comparing the old and new children there is the possibility that we have some remaining old-children, the only thing
+we can do with them is to unmount them to avoid having artefacts that do not correspond to the virtual dom representation.
+
+### Applying the DOM update
+
+Now that we have a list of new-children in the shape of VNodes we can start diffing them against their old shape. We'll iterate over our list
+and for every VNode we'll either [diff against a stub or its prior shape](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L87-L91).
+
+When diffing completes we'll apply or remove any `ref` that is requested by the virtual dom and we'll start our [`insert`](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L131)
+logic. There is however one very peculiar line in this `insert`, which [checks whether the parent actually contains the `oldDom`](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L361).
+
+Remember how I said that the construction of our new children array will return to us the node to start insertion from? Well, there is a caveat here and that is that
+we are dealing with recursion, when we initiated the [diff](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L97) for our VNode we inevitably dug
+deeper into the tree and called `diffChildren` for one of its children, if this child was a component itself (and hence fragment-like) it could have unmounted the
+`oldDom` we are looking at in this state of the world. This is the main reason why we need to defend ourselves against a deeper unmount because we can't bubble that up.
+
+Another little trick here is calling `parentDom.insertBefore(parentVNode._dom, oldDom || NULL);` when there is no `oldDom` we know that we are appending an element, rather
+than doing a special branch that calls `appendChild` we just insert an explicit strict NULL value so that the DOM itself reverts to `appendChild`, this saves some bytes for
+us.
+
+When we are done inserting we assign a new `oldDom` value which is the current vnodes `_dom` and start a [loop](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L368-L370)
+we'll get the next non-comment sibling of `_dom` so that the next child we diff has a correct corresponding vnode.
+
+---
+
+Let's rewind a bit now, to our example of when we updated [1, 2, 3] to [2, 1, 3], when we apply the DOM insertion logic we will skip the operation at 2 because we have not marked
+it as `INSERT_VNODE`, this means that [we'll mark `<p>3</p>` as the new `oldDom` because it's the sibling to the `<p>2</p>` DOM-node which is now at position 0](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L135).
+When we continue and get to the VNode representing 1 we'll insert it _before_ `oldDom` which is now at `<p>3</p>`, after this operation our DOM is already correct, however we have one
+more DOM node to traverse, which is 3... When we get to 3 our `oldDom` won't have changed, which means we'll hit this [bail](https://github.com/preactjs/preact/blob/10.26.4/src/diff/children.js#L360) and
+we'll do nothing.
+
+This is actually, despite the construction being counter-intuitive, the most optimal set of DOM-operations!
+
+I hope this was a at least a bit educational and sheds some light in the amount of thought that we, the Preact team, put into having a low-byte overhead while also being pretty
+optimal when it comes to diffing.
