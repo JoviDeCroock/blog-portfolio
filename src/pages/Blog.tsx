@@ -16,7 +16,7 @@ import { documentProps as graphqlsMissingFeatureDocumentProps } from './posts/do
 import { documentProps as fragmentVdomDocumentProps } from './posts/fragments-in-vdom/documentProps'
 import { documentProps as signalsDocumentProps } from './posts/signals/documentProps'
 import { documentProps as skewDocumentProps } from './posts/skew-based-diff/documentProps'
-
+import { documentProps as trackingContextDocumentProps } from './posts/tracking-context/documentProps'
 interface Post {
   title: string,
   description: string,
@@ -27,6 +27,7 @@ interface Post {
 }
 
 const posts: Array<Post> = [
+  trackingContextDocumentProps,
   skewDocumentProps,
   signalsDocumentProps,
   fragmentVdomDocumentProps,

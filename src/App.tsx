@@ -42,6 +42,9 @@ const Signals = lazy(
 const SkewBasedDiff = lazy(
   () => import('./pages/posts/skew-based-diff/index.mdx')
 )
+const TrackingContext = lazy(
+  () => import('./pages/posts/tracking-context/index.mdx')
+)
 
 export function App() {
   return (
@@ -90,6 +93,10 @@ export function App() {
               <Route
                 component={SkewBasedDiff}
                 path="/blog/skew-based-diffing"
+              />
+              <Route
+                component={TrackingContext}
+                path="/blog/tracking-context"
               />
               <Route component={NotFound} default />
             </Router>

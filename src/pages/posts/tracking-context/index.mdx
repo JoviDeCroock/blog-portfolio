@@ -1,0 +1,178 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<Dates updatedAt={documentProps.updatedAt} createdAt={documentProps.createdAt} />
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# Understanding Tracking Context in Preact Signals
+
+One of the most misunderstood aspects of Preact Signals is how tracking context works and the difference between `.value` and `.peek()`.
+
+## What is Tracking Context?
+
+A tracking context is an environment where signal access is monitored and subscriptions are automatically created.
+When you access a signal's `.value` property within a tracking context, that context becomes subscribed to changes in the signal.
+
+There are three main types of tracking contexts in Preact Signals:
+
+1. **Computeds** - Derived values that update when their dependencies change
+2. **Effects** - Side effects that run when their dependencies change
+3. **Components** - React/Preact components that re-render when signals change
+
+## Computeds
+
+Computed signals are perhaps the most elegant example of tracking context.
+They automatically track which signals they depend on and only recalculate when those dependencies change.
+
+```javascript
+import { signal, computed } from "@preact/signals";
+
+const count = signal(0);
+const name = signal("John");
+
+// This computed will only track 'count' because we only access count.value
+const doubleCount = computed(() => {
+  console.log("Computing double count...");
+  return count.value * 2;
+});
+
+// The computed is NOT active yet - no computation has happened
+console.log("Computed created, but not evaluated");
+
+// NOW it becomes active and runs for the first time
+console.log(doubleCount.value); // Logs: "Computing double count..." then "0"
+
+// Accessing again returns cached value
+console.log(doubleCount.value); // No log, returns cached "0"
+
+// Changing 'name' won't trigger the computed because it's not a dependency
+name.value = "Jane"; // No computation
+
+// But changing 'count' will trigger it
+count.value = 5; // Still no computation yet...
+console.log(doubleCount.value); // Logs: "Computing double count..." then "10"
+```
+
+Computeds are **lazy** - they only become active when first accessed via `.value`, and they only track signals that are actually accessed during their computation.
+
+## Effects
+
+Effects run when their tracked signals change, similar to computeds but for side effects rather than derived values.
+
+```javascript
+import { signal, effect } from "@preact/signals";
+
+const count = signal(0);
+const name = signal("John");
+
+// This effect tracks both count and name
+effect(() => {
+  console.log(`Hello ${name.value}, count is ${count.value}`);
+});
+// Immediately logs: "Hello John, count is 0"
+
+count.value = 1; // Logs: "Hello John, count is 1"
+name.value = "Jane"; // Logs: "Hello Jane, count is 1"
+```
+
+Effects run immediately when created, establishing their tracking context during the initial execution. It is worth noting
+that when you use `async` actions within the effect that only the synchronous accessed signals will be registered. When
+the synchronous part ends we have left the tracking-context.
+
+## Components
+
+When using the `@preact/signals` package with Preact (or `@preact/signals-react` with React), components automatically become tracking contexts during render.
+
+```javascript
+import { signal } from "@preact/signals";
+
+const count = signal(0);
+const theme = signal("light");
+
+function Counter() {
+  // Accessing count.value during render subscribes this component to count changes
+  // Component will re-render when count changes
+  const currentCount = count.value;
+
+  return (
+    <div>
+      <p>Count: {currentCount}</p>
+      <button onClick={() => count.value++}>
+        Increment
+      </button>
+      {/* Passing the signal itself doesn't create a subscription */}
+      <ThemeToggle themeSignal={theme} />
+    </div>
+  );
+}
+
+function ThemeToggle({ themeSignal }) {
+  return (
+    <button
+      onClick={() => {
+        // Accessing .value in event handlers is safe - no tracking context here
+        themeSignal.value = themeSignal.value === "light" ? "dark" : "light";
+      }}
+    >
+      Toggle theme
+    </button>
+  );
+}
+```
+
+Only synchronous access to `.value` during the render phase creates subscriptions.
+Event handlers, async operations, and other code outside the render tracking context don't create component subscriptions,
+this means that even though `themeSignal` changes from `ThemeToggle`, we won't rerender `ThemeToggle` because
+we [actively prevent this](https://github.com/preactjs/signals/blob/main/packages/preact/src/index.ts#L369).
+
+## When Tracking Context Doesn't Apply
+
+Not every code location is a tracking context. These scenarios don't create subscriptions:
+
+```javascript
+import { signal } from "@preact/signals";
+
+const count = signal(0);
+
+// Global scope - no tracking context
+console.log(count.value); // No subscription
+
+// Event handlers - no tracking context
+button.addEventListener('click', () => {
+  console.log(count.value); // No subscription
+});
+
+// Async operations - no tracking context
+setTimeout(() => {
+  console.log(count.value); // No subscription
+}, 1000);
+
+// Promise handlers - no tracking context
+fetch('/api/data').then(() => {
+  console.log(count.value); // No subscription
+});
+```
+
+## Conclusion
+
+Understanding tracking context is key to mastering Preact Signals. Remember:
+
+- **Tracking contexts** automatically subscribe to signals accessed via `.value`
+- **Computeds** are lazy and only track signals accessed during computation
+- **Components** subscribe to signals accessed during render (synchronously)
+- **Event handlers and async code** don't create tracking contexts
+- **`.peek()`** and **`untracked()`** let you escape tracking when needed (rarely)
+
+The beauty of signals lies in their automatic dependency tracking - you rarely need to think about subscriptions explicitly.
+When you do need to escape tracking context, `.peek()` and `untracked()` provide precise control over when subscriptions are created.
+Note that the need to escape this should be rare.
