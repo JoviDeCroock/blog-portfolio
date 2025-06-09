@@ -1,4 +1,6 @@
 import { styled } from 'goober'
+import { useState } from 'preact/hooks'
+
 import SEO from '../components/Seo'
 
 import { documentProps as VDomDocumentProps } from './posts/vdom-compilers/documentProps'
@@ -17,6 +19,7 @@ import { documentProps as fragmentVdomDocumentProps } from './posts/fragments-in
 import { documentProps as signalsDocumentProps } from './posts/signals/documentProps'
 import { documentProps as skewDocumentProps } from './posts/skew-based-diff/documentProps'
 import { documentProps as trackingContextDocumentProps } from './posts/tracking-context/documentProps'
+
 interface Post {
   title: string,
   description: string,
@@ -88,8 +91,46 @@ const SubjectSummary = styled('div')`
   }
 `
 
+const TagFilterContainer = styled('div')`
+  margin: 1rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+`
+
+const FilterTag = styled<{ background: string; isSelected: boolean }>('button')`
+  border-radius: 10px;
+  background: ${(x) => x.background};
+  opacity: ${(x) => (x.isSelected ? 1 : 0.6)};
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 12px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
+`
+
+const ClearFilter = styled('button')`
+  border-radius: 10px;
+  background: #666;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 12px;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background: #888;
+  }
+`
+
 const tagBgs: Record<string, string> = {
-  security: '#d6e1c2',
   performance: '#0080bb',
   graphql: '#E10098',
   'engineering': '#302221',
@@ -100,30 +141,73 @@ const tagBgs: Record<string, string> = {
   thinking: '#f59c42',
   external: '#4c01fe',
   'server-side-rendering': "#07a8f8",
+  'open-source': '#f5a142',
 } as const
 
-export default () => (
-  <main>
-    <SEO title="Blog" description="Posts about my work and thoughts." />
-    <h1>Blog</h1>
-    <p>
-      My thoughts in a semi-raw form, a lot of these posts contain what goes
-      around in my mind throughout a day.
-    </p>
-    <Block>
-      {posts.map((post) => (
-        <Summary>
-          <TitleLink target={post.external ? "blank" : undefined} href={post.path}>{post.title}</TitleLink>
-          <p>{post.description}</p>
-          <SubjectSummary>
-            {post.tags.map((tag) => (
-              <Tag background={tagBgs[tag]} key={tag}>
-                {tag}
-              </Tag>
-            ))}
-          </SubjectSummary>
-        </Summary>
-      ))}
-    </Block>
-  </main>
-)
+const ALL_TAGS = posts.flatMap((post) => post.tags).filter((tag, index, self) => self.indexOf(tag) === index)
+
+export default () => {
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
+  const filteredPosts = selectedTag
+    ? posts.filter(post => post.tags.includes(selectedTag as keyof typeof tagBgs))
+    : posts;
+
+  const handleTagClick = (tag: string) => {
+    setSelectedTag(selectedTag === tag ? null : tag);
+  };
+
+  const clearFilter = () => {
+    setSelectedTag(null);
+  };
+
+  return (
+    <main>
+      <SEO title="Blog" description="Posts about my work and thoughts." />
+      <h1>Blog</h1>
+      <p>
+        My thoughts in a semi-raw form, a lot of these posts contain what goes
+        around in my mind throughout a day.
+      </p>
+
+      <TagFilterContainer>
+        {/* @ts-expect-error */}
+        {ALL_TAGS.map((tag) => (
+          <FilterTag
+            background={tagBgs[tag]}
+            key={`filter-${tag}`}
+            isSelected={selectedTag === tag}
+            onClick={() => handleTagClick(tag)}
+          >
+            {tag}
+          </FilterTag>
+        ))}
+        {selectedTag && (
+          <ClearFilter onClick={clearFilter}>
+            Clear filter
+          </ClearFilter>
+        )}
+      </TagFilterContainer>
+
+      <Block>
+        {filteredPosts.map((post, index) => (
+          <Summary key={index}>
+            <TitleLink target={post.external ? "blank" : undefined} href={post.path}>{post.title}</TitleLink>
+            <p>{post.description}</p>
+            <SubjectSummary>
+              {post.tags.map((tag) => (
+                <Tag background={tagBgs[tag]} key={tag}>
+                  {tag}
+                </Tag>
+              ))}
+            </SubjectSummary>
+          </Summary>
+        ))}
+
+        {selectedTag && filteredPosts.length === 0 && (
+          <p>No posts found with the selected tag.</p>
+        )}
+      </Block>
+    </main>
+  )
+}
