@@ -3,6 +3,7 @@ import preact from '@preact/preset-vite'
 import mdx from '@mdx-js/rollup'
 import rehypeHighlight from 'rehype-highlight'
 import remarkGfm from 'remark-gfm'
+import { rssPlugin } from './plugins/rssPlugin'
 
 export default defineConfig({
   // @ts-ignore
@@ -18,5 +19,6 @@ export default defineConfig({
       remarkPlugins: [remarkGfm],
       rehypePlugins: [rehypeHighlight],
     }),
+    rssPlugin(),
   ],
 })

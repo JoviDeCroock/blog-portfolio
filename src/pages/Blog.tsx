@@ -20,16 +20,17 @@ import { documentProps as signalsDocumentProps } from './posts/signals/documentP
 import { documentProps as skewDocumentProps } from './posts/skew-based-diff/documentProps'
 import { documentProps as trackingContextDocumentProps } from './posts/tracking-context/documentProps'
 
-interface Post {
+export interface Post {
   title: string,
   description: string,
   image: string,
   path: string,
   tags: Array<keyof typeof tagBgs>,
   external?: boolean,
+  createdAt?: string,
 }
 
-const posts: Array<Post> = [
+export const posts: Array<Post> = [
   trackingContextDocumentProps,
   skewDocumentProps,
   signalsDocumentProps,
@@ -169,9 +170,13 @@ export default () => {
         My thoughts in a semi-raw form, a lot of these posts contain what goes
         around in my mind throughout a day.
       </p>
+      <p>
+        <a href="/rss.xml" target="_blank" rel="noopener noreferrer">
+          Subscribe via RSS
+        </a>
+      </p>
 
       <TagFilterContainer>
-        {/* @ts-expect-error */}
         {ALL_TAGS.map((tag) => (
           <FilterTag
             background={tagBgs[tag]}
