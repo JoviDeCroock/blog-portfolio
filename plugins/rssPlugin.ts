@@ -7,7 +7,7 @@ export function rssPlugin(): Plugin {
     generateBundle(options, bundle) {
       // Generate RSS feed
       const rssContent = generateRSSFeed();
-      
+
       // Emit the RSS file to the bundle
       this.emitFile({
         type: 'asset',
