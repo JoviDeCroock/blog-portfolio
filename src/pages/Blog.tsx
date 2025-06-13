@@ -176,6 +176,7 @@ export default () => {
         </a>
       </p>
 
+      <h2>Filter by tag</h2>
       <TagFilterContainer>
         {ALL_TAGS.map((tag) => (
           <FilterTag
