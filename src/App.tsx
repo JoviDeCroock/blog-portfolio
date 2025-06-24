@@ -9,6 +9,7 @@ setup(h)
 const NotFound = lazy(() => import('./pages/404'))
 const Blog = lazy(() => import('./pages/Blog'))
 const Home = lazy(() => import('./pages/Home'))
+const Blueprint = lazy(() => import('./pages/Blueprint'))
 
 // Posts
 const VDom = lazy(() => import('./pages/posts/vdom-compilers/index.mdx'))
@@ -55,6 +56,7 @@ export function App() {
             <Router>
               <Route component={Home} path="/" />
               <Route component={Blog} path="/blog" />
+              <Route component={Blueprint} path="/blueprint" />
               <Route component={VDom} path="/blog/vdom-compilers" />
               <Route component={Inputs} path="/blog/controlled-inputs" />
               <Route component={Suspense} path="/blog/suspense-data-ssr" />

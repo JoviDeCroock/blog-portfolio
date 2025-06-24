@@ -66,6 +66,7 @@ const Header = () => (
     <Nav>
       <a href="/">Home</a>
       <a href="/blog">Blog</a>
+      <a href="/blueprint">Blueprint</a>
     </Nav>
   </DomHeader>
 )
