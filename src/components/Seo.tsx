@@ -1,4 +1,4 @@
-import { useLang, useTitle, useMeta } from 'hoofd/preact'
+import { useLang, useTitle, useMeta, useLink } from 'hoofd/preact'
 
 type SEOProps = {
   title: string
@@ -24,9 +24,9 @@ const SEO = (props: SEOProps) => {
     content: props.keywords ? props.keywords.join(', ') : '',
   })
   // Canonical URL
-  useMeta({
-    property: 'canonical',
-    content: props.url ? `${baseUrl}${props.url}` : baseUrl,
+  useLink({
+    rel: 'canonical',
+    href: props.url ? `${baseUrl}${props.url}` : baseUrl,
   })
   // Robots
   useMeta({
