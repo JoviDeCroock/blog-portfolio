@@ -31,7 +31,7 @@
     "vite": "^6.3.5"
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx,mdx}": ["biome format --write"]
+    "src/**/*.{ts,tsx,mdx,json,html,mdx}": ["biome format --write"]
   },
   "husky": {
     "hooks": {
