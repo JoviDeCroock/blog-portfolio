@@ -42,6 +42,41 @@ const PrincipleCard = styled('div')`
   }
 `
 
+const PrincipleHeader = styled('div')`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+`
+
+const IconContainer = styled('div')`
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(235, 41, 169, 0.1), rgba(99, 102, 241, 0.1));
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke: #EB29A9;
+    fill: none;
+    stroke-width: 2;
+    transition: all 0.3s ease;
+  }
+
+  ${PrincipleCard}:hover & {
+    background: linear-gradient(135deg, rgba(235, 41, 169, 0.2), rgba(99, 102, 241, 0.2));
+    transform: scale(1.1);
+
+    svg {
+      stroke: #ffffff;
+    }
+  }
+`
+
 const PrincipleNumber = styled('div')`
   display: inline-flex;
   align-items: center;
@@ -53,7 +88,6 @@ const PrincipleNumber = styled('div')`
   border-radius: 50%;
   font-weight: bold;
   font-size: 0.9rem;
-  margin-bottom: 1rem;
 `
 
 const PrincipleTitle = styled('h3')`
@@ -102,7 +136,13 @@ const Blueprint = () => (
 
     <PrincipleGrid>
       <PrincipleCard>
-        <PrincipleNumber>1</PrincipleNumber>
+        <PrincipleHeader>
+          <IconContainer>
+            <svg viewBox="0 0 24 24">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </IconContainer>
+        </PrincipleHeader>
         <PrincipleTitle>Challenge the status quo</PrincipleTitle>
         <PrincipleDescription>
           Established solutions have their own trade-offs, we need to evaluate whether they fit in our frame.
@@ -110,7 +150,13 @@ const Blueprint = () => (
       </PrincipleCard>
 
       <PrincipleCard>
-        <PrincipleNumber>2</PrincipleNumber>
+        <PrincipleHeader>
+          <IconContainer>
+            <svg viewBox="0 0 24 24">
+              <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </IconContainer>
+        </PrincipleHeader>
         <PrincipleTitle>Prefers simple, elegant and minimalistic solutions</PrincipleTitle>
         <PrincipleDescription>
           It's easy to create and bolt on to solutions all the time, this makes them increasingly hard to maintain.
@@ -119,7 +165,13 @@ const Blueprint = () => (
       </PrincipleCard>
 
       <PrincipleCard>
-        <PrincipleNumber>3</PrincipleNumber>
+        <PrincipleHeader>
+          <IconContainer>
+            <svg viewBox="0 0 24 24">
+              <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </IconContainer>
+        </PrincipleHeader>
         <PrincipleTitle>Say the thing</PrincipleTitle>
         <PrincipleDescription>
           I value direct feedback, the only way to grow is to know what we're lacking in.
@@ -127,7 +179,13 @@ const Blueprint = () => (
       </PrincipleCard>
 
       <PrincipleCard>
-        <PrincipleNumber>4</PrincipleNumber>
+        <PrincipleHeader>
+          <IconContainer>
+            <svg viewBox="0 0 24 24">
+              <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </IconContainer>
+        </PrincipleHeader>
         <PrincipleTitle>Iterate rapidly</PrincipleTitle>
         <PrincipleDescription>
           We need to learn and we need to learn continuously, this can only be done through data and prototyping.
@@ -135,7 +193,13 @@ const Blueprint = () => (
       </PrincipleCard>
 
       <PrincipleCard>
-        <PrincipleNumber>5</PrincipleNumber>
+        <PrincipleHeader>
+          <IconContainer>
+            <svg viewBox="0 0 24 24">
+              <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </IconContainer>
+        </PrincipleHeader>
         <PrincipleTitle>Force multiply</PrincipleTitle>
         <PrincipleDescription>
           Enabling others is more valuable than any individual task.
@@ -143,7 +207,13 @@ const Blueprint = () => (
       </PrincipleCard>
 
       <PrincipleCard>
-        <PrincipleNumber>6</PrincipleNumber>
+        <PrincipleHeader>
+          <IconContainer>
+            <svg viewBox="0 0 24 24">
+              <path d="M13 9l3 3-3 3m-4-6L6 12l3 3" />
+            </svg>
+          </IconContainer>
+        </PrincipleHeader>
         <PrincipleTitle>Default to action</PrincipleTitle>
         <PrincipleDescription>
           We need to move the needle, actioning is my reaction to most conversations.
