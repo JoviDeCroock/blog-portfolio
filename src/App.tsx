@@ -37,9 +37,7 @@ const GraphQLMissingFeature = lazy(
 const FragmentsInVDOM = lazy(
   () => import('./pages/posts/fragments-in-vdom/index.mdx')
 )
-const Signals = lazy(
-  () => import('./pages/posts/signals/index.mdx')
-)
+const Signals = lazy(() => import('./pages/posts/signals/index.mdx'))
 const SkewBasedDiff = lazy(
   () => import('./pages/posts/skew-based-diff/index.mdx')
 )
@@ -88,10 +86,7 @@ export function App() {
                 component={FragmentsInVDOM}
                 path="/blog/fragments-in-vdom"
               />
-              <Route
-                component={Signals}
-                path="/blog/signals"
-              />
+              <Route component={Signals} path="/blog/signals" />
               <Route
                 component={SkewBasedDiff}
                 path="/blog/skew-based-diffing"

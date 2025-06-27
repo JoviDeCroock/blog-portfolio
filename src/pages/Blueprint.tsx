@@ -14,7 +14,9 @@ const PrincipleGrid = styled('div')`
   @media (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
   }
-`const PrincipleCard = styled('div')`
+`
+
+const PrincipleCard = styled('div')`
   border: 1px solid #2D2C2C;
   padding: 1.5rem;
   border-radius: 8px;
@@ -110,11 +112,13 @@ const Blueprint = () => (
       <IntroText>
         <p>
           These principles form the foundation of my engineering philosophy.
-          They guide how I approach problems, collaborate with teams, and build sustainable solutions.
+          They guide how I approach problems, collaborate with teams, and build
+          sustainable solutions.
         </p>
         <p>
-          Each principle has been refined through years of experience across different teams,
-          projects, and challenges in the software engineering landscape.
+          Each principle has been refined through years of experience across
+          different teams, projects, and challenges in the software engineering
+          landscape.
         </p>
       </IntroText>
     </Hero>
@@ -130,7 +134,8 @@ const Blueprint = () => (
         </PrincipleHeader>
         <PrincipleTitle>Challenge the status quo</PrincipleTitle>
         <PrincipleDescription>
-          Established solutions have their own trade-offs, we need to evaluate whether they fit in our frame.
+          Established solutions have their own trade-offs, we need to evaluate
+          whether they fit in our frame.
         </PrincipleDescription>
       </PrincipleCard>
 
@@ -144,7 +149,8 @@ const Blueprint = () => (
         </PrincipleHeader>
         <PrincipleTitle>Simple, not crude</PrincipleTitle>
         <PrincipleDescription>
-          Elegant abstractions beat bolted-on solutions. Dare to duplicate before you abstract.
+          Elegant abstractions beat bolted-on solutions. Dare to duplicate
+          before you abstract.
         </PrincipleDescription>
       </PrincipleCard>
 
@@ -158,7 +164,8 @@ const Blueprint = () => (
         </PrincipleHeader>
         <PrincipleTitle>Say the thing</PrincipleTitle>
         <PrincipleDescription>
-          I value direct feedback, the only way to grow is to know what we're lacking in.
+          I value direct feedback, the only way to grow is to know what we're
+          lacking in.
         </PrincipleDescription>
       </PrincipleCard>
 
@@ -172,7 +179,8 @@ const Blueprint = () => (
         </PrincipleHeader>
         <PrincipleTitle>Iterate rapidly</PrincipleTitle>
         <PrincipleDescription>
-          We need to learn and we need to learn continuously, this can only be done through data and prototyping.
+          We need to learn and we need to learn continuously, this can only be
+          done through data and prototyping.
         </PrincipleDescription>
       </PrincipleCard>
 
@@ -200,7 +208,8 @@ const Blueprint = () => (
         </PrincipleHeader>
         <PrincipleTitle>Default to action</PrincipleTitle>
         <PrincipleDescription>
-          We need to move the needle, actioning is my reaction to most conversations.
+          We need to move the needle, actioning is my reaction to most
+          conversations.
         </PrincipleDescription>
       </PrincipleCard>
     </PrincipleGrid>

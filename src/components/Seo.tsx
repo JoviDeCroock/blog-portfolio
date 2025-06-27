@@ -31,7 +31,7 @@ const SEO = (props: SEOProps) => {
   // Robots
   useMeta({
     name: 'robots',
-    content: 'index,follow'
+    content: 'index,follow',
   })
 
   // Twitter

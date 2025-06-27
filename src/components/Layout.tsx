@@ -45,7 +45,7 @@ const FloatingDiv = styled('div')`
     left: 0;
     top: 0;
   }
-`;
+`
 
 const FloatingTitle = styled('h3')`
   margin: 0;

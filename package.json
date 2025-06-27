@@ -1,43 +1,41 @@
 {
- "name": "portfolio",
- "type": "module",
- "private": true,
- "author": "Jovi De Croock",
- "description": "My own portfolio",
- "homepage": "https://jovidecroock.com/",
- "license": "MIT",
- "packageManager": "pnpm@8.6.7",
- "scripts": {
-  "prepare": "husky install",
-  "dev": "vite",
-  "build": "vite build --outDir dist"
- },
- "dependencies": {
-  "@mdx-js/rollup": "^3.0.1",
-  "goober": "2.1.16",
-  "hoofd": "^1.7.3",
-  "preact": "10.26.8",
-  "preact-iso": "^2.9.2",
-  "preact-render-to-string": "^6.5.13",
-  "rehype-highlight": "^7.0.0",
-  "remark-gfm": "^4.0.1"
- },
- "devDependencies": {
-  "@biomejs/biome": "^2.0.0",
-  "@preact/preset-vite": "^2.10.1",
-  "husky": "^9.1.7",
-  "lint-staged": "^16.1.0",
-  "typescript": "^5.8.3",
-  "vite": "^6.3.5"
- },
- "lint-staged": {
-  "src/**/.{ts,tsx,mdx}": [
-   "biome format --write"
-  ]
- },
- "husky": {
-  "hooks": {
-   "pre-commit": "lint-staged"
+  "name": "portfolio",
+  "type": "module",
+  "private": true,
+  "author": "Jovi De Croock",
+  "description": "My own portfolio",
+  "homepage": "https://jovidecroock.com/",
+  "license": "MIT",
+  "packageManager": "pnpm@8.6.7",
+  "scripts": {
+    "prepare": "husky install",
+    "dev": "vite",
+    "build": "vite build --outDir dist"
+  },
+  "dependencies": {
+    "@mdx-js/rollup": "^3.0.1",
+    "goober": "2.1.16",
+    "hoofd": "^1.7.3",
+    "preact": "10.26.8",
+    "preact-iso": "^2.9.2",
+    "preact-render-to-string": "^6.5.13",
+    "rehype-highlight": "^7.0.0",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.0",
+    "@preact/preset-vite": "^2.10.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  },
+  "lint-staged": {
+    "src/**/.{ts,tsx,mdx}": ["biome format --write"]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
- }
 }

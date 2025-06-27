@@ -1,7 +1,7 @@
 // preact.d.ts
 /// <reference types="preact" />
 
-import { JSX } from 'preact';
+import { JSX } from 'preact'
 
 declare global {
   namespace JSX {
@@ -10,6 +10,6 @@ declare global {
 }
 
 declare module '*.mdx' {
-  let MDXComponent: (props: any) => JSX.Element;
-  export default MDXComponent;
+  let MDXComponent: (props: any) => JSX.Element
+  export default MDXComponent
 }

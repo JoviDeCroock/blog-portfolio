@@ -18,37 +18,40 @@ if (typeof window !== 'undefined') {
   }
 }
 
-
 export async function prerender() {
   const { prerender: ssr } = await import('preact-iso')
   const { extractCss } = await import('goober')
   const { toStatic } = await import('hoofd/preact')
 
-	const { html, links } = await ssr(jsx);
-  const styles = extractCss();
-  const head = toStatic();
+  const { html, links } = await ssr(jsx)
+  const styles = extractCss()
+  const head = toStatic()
 
-  const headElements = [...head.metas.map(meta => ({
-    type: 'meta',
-    props: meta
-  })), ...head.links.map(link => ({ type: 'link', props: link })), ...head.scripts.map(script => ({ type: 'script', props: script }))]
-	return {
-		html,
-		links,
-		renderTarget: "#main",
-		head: {
-			lang: head.lang,
-			title: head.title,
-			elements: new Set([
+  const headElements = [
+    ...head.metas.map((meta) => ({
+      type: 'meta',
+      props: meta,
+    })),
+    ...head.links.map((link) => ({ type: 'link', props: link })),
+    ...head.scripts.map((script) => ({ type: 'script', props: script })),
+  ]
+  return {
+    html,
+    links,
+    renderTarget: '#main',
+    head: {
+      lang: head.lang,
+      title: head.title,
+      elements: new Set([
         {
           type: 'style',
           props: {
-            id: "_goober",
-            children: styles
-          }
+            id: '_goober',
+            children: styles,
+          },
         },
-        ...headElements
-			]),
-		},
-	};
+        ...headElements,
+      ]),
+    },
+  }
 }

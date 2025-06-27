@@ -21,13 +21,13 @@ import { documentProps as skewDocumentProps } from './posts/skew-based-diff/docu
 import { documentProps as trackingContextDocumentProps } from './posts/tracking-context/documentProps'
 
 export interface Post {
-  title: string,
-  description: string,
-  image: string,
-  path: string,
-  tags: Array<keyof typeof tagBgs>,
-  external?: boolean,
-  createdAt?: string,
+  title: string
+  description: string
+  image: string
+  path: string
+  tags: Array<keyof typeof tagBgs>
+  external?: boolean
+  createdAt?: string
 }
 
 export const posts: Array<Post> = [
@@ -42,7 +42,7 @@ export const posts: Array<Post> = [
     image: 'https://www.jovidecroock.com/preact-x.png',
     path: 'https://preactjs.com/blog/preact-x',
     tags: ['external', 'thinking'],
-    external: true
+    external: true,
   },
   unreliableVendorsDocumentProps,
   abstractTypesDocumentProps,
@@ -134,33 +134,37 @@ const ClearFilter = styled('button')`
 const tagBgs: Record<string, string> = {
   performance: '#0080bb',
   graphql: '#E10098',
-  'engineering': '#302221',
+  engineering: '#302221',
   'front-end': '#7842f5',
   vdom: '#6ff542',
   state: '#f5427e',
   suspense: '#f54242',
   thinking: '#f59c42',
   external: '#4c01fe',
-  'server-side-rendering': "#07a8f8",
+  'server-side-rendering': '#07a8f8',
   'open-source': '#f5a142',
 } as const
 
-const ALL_TAGS = posts.flatMap((post) => post.tags).filter((tag, index, self) => self.indexOf(tag) === index)
+const ALL_TAGS = posts
+  .flatMap((post) => post.tags)
+  .filter((tag, index, self) => self.indexOf(tag) === index)
 
 export default () => {
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null)
 
   const filteredPosts = selectedTag
-    ? posts.filter(post => post.tags.includes(selectedTag as keyof typeof tagBgs))
-    : posts;
+    ? posts.filter((post) =>
+        post.tags.includes(selectedTag as keyof typeof tagBgs)
+      )
+    : posts
 
   const handleTagClick = (tag: string) => {
-    setSelectedTag(selectedTag === tag ? null : tag);
-  };
+    setSelectedTag(selectedTag === tag ? null : tag)
+  }
 
   const clearFilter = () => {
-    setSelectedTag(null);
-  };
+    setSelectedTag(null)
+  }
 
   return (
     <main>
@@ -189,16 +193,19 @@ export default () => {
           </FilterTag>
         ))}
         {selectedTag && (
-          <ClearFilter onClick={clearFilter}>
-            Clear filter
-          </ClearFilter>
+          <ClearFilter onClick={clearFilter}>Clear filter</ClearFilter>
         )}
       </TagFilterContainer>
 
       <Block>
         {filteredPosts.map((post, index) => (
           <Summary key={index}>
-            <TitleLink target={post.external ? "blank" : undefined} href={post.path}>{post.title}</TitleLink>
+            <TitleLink
+              target={post.external ? 'blank' : undefined}
+              href={post.path}
+            >
+              {post.title}
+            </TitleLink>
             <p>{post.description}</p>
             <SubjectSummary>
               {post.tags.map((tag) => (
