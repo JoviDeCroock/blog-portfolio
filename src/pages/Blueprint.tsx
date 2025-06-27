@@ -77,19 +77,6 @@ const IconContainer = styled('div')`
   }
 `
 
-const PrincipleNumber = styled('div')`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  background: linear-gradient(135deg, #EB29A9, #6366f1);
-  color: white;
-  border-radius: 50%;
-  font-weight: bold;
-  font-size: 0.9rem;
-`
-
 const PrincipleTitle = styled('h3')`
   margin: 0 0 1rem 0;
   color: #FCFCFD;
@@ -157,10 +144,9 @@ const Blueprint = () => (
             </svg>
           </IconContainer>
         </PrincipleHeader>
-        <PrincipleTitle>Prefers simple, elegant and minimalistic solutions</PrincipleTitle>
+        <PrincipleTitle>Simple, not crude</PrincipleTitle>
         <PrincipleDescription>
-          It's easy to create and bolt on to solutions all the time, this makes them increasingly hard to maintain.
-          A single elegant small abstraction can alleviate these burdens, dare to duplicate and abstract when needed.
+          Elegant abstractions beat bolted-on solutions. Dare to duplicate before you abstract.
         </PrincipleDescription>
       </PrincipleCard>
 
