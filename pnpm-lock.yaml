@@ -43,9 +43,6 @@ devDependencies:
   lint-staged:
     specifier: ^16.1.0
     version: 16.1.0
-  prettier:
-    specifier: ^3.6.0
-    version: 3.6.0
   typescript:
     specifier: ^5.8.3
     version: 5.8.3
@@ -2366,12 +2363,6 @@ packages:
 
   /preact@10.26.8:
     resolution: {integrity: sha512-1nMfdFjucm5hKvq0IClqZwK4FJkGXhRrQstOQ3P4vp8HxKrJEMFcY6RdBRVTdfQS/UlnX6gfbPuTvaqx/bDoeQ==}
-
-  /prettier@3.6.0:
-    resolution: {integrity: sha512-ujSB9uXHJKzM/2GBuE0hBOUgC77CN3Bnpqa+g80bkv3T3A93wL/xlzDATHhnhkzifz/UE2SNOvmbTz5hSkDlHw==}
-    engines: {node: '>=14'}
-    hasBin: true
-    dev: true
 
   /property-information@7.1.0:
     resolution: {integrity: sha512-TwEZ+X+yCJmYfL7TPUOcvBZ4QfoT5YenQiJuX//0th53DE6w0xxLEtfK3iyryQFddXuvkIk51EEgrJQ0WJkOmQ==}

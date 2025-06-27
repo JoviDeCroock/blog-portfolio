@@ -14,9 +14,7 @@ const PrincipleGrid = styled('div')`
   @media (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
   }
-`
-
-const PrincipleCard = styled('div')`
+`const PrincipleCard = styled('div')`
   border: 1px solid #2D2C2C;
   padding: 1.5rem;
   border-radius: 8px;
