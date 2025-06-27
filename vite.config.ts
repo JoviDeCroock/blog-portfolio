@@ -4,6 +4,7 @@ import mdx from '@mdx-js/rollup'
 import rehypeHighlight from 'rehype-highlight'
 import remarkGfm from 'remark-gfm'
 import { rssPlugin } from './plugins/rssPlugin'
+import { sitemapPlugin } from './plugins/sitemapPlugin'
 
 export default defineConfig({
   // @ts-ignore
@@ -15,10 +16,12 @@ export default defineConfig({
   },
   plugins: [
     preact({ prerender: { enabled: true, renderTarget: '#main' } }),
+    // @ts-expect-error
     mdx({
       remarkPlugins: [remarkGfm],
       rehypePlugins: [rehypeHighlight],
     }),
     rssPlugin(),
+    sitemapPlugin(),
   ],
 })
