@@ -139,15 +139,15 @@ const Home = () => (
     <Block>
       <h2>Engineering Philosophy</h2>
       <p>
-        My approach to software engineering is guided by six core principles that emphasize 
+        My approach to software engineering is guided by six core principles that emphasize
         simplicity, collaboration, and continuous improvement.
       </p>
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-        <a 
-          href="/blueprint" 
-          style={{ 
-            color: '#EB29A9', 
-            textDecoration: 'none', 
+        <a
+          href="/blueprint"
+          style={{
+            color: '#EB29A9',
+            textDecoration: 'none',
             fontWeight: 'bold',
             padding: '0.5rem 1rem',
             border: '1px solid #EB29A9',

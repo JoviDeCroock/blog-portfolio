@@ -31,6 +31,8 @@ const Nav = styled('nav')`
   margin-bottom: 1rem;
   @media(max-width: 768px) {
     margin-right: unset;
+    margin-left: unset;
+    margin-top: 1rem;
   }
 `
 
@@ -55,6 +57,12 @@ const FloatingUnderline = styled('p')`
 
 const DomHeader = styled('header')`
   display: flex;
+
+  @media(max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `
 
 const Header = () => (
