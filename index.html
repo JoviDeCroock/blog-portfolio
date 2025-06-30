@@ -16,13 +16,35 @@
 
     <!-- RSS Feed -->
     <link rel="alternate" type="application/rss+xml" title="Jovi De Croock's Blog RSS Feed" href="/rss.xml" />
-    
+
     <!-- Sitemap -->
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
 
     <style>
       *, *::before, *::after {
         box-sizing: border-box;
+      }
+
+      .post-callout {
+        color: #E4E4E7;
+        border: 1px solid #2D2C2C;
+        padding: 1rem 1.25rem;
+        border-radius: 8px;
+        background: linear-gradient(135deg, rgba(235, 41, 169, 0.05) 0%, rgba(11, 11, 12, 0.1) 100%);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        margin: 1.5rem 0;
+      }
+
+      .post-callout::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #EB29A9, #6366f1);
       }
 
       blockquote {
