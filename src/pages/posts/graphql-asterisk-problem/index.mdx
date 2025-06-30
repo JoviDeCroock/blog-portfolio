@@ -1,4 +1,5 @@
 import SEO from "../../../components/Seo";
+import Dates from "../../../components/Dates";
 import { documentProps } from "./documentProps";
 
 <SEO
@@ -8,6 +9,7 @@ import { documentProps } from "./documentProps";
   image={documentProps.image}
   url={documentProps.path}
 />
+<Dates updatedAt={documentProps.updatedAt} createdAt={documentProps.createdAt} />
 
 # The GraphQL Asterisk Problem: When Benefits Come with Caveats
 
