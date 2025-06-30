@@ -1,0 +1,194 @@
+import SEO from "../../../components/Seo";
+import Dates from "../../../components/Dates";
+import { documentProps } from "./documentProps";
+
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+<Dates updatedAt={documentProps.updatedAt} createdAt={documentProps.createdAt} />
+
+# The GraphQL Asterisk Problem: When Benefits Come with Caveats
+
+Let’s start off by looking at what GraphQL had to offer and why it was such a groundbreaking innovation. When GraphQL came to the stage it boasted its
+[pillars](https://spec.graphql.org/October2021/#sel-CADDPAAERJBlI2gH), you can look at the link but I’ll re-iterate them here shortly
+
+- **Product-centric,** GraphQL should be driven by the requirements of your clients
+- **Hierarchical**, the data reflects the UI hierarchy
+- **Strong-typing**, leveraging GraphQL should enable the client to derive types and leverage them
+- **Client-specified response,** the client tells the server exactly what it wants and does not expect the response to include more
+- **Introspective,** the system used by the GraphQL server is transparently query-able
+
+Now all of this is quite abstract and has been generalised in a few benefits that, if you ask me, do not paint the full picture of what GraphQL gives you.
+
+- Common API Contract (Rust server - TS client, Go server - Rust client, ….)
+- Single endpoint
+- Better API-Versioning
+- Avoid overfetching
+- Declarative data fetching
+- Strong typing
+- Self documenting
+
+Don’t get me wrong, a lot of these are true but they always come with an asterisk.
+
+GraphQL is indeed self-documenting, if you go through the effort of properly describing your inputs and outputs. A big win for DX if done correctly.
+
+GraphQL is strongly typed, that one can’t be argued with, however please setup GraphQL Code Generator or gql.tada on the client and pothos or
+GraphQL Code Generator on the server to actually achieve strong typings.
+These strong typings ensure your logic avoids common issues both on server as well as client, this is a big strength, a win in both DX and UX.
+
+GraphQL allows you to declaratively fetch data, however without [Fragment co-location](https://gql-tada.0no.co/guides/fragment-colocation)
+this becomes challenging as one will always have to navigate to the parent-query to add a field.
+This opens its own can of worms because of [GraphQL’s missing primitive](https://www.jovidecroock.com/blog/graphqls-missing-feature). This should be a win in DX,
+more often than not it’s a pain in DX though.
+
+GraphQL allows you to avoid over-fetching, however the proper LSP tooling is missing from the ecosystem Relay and GraphQLSP try their very best but
+with all of the ways to author GraphQL documents there is no great way to achieve this monitoring at scale.
+I’d argue that a bigger strength of GraphQL comes from combining declarative data-fetching and strong typing, we actually
+avoid under fetching, we are assured that the types reflect the possibility of absence and presence of data which leads to less issues.
+
+GraphQL allows for a different kind of API-Versioning, I personally would not use the word “Better” to prefix that. We are encouraged to work
+versionless, which for GraphQL API’s that are used internally is possible and fun as you don’t have to switch up URL’s but for public API’s this is an absolute PAIN.
+According to this philosophy you have to support fields forever, despite the shape of your product/business changing, this is unrealistic.
+Versionless is unrealistic, we have to change and we have to do breaking/dangerous changes, that’s the reality of engineering.
+
+Single endpoint, I hope hope hope that nobody sees this as a strength… It makes for a network console that just looks like `/graphql` ad infinitum.
+In production GraphQL should be compiled into Persisted Operations which ideally look like `/operations/<some-hash>/<operation-name>` which reads
+an awful lot better and is easier to observe in metrics.
+
+<aside>
+  💡 Heck when you use traditional GraphQL as advertised you even lose HTTP
+  caching… ☹️ my issue here is more with the GraphQL-HTTP specification than
+  anything else but still, we need to mention this.
+</aside>
+
+---
+
+Now this might have looked like one big rant, believe me we are going somewhere. From the above we can derive that GraphQL, when done well,
+makes life easier on developers that have multiple clients to manage (mobile, web, CLI, ….). Doing it well, however, might be difficult
+given the state of tooling outside of Relay for clients and well just hard when you consider the server-side.
+
+In recent years a lot of “alternatives for GraphQL” have visited the spotlight, tRPC, oRPC, bespoke endpoints or just traditional REST.
+All of these have their improvements and regressions compared to GraphQL and all of these technologies carry their merit,
+I will in no way shape or form say that any of these is bad, engineering is a craft of tradeoffs that we at all times have to respect.
+
+Looking at the alternatives gives us a clear picture of what GraphQL could improve on and the unique strengths the technology _could_ offer
+if we capitalize on the strengths and improve on the weaknesses.
+
+## REST: The Dinosaur always having its nest in our hearts
+
+Traditional REST(ful) endpoints are a powerhouse, they’ve never _really_ left the scene. When people talk about REST they often mean bespoke endpoints
+so let’s clarify, a REST API will return its resource without relations. A bespoke endpoint will return data tailored to a certain view, this could be an
+enhanced resource like the cart with all its products.
+
+When we leverage REST we naturally start creating waterfalls when we deal with rich UI applications, when we render a view we’ll get the base resource,
+which potentially has multiple other resources. Let’s say we get a movie and we now need to get every actor, in a rich UI this can hurt performance unless cached well.
+Flashback to GraphQL, where HTTP semantics are often left out of the initial conversation, in REST this is _never_ a tradeoff you have to use REST well.
+
+The issue is that if you want to use REST _and_ have good typings that you are often left to explore options like OpenAPI specs, …
+and honestly these are also a lot of work while being less strict compared to GraphQL. In GraphQL if you define a certain shape of your
+schema and don’t return that shape it won’t work, while in REST you would need to create additional tooling for that.
+
+If you are creating a CMS where you are looking at individual resources and developing that way, REST is probably hella awesome.
+Tangentially, if you are creating a public API for anyone to consume, REST is probably the most accessible format for your users.
+You can version freely by leveraging the URL, you can tell people to just surf to a URL and see their data, everything is all fine and dandy.
+
+## The tRPC Promise: Type Safety Without the Complexity
+
+`tRPC` when I was first introduced to it felt like a refreshing newcomer and honestly, an absolutely amazing idea. It has the typing advantages of GraphQL,
+very similar even. it also does one thing _extremely_ well where GraphQL fails, it unifies tooling and forces opinions on you. `tRPC` took `react-query` (now named tanstack-query)
+and used that as an opinionated way for clients to interact well with its endpoints. There’s no doubt or war going on about how you do `tRPC` well,
+it allows you to just spin up an app and rapidly evolve it.
+
+The caveat to all of this is that `tRPC` is designed to use TypeScript on both the server as well as the client,
+a constraint we don’t have with GraphQL due to its API contract being defined as a common language.
+
+When we evolve into multiple clients apart from our let’s say Next.JS application we will have to start packaging up these `tRPC` types or
+have some kind of monorepo orchestration to ensure that our new client has the benefits of being strongly typed with the data it receives from our endpoints.
+
+If the above isn’t a concern because you only have 1 client, or you are using a tool to author mobile/web in one repository then `tRPC` is
+probably one of the best choices. Typings, a strong community, opinions and awesome maintainers. The [setup](https://trpc.io/docs/quickstart) is also so
+much easier than GraphQL, thanks to their opinions you don’t have to make 10 choices before even getting started.
+
+In relation to REST, we could consider `tRPC` a form of bespoke endpoints with a good API contract.
+
+Team size matters here, it’s harder to work on a large distributed team with `tRPC` due to the documentation generally being a manual thing,
+or even a JSDoc concern. I am not at all saying this is a bad thing but the introspective nature of GraphQL or the OpenAPI approach is easier to
+work with in a distributed manner… The question remains, with machines evolving and writing more code whether teams and organizations will
+remain the sizes they have today.
+
+`tRPC` purely from the documentation feels very React-centric, I reckon that nothing is React specific.
+Tanstack query is available on more libraries so I reckon this limitation is more educational rather than fundamental.
+There is documentation for vanilla clients as well, it just feels less first-class compared to the recommendation.
+
+## Server-Driven UI: The Dark Horse
+
+I will start this one off with a disclaimer as I am personally less experienced with this compared to the others that I’ve just discussed.
+We’ve seen a resurgence in servers returning a format that tells the client how to render, AirBnB has talked about [this](https://www.facebook.com/AirbnbTech/videos/1445539065813160/)
+and React in recent years has increasingly pushed server components as their way to do this.
+
+I will focus my attention on React Server Components because at the very least I have read and experimented the most with that,
+I am a [Preact](https://preactjs.com/) maintainer and we have done our own experiments with a paradigm like this.
+
+When a client requests a certain view, the server will fetch its data and return the UI description.
+In React this can be a JSON representation of their Virtual UI tree which the client can then use to translate into UI elements,
+I explicitly say Virtual UI and UI elements as this is applicable to Native, terminal UI as well as web.
+
+The above means that a server-endpoint _could_ be made to express the UI of multiple clients,
+I doubt that you’d want the same UI for multiple clients but it means abstractions can be shared throughout to cater to multiple clients.
+Heck, React-Native-Web and expo are proving that it’s possible to share a codebase that caters to web and mobile while still having a great experience on both.
+
+The static typing concern is less prolific here as you’re handling data on the server,
+the experience can be integrated meaning you can pass data over props and automatically you’ll be typing things correctly,
+unless you use `any` - yes I am looking judgingly at you.
+
+My main concern with server-driven UI is that either you are a full-stack developer and call your datasource directly,
+this probably doesn’t scale all that well when you do have to cater multiple devices,
+if you don’t do this then you’ll end up calling an API which returns to REST/GraphQL/… so I guess this is a half-alternative.
+Another concern that comes up is that this is highly React specific, both the fact that it caters to many types of clients a well as the technology itself.
+
+I do think that for prototyping it’s amazing to just have this integrated way of calling your database directly and
+having everything done for you, as you scale you remove the database calls and abstract it to the endpoints.
+
+## What are you waiting for sir author?
+
+One might wonder why after writing all of this I don’t just start working on it, and that would be a great question.
+I have spent a lot of the past 7 years working on GraphQL and its ecosystem, I’ve actually never seen anything
+I’ve made have a large impact on how we do things and sifting through all of the hate the technology gets is utterly exhausting.
+My last effort was to fully revamp the GraphQL JS documentation site in the hopes that we might get GraphQL JS v17 in a good place for release,
+despite all of that work and a good result the documentation website isn’t a hit. Furthermore it fails to address a lot of the concerns I have outlined in the above,
+someone else has done a wonderful job in outlining a lot of it but public perception of GraphQL has been battered for the past 10 years, how do we get back from that?
+How do we tell people that, given the tooling we had back then everything was overhyped but that the potential is still there, as a community GraphQL can get there,
+community is all that matters.
+
+But what should we improve on as an ecosystem?
+
+- Encourage users to get started with Persisted Operations, this should be as easy as an init command
+- For clients, create and document ways to author GraphQL operations that are statically typed and actually benefit from LSP tooling
+- Document the caveats of the default approach, POST’ing documents should _never_ ever ever ever be the default.
+- For servers, call out that versionless is not the end all be all that is currently being sold to the ecosystem
+- For servers, be explicit about the security concerns (CSRF, depth, …)
+
+I didn’t even start talking about client-side caching and all of these other topics that make GraphQL look so complex to beginners.
+
+## Closing thoughts
+
+We need ways to transmit data regardless of the shape of your client and the shape of your server, GraphQL as a technology and specification fills these shoes.
+To fill them well, it needs a lot of love and attention from the community, it needs to be a community effort to make GraphQL a great experience for everyone.
+
+For those who don’t know some of my work, I have maintained [urql](https://github.com/urql-graphql/urql), the extensible GraphQL client, for 6 years,
+I am the co-creator of [GraphQLSP](https://github.com/0no-co/GraphQLSP) (LSP that I talk about in the above) and [gql.tada](https://github.com/0no-co/gql.tada)
+(automatic type derivation for documents, persisted operation tooling, Fragment co-location encouragement, …).
+I was one of the first engineers at [stellate](https://stellate.co/), the GraphQL CDN, o11y platform, …. I have written a lot of tooling and libraries in this space.
+
+Maybe there is a world where we just make GraphQL an implementation detail, we leverage its design to create a `tRPC` experience that works across languages,
+GraphQL could be a great choice even for smaller teams if the community didn’t rely on you shooting yourself in the foot over and over before ever getting to a good state.
+
+Maybe it’s all not as bad if you look at it trhrough another lens, from my eyes though, GraphQL requires wartime leadership and not favoring no change.
+Public perception is in a bad spot and if we favor no change there, well….
+
+I am not advocating for anyone to 180 their data-stack, heck, whatever works for you is probably best.
+I’d love to have more conversations about all of this, so this is also an open invitation if anyone wants to talk through any of this, just send me a DM/Reply/…
