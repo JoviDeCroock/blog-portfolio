@@ -19,6 +19,7 @@ import { documentProps as fragmentVdomDocumentProps } from './posts/fragments-in
 import { documentProps as signalsDocumentProps } from './posts/signals/documentProps'
 import { documentProps as skewDocumentProps } from './posts/skew-based-diff/documentProps'
 import { documentProps as trackingContextDocumentProps } from './posts/tracking-context/documentProps'
+import { documentProps as graphqlAsteriskProblemDocumentProps } from './posts/graphql-asterisk-problem/documentProps'
 
 export interface Post {
   title: string
@@ -31,6 +32,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  graphqlAsteriskProblemDocumentProps,
   trackingContextDocumentProps,
   skewDocumentProps,
   signalsDocumentProps,

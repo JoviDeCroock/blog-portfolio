@@ -44,6 +44,9 @@ const SkewBasedDiff = lazy(
 const TrackingContext = lazy(
   () => import('./pages/posts/tracking-context/index.mdx')
 )
+const GraphQLAsteriskProblem = lazy(
+  () => import('./pages/posts/graphql-asterisk-problem/index.mdx')
+)
 
 export function App() {
   return (
@@ -94,6 +97,10 @@ export function App() {
               <Route
                 component={TrackingContext}
                 path="/blog/tracking-context"
+              />
+              <Route
+                component={GraphQLAsteriskProblem}
+                path="/blog/graphql-asterisk-problem"
               />
               <Route component={NotFound} default />
             </Router>
