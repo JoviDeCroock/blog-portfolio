@@ -50,63 +50,52 @@ const GraphQLAsteriskProblem = lazy(
 
 export function App() {
   return (
-    <>
-      <Layout>
-        <ErrorBoundary>
-          <div>
-            <Router>
-              <Route component={Home} path="/" />
-              <Route component={Blog} path="/blog" />
-              <Route component={Blueprint} path="/blueprint" />
-              <Route component={VDom} path="/blog/vdom-compilers" />
-              <Route component={Inputs} path="/blog/controlled-inputs" />
-              <Route component={Suspense} path="/blog/suspense-data-ssr" />
-              <Route component={State} path="/blog/state-in-vdom" />
-              <Route component={Hydration} path="/blog/hydration-and-preact" />
-              <Route component={Timings} path="/blog/browser-timings" />
-              <Route component={UseId} path="/blog/preact-use-id" />
-              <Route
-                component={PersistedOperations}
-                path="/blog/persisted-operations"
-              />
-              <Route
-                component={GraphQLDevelopmentWorkflow}
-                path="/blog/graphql-development-workflow"
-              />
-              <Route
-                component={GraphQLAbstractTypes}
-                path="/blog/graphql-abstract-types"
-              />
-              <Route
-                component={UnreliableVendors}
-                path="/blog/unreliable-vendors"
-              />
-              <Route
-                component={GraphQLMissingFeature}
-                path="/blog/graphqls-missing-feature"
-              />
-              <Route
-                component={FragmentsInVDOM}
-                path="/blog/fragments-in-vdom"
-              />
-              <Route component={Signals} path="/blog/signals" />
-              <Route
-                component={SkewBasedDiff}
-                path="/blog/skew-based-diffing"
-              />
-              <Route
-                component={TrackingContext}
-                path="/blog/tracking-context"
-              />
-              <Route
-                component={GraphQLAsteriskProblem}
-                path="/blog/graphql-asterisk-problem"
-              />
-              <Route component={NotFound} default />
-            </Router>
-          </div>
-        </ErrorBoundary>
-      </Layout>
-    </>
+    <Layout>
+      <ErrorBoundary>
+        <div>
+          <Router>
+            <Route component={Home} path="/" />
+            <Route component={Blog} path="/blog" />
+            <Route component={Blueprint} path="/blueprint" />
+            <Route component={VDom} path="/blog/vdom-compilers" />
+            <Route component={Inputs} path="/blog/controlled-inputs" />
+            <Route component={Suspense} path="/blog/suspense-data-ssr" />
+            <Route component={State} path="/blog/state-in-vdom" />
+            <Route component={Hydration} path="/blog/hydration-and-preact" />
+            <Route component={Timings} path="/blog/browser-timings" />
+            <Route component={UseId} path="/blog/preact-use-id" />
+            <Route
+              component={PersistedOperations}
+              path="/blog/persisted-operations"
+            />
+            <Route
+              component={GraphQLDevelopmentWorkflow}
+              path="/blog/graphql-development-workflow"
+            />
+            <Route
+              component={GraphQLAbstractTypes}
+              path="/blog/graphql-abstract-types"
+            />
+            <Route
+              component={UnreliableVendors}
+              path="/blog/unreliable-vendors"
+            />
+            <Route
+              component={GraphQLMissingFeature}
+              path="/blog/graphqls-missing-feature"
+            />
+            <Route component={FragmentsInVDOM} path="/blog/fragments-in-vdom" />
+            <Route component={Signals} path="/blog/signals" />
+            <Route component={SkewBasedDiff} path="/blog/skew-based-diffing" />
+            <Route component={TrackingContext} path="/blog/tracking-context" />
+            <Route
+              component={GraphQLAsteriskProblem}
+              path="/blog/graphql-asterisk-problem"
+            />
+            <Route component={NotFound} default />
+          </Router>
+        </div>
+      </ErrorBoundary>
+    </Layout>
   )
 }
