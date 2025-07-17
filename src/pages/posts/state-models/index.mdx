@@ -113,9 +113,6 @@ This means that we only re-render the parts that are subscribed to these propert
 ```js
 export function createTodoList() {
   const list = signal<Todo[]>([]);
-  const completed = computed(() =>
-    list.value.every((todo) => todo.completed.value),
-  );
 
   const add = (todoText: string) => {
     list.value = [...list.value, createTodo(todoText)];
@@ -125,21 +122,27 @@ export function createTodoList() {
     list.value = list.value.filter(todo => todo.id !== id);
   };
 
+  const completed = computed(() =>
+    list.value.every((todo) => todo.completed.value),
+  );
+  const count = computed(() => list.value.length);
+  const completedCount = computed(() =>
+    completed.value.length,
+  );
+
   return {
     // Views
     get items() {
       return list.value;
     },
     get count() {
-      return list.value.length;
+      return count.value;
     },
     get completedItems() {
       return completed.value;
     },
     get completedCount() {
-      return list.value.filter(
-        todo => todo.completed.value
-      ).length;
+      return completedCount.value;
     },
     // Actions
     add,
