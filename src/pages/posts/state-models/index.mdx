@@ -1,0 +1,284 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+<Dates updatedAt={documentProps.updatedAt} createdAt={documentProps.createdAt} />
+
+# Beyond Hooks: Why Signals and State Models
+
+We've all been there, right? Managing state directly within our components using hooks like `useState` has become second nature for us (P)React developers.
+While this approach works for simple cases, it often leads to tightly coupled code that's difficult to test, reuse, and reason about.
+I want to explore a different paradigm using **Preact Signals** that promotes better separation of concerns through dedicated state models.
+
+> This approach can be seen in practice when re-watching my <a target="_blank" rel="noreferrer" href="https://www.youtube.com/watch?v=6pBMaaX4jIg">CodeTV Episode</a>
+> with the source code available on <a target="_blank" rel="noreferrer" href="https://github.com/learnwithjason/learn-preact">GitHub</a>
+
+## The Problem with Hook-Centric State Management
+
+Let's look at this typical React component using hooks:
+
+```js
+const TodoList = () => {
+  const [todos, setTodos] = useState([])
+  const [filter, setFilter] = useState('all')
+
+  const addTodo = (text) => {
+    setTodos([...todos, {
+      id: Date.now(),
+      text,
+      completed: false
+    }])
+  }
+
+  const toggleTodo = (id) => {
+    setTodos(todos.map(todo =>
+      todo.id === id
+        ? {...todo, completed: !todo.completed}
+        : todo
+    ))
+  }
+
+  const completedCount =
+    todos.filter(t => t.completed).length
+
+  return (
+    // JSX with business logic mixed in
+  )
+}
+```
+
+While functional, this approach has several drawbacks:
+
+- **Your component becomes a dumping ground** for both presentation logic and business logic. Testing business rules requires rendering components, and reusing logic across different views becomes nearly impossible.
+- **State is scattered** across multiple `useState` declarations, making it harder to understand the complete state shape and manage complex state transitions.
+- **No clear domain model** exists - business concepts like "Todo" or "TodoList" don't exist as first-class entities in your code. Instead, they're just plain objects floating around in component state.
+- **Performance implications** are real - every state change triggers component re-renders, even when only specific parts of the UI need to update.
+
+## Enter Preact Signals: A Different Approach
+
+Preact Signals offer a compelling alternative that promotes **separation of concerns** through dedicated state models. Let's reimagine our todo application:
+
+### Creating Individual Todo Models
+
+```js
+import { computed, signal, type Signal } from '@preact/signals';
+
+export type Todo = {
+  id: number;
+  text: Signal<string>;
+  completed: Signal<boolean>;
+  toggle: () => void;
+};
+
+export function createTodo(text: string): Todo {
+  const textSignal = signal(text);
+  const completed = signal(false);
+
+  const toggle = () => {
+    completed.value = !completed.value;
+  };
+
+  return {
+    // Properties
+    id: Date.now(),
+    get text() {
+      return textSignal.value;
+    },
+    get completed() {
+      return completed.value;
+    },
+    // Actions
+    toggle,
+    set text(value: string) {
+      textSignal.value = value;
+    },
+  };
+}
+```
+
+Here, each `Todo` is a **self-contained model** with its own state and behavior. The `text` and `completed` properties are signals that can be observed and updated independently.
+This means that we only re-render the parts that are subscribed to these properties rather than everything that uses the `TodoList` component, as we'd regularly see with hooks.
+
+### Building Composite State Models
+
+```js
+export function createTodoList() {
+  const list = signal<Todo[]>([]);
+  const completed = computed(() =>
+    list.value.every((todo) => todo.completed.value),
+  );
+
+  const add = (todoText: string) => {
+    list.value = [...list.value, createTodo(todoText)];
+  };
+
+  const remove = (id: number) => {
+    list.value = list.value.filter(todo => todo.id !== id);
+  };
+
+  return {
+    // Views
+    get items() {
+      return list.value;
+    },
+    get count() {
+      return list.value.length;
+    },
+    get completedItems() {
+      return completed.value;
+    },
+    get completedCount() {
+      return list.value.filter(
+        todo => todo.completed.value
+      ).length;
+    },
+    // Actions
+    add,
+    remove,
+  };
+}
+```
+
+The `createTodoList` function returns a **state model** that encapsulates all todo-related operations.
+Notice how `completedItems` is a computed signal that automatically updates when any todo's completion status changes.
+
+We can either create a singleton instance of this model or pass one through context, you can consider a signal a boxed value,
+we only subscribe a component once `.value` is accessed, and it will re-compute when the value changes.
+
+## The Benefits in Action
+
+### **Clean Separation of Concerns**
+
+Your components become purely presentational:
+
+```js
+import { TodoListContext } from './models/todoList';
+
+const TodoList = () => {
+  const todoList = useContext(TodoListContext);
+  return (
+    <div>
+      <h2>Todos ({todoList.count})</h2>
+      <ul>
+        {todoList.items.map(todo => (
+          <TodoItem key={todo.id} todo={todo} />
+        ))}
+      </ul>
+      <AddTodoForm />
+    </div>
+  );
+};
+
+const TodoItem = ({ todo }) => (
+  <li>
+    <input
+      type="checkbox"
+      checked={todo.completed}
+      onChange={todo.toggle}
+    />
+    <span>{todo.text}</span>
+  </li>
+);
+```
+
+### **Effortless Testing**
+
+Business logic testing becomes straightforward since models are independent of React:
+
+```js
+import { describe, it, expect } from 'vitest';
+import { createTodo, createTodoList } from './todoModels';
+
+describe('Todo Model', () => {
+  it('should toggle completion status', () => {
+    const todo = createTodo('Learn Signals');
+    expect(todo.completed).toBe(false);
+
+    todo.toggle();
+    expect(todo.completed).toBe(true);
+  });
+});
+
+describe('TodoList Model', () => {
+  it('should track completion status', () => {
+    const todos = createTodoList();
+    todos.add('Task 1');
+    todos.add('Task 2');
+
+    expect(todos.completedCount).toBe(0);
+
+    todos.items.forEach(todo => todo.toggle());
+    expect(todos.completedCount).toBe(2);
+  });
+});
+```
+
+### **Granular Reactivity**
+
+Signals provide surgical updates. When a single todo's text changes,
+only that specific component re-renders:
+
+```js
+const TodoItem = ({ todo }) => {
+  // Only re-renders when THIS todo's signals change
+  return (
+    <li className={todo.completed ? 'completed' : ''}>
+      <input
+        type="text"
+        value={todo.text}
+        onChange={
+          (e) => todo.text = e.target.value
+        }
+      />
+    </li>
+  );
+};
+```
+
+Stronger than that, when we use `preact` we could even use the boxed variant of our signal
+and it would directly update the DOM-attribute or text-node. We can also further optimize
+the granularity of our updates by using the
+<a target="_blank" rel="noreferrer" href="https://github.com/preactjs/signals/blob/main/packages/preact/README.md#utility-components-and-hooks">`signal-utils`</a>
+like `Show` and `For`.
+
+### **Reusable Across Different Views**
+
+Want to display todos in a different format? Just create a new component that uses the same model:
+
+```js
+const TodoSummary = () => (
+  <div>
+    <p>Total: {todoList.count}</p>
+    <p>Completed: {todoList.completedCount}</p>
+    <progress
+      value={todoList.completedCount}
+      max={todoList.count}
+    />
+  </div>
+);
+```
+
+## Conclusion
+
+While React hooks revolutionized state management by making it more functional and composable, Preact Signals take this evolution further by promoting **true separation of concerns**. By moving state and business logic into dedicated models, we achieve:
+
+- **Better testability** through framework-independent business logic
+- **Improved reusability** across different views and components
+- **Enhanced performance** via granular reactivity
+- **Clearer architecture** with explicit domain models
+- **Easier debugging** with predictable state changes
+
+The next time you find yourself writing `const [state, setState] = useState()`, consider whether that state belongs in a dedicated model instead. Your future self (and your teammates) will thank you for the cleaner, more maintainable codebase.
+
+---
+
+*Ready to try Preact Signals in your next project? Check out the <a target="_blank" rel="noreferrer" href="https://preactjs.com/guide/v10/signals">official documentation</a> and start building.*

@@ -47,6 +47,7 @@ const TrackingContext = lazy(
 const GraphQLAsteriskProblem = lazy(
   () => import('./pages/posts/graphql-asterisk-problem/index.mdx')
 )
+const StateModels = lazy(() => import('./pages/posts/state-models/index.mdx'))
 
 export function App() {
   return (
@@ -92,6 +93,7 @@ export function App() {
               component={GraphQLAsteriskProblem}
               path="/blog/graphql-asterisk-problem"
             />
+            <Route component={StateModels} path="/blog/state-models" />
             <Route component={NotFound} default />
           </Router>
         </div>
