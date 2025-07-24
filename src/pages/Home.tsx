@@ -60,7 +60,15 @@ const Home = () => (
         Hey, I am Jovi De Croock, a software engineer and technology enthusiast
         from Belgium. A <b>React</b>, <b>GraphQL</b>, and <b>TypeScript</b>{' '}
         specialist, currently Staff Software Engineer at Shopify, previously
-        worked at Stellate, Formidable and Codifly.
+        worked at Stellate, Formidable and Codifly. Founder of{' '}
+        <a
+          rel="noopener noreferrer"
+          target="_blank"
+          href="https://resynapse.dev"
+        >
+          Resynapse
+        </a>
+        .
       </p>
       <p>
         I love working in the open, collaborating, being a force multiplier with
@@ -239,7 +247,7 @@ const OSSBox = (props: { name: string; description: string; link: string }) => {
           <H3>{props.name}</H3>
           <P>{props.description}</P>
         </div>
-        <a rel="nofollow" target="blank" href={props.link}>
+        <a rel="nofollow noopener noreferrer" target="blank" href={props.link}>
           {props.link}
         </a>
       </Wrapper>
