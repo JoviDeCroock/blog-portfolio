@@ -17,7 +17,15 @@ const Footer = () => (
       target="blank"
       href="https://bsky.app/profile/jovidecroock.com"
     >
-      BlueSky @jovidecroock.com
+      BlueSky
+    </FooterLink>
+    -
+    <FooterLink
+      rel="nofollow"
+      target="blank"
+      href="https://x.com/jovidec"
+    >
+      Twitter
     </FooterLink>
     -
     <FooterLink
