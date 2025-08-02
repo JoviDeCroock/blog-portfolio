@@ -48,6 +48,9 @@ const GraphQLAsteriskProblem = lazy(
   () => import('./pages/posts/graphql-asterisk-problem/index.mdx')
 )
 const StateModels = lazy(() => import('./pages/posts/state-models/index.mdx'))
+const SurgicalRendering = lazy(
+  () => import('./pages/posts/signals-fetch/index.mdx')
+)
 
 export function App() {
   return (
@@ -94,6 +97,10 @@ export function App() {
               path="/blog/graphql-asterisk-problem"
             />
             <Route component={StateModels} path="/blog/state-models" />
+            <Route
+              component={SurgicalRendering}
+              path="/blog/surgical-rendering"
+            />
             <Route component={NotFound} default />
           </Router>
         </div>

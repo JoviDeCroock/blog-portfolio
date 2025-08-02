@@ -21,6 +21,7 @@ import { documentProps as skewDocumentProps } from './posts/skew-based-diff/docu
 import { documentProps as trackingContextDocumentProps } from './posts/tracking-context/documentProps'
 import { documentProps as graphqlAsteriskProblemDocumentProps } from './posts/graphql-asterisk-problem/documentProps'
 import { documentProps as stateModelsDocumentProps } from './posts/state-models/documentProps'
+import { documentProps as surgicalRenderingDocumentProps } from './posts/signals-fetch/documentProps'
 
 export interface Post {
   title: string
@@ -33,6 +34,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  surgicalRenderingDocumentProps,
   stateModelsDocumentProps,
   graphqlAsteriskProblemDocumentProps,
   trackingContextDocumentProps,
