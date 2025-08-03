@@ -117,7 +117,71 @@ const createTodo = (todoData) => {
 When data comes in we'll create the signals for each field. If we're dealing with a list we could make the list
 a signal and then each todo would have its field be a signal.
 
-Now our component subscribing to the enhanced todo becomes surgically reactive:
+### Computed Signals: Deriving State
+
+Signals become even more powerful when you combine them with computed values. Let's enhance our todo example:
+
+```javascript
+import { signal, computed } from '@preact/signals';
+
+const createTodo = (todoData) => {
+  const todo = {
+    ...ourSignalFields
+  };
+
+  todo.isOverdue = computed(() => {
+    if (todo.completed.value) return false;
+    const created = new Date(todo.createdAt.value);
+    const daysSinceCreated = (Date.now() - created.getTime()) / (1000 * 60 * 60 * 24);
+    return daysSinceCreated > 7;
+  });
+
+  return todo;
+};
+```
+
+In GraphQL patterns we'll often see computed values symbolised with a `@client` directive.
+
+The real power emerges when dealing with nested, relational data. Let's extend our todo to include nested objects:
+
+```javascript
+const createProject = (projectData) => {
+  const project = {
+    id: signal(projectData.id),
+    name: signal(projectData.name),
+    description: signal(projectData.description),
+    status: signal(projectData.status),
+  };
+
+  // Computed signal for project progress
+  project.completionRate = computed(() => {
+    const todos = project.todos?.value || [];
+    if (todos.length === 0) return 0;
+    const completedCount = todos.filter(todo => todo.completed.value).length;
+    return Math.round((completedCount / todos.length) * 100);
+  });
+
+  return project;
+};
+
+const createStore = (todoData, projectRef = null) => {
+  const store = todoData.map((todoItem) => {
+    const todo = createTodo(todoItem);
+    todo.project = signal(projectRef);
+    todo.projectProgress = computed(() => {
+      if (!todo.project.value) return null;
+      return todo.project.value.completionRate.value;
+    });
+  });
+
+  return store;
+};
+```
+
+This approach gives us GraphQL fragment-like precision in our updates.
+The project's completion rate will automatically update when any todo's completion status changes.
+
+With all of this our component subscribing to the enhanced todo becomes surgically reactive:
 
 ```javascript
 const Text = (props) => {
@@ -196,46 +260,184 @@ Let's examine what happens when a single todo's `title` changes in a list of 100
 Here's how you might build a signal-based data layer that works with any REST API:
 
 ```javascript
+import { signal, computed, effect } from '@preact/signals';
+
 class SignalStore {
   constructor() {
-    this.cache = new Map();
-    this.subscriptions = new Map();
+    this.todos = new Map();
+    this.projects = new Map();
+    this.isLoading = signal(false);
+    this.error = signal(null);
   }
 
-  async fetchTodos() {
-    const response = await fetch('/api/todos');
-    const todos = await response.json();
-
-    return signal(todos.map(todo => {
-      if (!this.cache.has(todo.id)) {
-        const enhancedTodo = createTodo(todo);
-        this.cache.set(todo.id, enhancedTodo);
-        return enhancedTodo;
-      } else {
-        // Update existing signals without losing reactivity
-        const existingTodo = this.cache.get(todo.id);
-        Object.keys(todo).forEach(key => {
-          if (existingTodo[key] && existingTodo[key].value !== todo[key]) {
-            existingTodo[key].value = todo[key];
-          }
-        });
-        return existingTodo;
-      }
-    }));
-  }
-
-  async updateTodo(id, updates) {
-    // Optimistic update
-    const todo = this.cache.get(id);
-    if (todo) {
-      Object.keys(updates).forEach(key => {
-        todo.[key].value = updates[key];
-      });
+  createTodoEntity(todoData) {
+    if (this.todos.has(todoData.id)) {
+      return this.updateTodoEntity(todoData.id, todoData);
     }
 
-    // We can do a call to the server here
-    // an effect(()=>{}) around each createTodo
-    // can be used to update the server as well.
+    const todo = createEnhancedTodo(todoData);
+
+    // Set up server sync effects for each property
+    Object.keys(todo).forEach(key => {
+      if (todo[key] && typeof todo[key] === 'object' && 'value' in todo[key]) {
+        effect(() => {
+          // Skip computed signals - they don't need server sync
+          if (typeof todo[key].value === 'function') return;
+
+          // Debounced server sync (in real app, you'd use a proper debounce)
+          clearTimeout(todo[`_${key}Timer`]);
+          todo[`_${key}Timer`] = setTimeout(() => {
+            this.syncTodoField(todo.id.value, key, todo[key].value);
+          }, 500);
+        });
+      }
+    });
+
+    this.todos.set(todoData.id, todo);
+    return todo;
+  }
+
+  updateTodoEntity(id, updates) {
+    const todo = this.todos.get(id);
+    if (!todo) return null;
+
+    Object.keys(updates).forEach(key => {
+      if (todo[key] && 'value' in todo[key]) {
+        // Only update if value actually changed
+        if (todo[key].value !== updates[key]) {
+          todo[key].value = updates[key];
+        }
+      } else if (key === 'assignee' && typeof updates[key] === 'object') {
+        // Handle nested object updates
+        Object.keys(updates[key]).forEach(assigneeKey => {
+          if (todo.assignee[assigneeKey]) {
+            todo.assignee[assigneeKey].value = updates[key][assigneeKey];
+          }
+        });
+      }
+    });
+
+    return todo;
+  }
+
+  async fetchTodos(projectId = null) {
+    this.isLoading.value = true;
+    this.error.value = null;
+
+    try {
+      const url = projectId ? `/api/projects/${projectId}/todos` : '/api/todos';
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch todos: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      const todos = data.todos || data;
+      const project = data.project;
+
+      let projectEntity = null;
+      if (project) {
+        projectEntity = this.createProjectEntity(project);
+      }
+
+      const todoEntities = todos.map(todoData => {
+        const todo = this.createTodoEntity(todoData);
+        if (projectEntity) {
+          // Link todo to project if available
+          // we signal this so each todo can reactively
+          // be unassigned from a project
+          todo.project = signal(projectEntity);
+        }
+        return todo;
+      });
+
+      // Update project's todos if we have a project
+      if (projectEntity) {
+        projectEntity.todos = signal(todoEntities);
+      }
+
+      return signal(todoEntities);
+    } catch (err) {
+      this.error.value = err.message;
+      return signal([]);
+    } finally {
+      this.isLoading.value = false;
+    }
+  }
+
+  createProjectEntity(projectData) {
+    if (this.projects.has(projectData.id)) {
+      return this.updateProjectEntity(projectData.id, projectData);
+    }
+
+    const project = createProject(projectData);
+    this.projects.set(projectData.id, project);
+    return project;
+  }
+
+  updateProjectEntity(id, updates) {
+    const project = this.projects.get(id);
+    if (!project) return null;
+
+    Object.keys(updates).forEach(key => {
+      if (project[key] && 'value' in project[key]) {
+        project[key].value = updates[key];
+      }
+    });
+
+    return project;
+  }
+
+  async syncTodoField(todoId, field, value) {
+    try {
+      await fetch(`/api/todos/${todoId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ [field]: value })
+      });
+    } catch (err) {
+      console.error(`Failed to sync ${field} for todo ${todoId}:`, err);
+      // Could revert the change or show error to user
+      this.error.value = `Failed to sync changes: ${err.message}`;
+    }
+  }
+
+  // Optimistic updates with error handling
+  async updateTodo(id, updates) {
+    const todo = this.todos.get(id);
+    if (!todo) return;
+
+    // Store original values for potential rollback
+    const originalValues = {};
+    Object.keys(updates).forEach(key => {
+      if (todo[key] && 'value' in todo[key]) {
+        originalValues[key] = todo[key].value;
+      }
+    });
+
+    // Apply optimistic update
+    this.updateTodoEntity(id, updates);
+
+    try {
+      const response = await fetch(`/api/todos/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Update failed: ${response.statusText}`);
+      }
+
+      const updatedTodo = await response.json();
+      this.updateTodoEntity(id, updatedTodo);
+    } catch (err) {
+      // Rollback on error
+      this.updateTodoEntity(id, originalValues);
+      this.error.value = `Failed to update todo: ${err.message}`;
+    }
   }
 }
 ```
