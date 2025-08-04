@@ -1,0 +1,478 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# Achieving Surgical Rendering with any API
+
+When we talk about frontend performance optimizations, GraphQL fragments often steal the spotlight.
+They promise precise data fetching and reduced over-fetching, leading to better performance.
+But what if I told you that with signals, you could achieve similar—or even superior—rendering performance
+using any type of endpoint?
+
+Let's explore how fine-grained reactivity fundamentally changes the performance equation.
+
+## The Traditional Problem
+
+Consider a typical todo application. When you fetch a list of todos from a REST endpoint, you get the complete object:
+
+```javascript
+// GET /api/todos/1
+{
+  id: 1,
+  title: "Learn signals",
+  description: "Deep dive into reactive programming",
+  completed: false,
+  priority: "high",
+  assignee: "John Doe",
+  createdAt: "2024-01-15T10:00:00Z",
+  updatedAt: "2024-01-15T10:00:00Z"
+},
+```
+
+In a traditional React application, when any field changes, the entire component re-renders:
+
+```javascript
+const TodoItem = ({ todo, onUpdate }) => {
+  return (
+    <div className="todo-item">
+      <h3>{todo.title}</h3>
+      <p>{todo.description}</p>
+      <input
+        type="checkbox"
+        checked={todo.completed}
+        onChange={(e) => onUpdate(todo.id, { completed: e.target.checked })}
+      />
+      <span className={`priority-${todo.priority}`}>{todo.priority}</span>
+      <span className="assignee">{todo.assignee}</span>
+    </div>
+  );
+};
+```
+
+When `completed` changes, the entire component re-renders, even though only the checkbox state actually changed.
+Multiply this by hundreds of todos, and you could have a performance problem.
+
+> Of course a todo-application won't have performance issues, but this is a simplified example to illustrate the problem.
+> In real world applications you might use `memo` and other optimizations but what if you could just forget about them?
+
+## The GraphQL Fragment Solution
+
+GraphQL fragments address this by allowing precise data selection:
+
+```graphql
+fragment TodoSummary on Todo {
+  id
+  title
+  completed
+}
+
+fragment TodoDetails on Todo {
+  id
+  description
+  priority
+  assignee
+}
+
+query GetTodo {
+  todo(id: "1") {
+    ...TodoSummary
+    ...TodoDetails
+  }
+}
+```
+
+We've essentially prevented receiving data over the wire that we don't need and
+a smart enough abstraction (Relay FragmentContainers) will only re-render
+the specific components subscribed to the changed fields.
+
+## Enter Signals: The Game Changer
+
+Signals flip the script entirely, we can surgically determine each dependency of a signal.
+Each piece of data becomes a reactive primitive:
+
+```javascript
+import { signal } from '@preact/signals';
+
+const createTodo = (todoData) => {
+  return {
+    id: signal(todoData.id),
+    title: signal(todoData.title),
+    description: signal(todoData.description),
+    completed: signal(todoData.completed),
+    priority: signal(todoData.priority),
+    assignee: signal(todoData.assignee),
+  };
+};
+```
+
+When data comes in we'll create the signals for each field. If we're dealing with a list we could make the list
+a signal and then each todo would have its field be a signal.
+
+### Computed Signals: Deriving State
+
+Signals become even more powerful when you combine them with computed values. Let's enhance our todo example:
+
+```javascript
+import { signal, computed } from '@preact/signals';
+
+const createTodo = (todoData) => {
+  const todo = {
+    ...ourSignalFields
+  };
+
+  todo.isOverdue = computed(() => {
+    if (todo.completed.value) return false;
+    const created = new Date(todo.createdAt.value);
+    const daysSinceCreated = (Date.now() - created.getTime()) / (1000 * 60 * 60 * 24);
+    return daysSinceCreated > 7;
+  });
+
+  return todo;
+};
+```
+
+In GraphQL patterns we'll often see computed values symbolised with a `@client` directive.
+
+The real power emerges when dealing with nested, relational data. Let's extend our todo to include nested objects:
+
+```javascript
+const createProject = (projectData) => {
+  const project = {
+    id: signal(projectData.id),
+    name: signal(projectData.name),
+    description: signal(projectData.description),
+    status: signal(projectData.status),
+  };
+
+  // Computed signal for project progress
+  project.completionRate = computed(() => {
+    const todos = project.todos?.value || [];
+    if (todos.length === 0) return 0;
+    const completedCount = todos.filter(todo => todo.completed.value).length;
+    return Math.round((completedCount / todos.length) * 100);
+  });
+
+  return project;
+};
+
+const createStore = (todoData, projectRef = null) => {
+  const store = todoData.map((todoItem) => {
+    const todo = createTodo(todoItem);
+    todo.project = signal(projectRef);
+    todo.projectProgress = computed(() => {
+      if (!todo.project.value) return null;
+      return todo.project.value.completionRate.value;
+    });
+  });
+
+  return store;
+};
+```
+
+This approach gives us GraphQL fragment-like precision in our updates.
+The project's completion rate will automatically update when any todo's completion status changes.
+
+With all of this our component subscribing to the enhanced todo becomes surgically reactive:
+
+```javascript
+const Text = (props) => {
+  const kind = props.kind || 'span';
+  return createElement(
+    kind,
+    { className: `text-${props.kind} ${props.className}` },
+    props.children
+  );
+}
+
+const CheckBox = ({ checked, onChange }) => {
+  return (
+    <input
+      type="checkbox"
+      checked={checked}
+      onChange={onChange}
+    />
+  );
+};
+
+const TodoItem = ({ todo }) => {
+  return (
+    <div className="todo-item">
+      <Text kind="h3">{todo.title}</Text>
+      <Text kind="p">{todo.description}</Text>
+      <CheckBox
+        checked={todo.completed}
+        onChange={(e) => {
+          todo.completed.value = e.target.checked;
+        }}
+      />
+      <Text kind="span" className={`priority-${todo.priority.value}`}>
+        {todo.priority}
+      </Text>
+      <Text kind="span" className="assignee">
+        {todo.assignee}
+      </Text>
+    </div>
+  );
+};
+```
+
+Each element will only re-render when its specific signal changes. In Preact we go
+even further, rather than re-rendering the component we can update the `checked` attribute
+or the `text-node` directly when we see that a signal is assigned to it.
+
+In React we'll rerender the component subscribed to the signal, so for instance when title changes,
+we'll only re-render the first `Text` component that displays the title, not the entire `TodoItem`
+or any of the other `Text` components.
+
+## Performance Comparison
+
+Let's examine what happens when a single todo's `title` changes in a list of 100 todos:
+
+**Traditional React State:**
+- Re-renders: 1 component (the entire TodoItem)
+- DOM updates: Potentially the entire component tree
+- JavaScript work: Re-executing the entire render function
+
+**GraphQL Fragments + React:**
+- Re-renders: 1 component (still the entire TodoItem)
+- DOM updates: Still potentially the entire component
+- Network efficiency: ✅ Better (precise fetching)
+- Runtime efficiency: ❌ Same as traditional
+
+**Signals + Any API:**
+- Re-renders: 1 signal subscription (just the title Text component)
+- DOM updates: Single DOM node
+- JavaScript work: Minimal signal update
+- Network efficiency: ❌ May over-fetch initially
+- Runtime efficiency: ✅ Superior
+
+## Real-World Implementation
+
+Here's how you might build a signal-based data layer that works with any REST API:
+
+```javascript
+import { signal, computed, effect } from '@preact/signals';
+
+class SignalStore {
+  constructor() {
+    this.todos = new Map();
+    this.projects = new Map();
+    this.isLoading = signal(false);
+    this.error = signal(null);
+  }
+
+  createTodoEntity(todoData) {
+    if (this.todos.has(todoData.id)) {
+      return this.updateTodoEntity(todoData.id, todoData);
+    }
+
+    const todo = createEnhancedTodo(todoData);
+
+    // Set up server sync effects for each property
+    Object.keys(todo).forEach(key => {
+      if (todo[key] && typeof todo[key] === 'object' && 'value' in todo[key]) {
+        effect(() => {
+          // Skip computed signals - they don't need server sync
+          if (typeof todo[key].value === 'function') return;
+
+          // Debounced server sync (in real app, you'd use a proper debounce)
+          clearTimeout(todo[`_${key}Timer`]);
+          todo[`_${key}Timer`] = setTimeout(() => {
+            this.syncTodoField(todo.id.value, key, todo[key].value);
+          }, 500);
+        });
+      }
+    });
+
+    this.todos.set(todoData.id, todo);
+    return todo;
+  }
+
+  updateTodoEntity(id, updates) {
+    const todo = this.todos.get(id);
+    if (!todo) return null;
+
+    Object.keys(updates).forEach(key => {
+      if (todo[key] && 'value' in todo[key]) {
+        // Only update if value actually changed
+        if (todo[key].value !== updates[key]) {
+          todo[key].value = updates[key];
+        }
+      } else if (key === 'assignee' && typeof updates[key] === 'object') {
+        // Handle nested object updates
+        Object.keys(updates[key]).forEach(assigneeKey => {
+          if (todo.assignee[assigneeKey]) {
+            todo.assignee[assigneeKey].value = updates[key][assigneeKey];
+          }
+        });
+      }
+    });
+
+    return todo;
+  }
+
+  async fetchTodos(projectId = null) {
+    this.isLoading.value = true;
+    this.error.value = null;
+
+    try {
+      const url = projectId ? `/api/projects/${projectId}/todos` : '/api/todos';
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch todos: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      const todos = data.todos || data;
+      const project = data.project;
+
+      let projectEntity = null;
+      if (project) {
+        projectEntity = this.createProjectEntity(project);
+      }
+
+      const todoEntities = todos.map(todoData => {
+        const todo = this.createTodoEntity(todoData);
+        if (projectEntity) {
+          // Link todo to project if available
+          // we signal this so each todo can reactively
+          // be unassigned from a project
+          todo.project = signal(projectEntity);
+        }
+        return todo;
+      });
+
+      // Update project's todos if we have a project
+      if (projectEntity) {
+        projectEntity.todos = signal(todoEntities);
+      }
+
+      return signal(todoEntities);
+    } catch (err) {
+      this.error.value = err.message;
+      return signal([]);
+    } finally {
+      this.isLoading.value = false;
+    }
+  }
+
+  createProjectEntity(projectData) {
+    if (this.projects.has(projectData.id)) {
+      return this.updateProjectEntity(projectData.id, projectData);
+    }
+
+    const project = createProject(projectData);
+    this.projects.set(projectData.id, project);
+    return project;
+  }
+
+  updateProjectEntity(id, updates) {
+    const project = this.projects.get(id);
+    if (!project) return null;
+
+    Object.keys(updates).forEach(key => {
+      if (project[key] && 'value' in project[key]) {
+        project[key].value = updates[key];
+      }
+    });
+
+    return project;
+  }
+
+  async syncTodoField(todoId, field, value) {
+    try {
+      await fetch(`/api/todos/${todoId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ [field]: value })
+      });
+    } catch (err) {
+      console.error(`Failed to sync ${field} for todo ${todoId}:`, err);
+      // Could revert the change or show error to user
+      this.error.value = `Failed to sync changes: ${err.message}`;
+    }
+  }
+
+  // Optimistic updates with error handling
+  async updateTodo(id, updates) {
+    const todo = this.todos.get(id);
+    if (!todo) return;
+
+    // Store original values for potential rollback
+    const originalValues = {};
+    Object.keys(updates).forEach(key => {
+      if (todo[key] && 'value' in todo[key]) {
+        originalValues[key] = todo[key].value;
+      }
+    });
+
+    // Apply optimistic update
+    this.updateTodoEntity(id, updates);
+
+    try {
+      const response = await fetch(`/api/todos/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Update failed: ${response.statusText}`);
+      }
+
+      const updatedTodo = await response.json();
+      this.updateTodoEntity(id, updatedTodo);
+    } catch (err) {
+      // Rollback on error
+      this.updateTodoEntity(id, originalValues);
+      this.error.value = `Failed to update todo: ${err.message}`;
+    }
+  }
+}
+```
+
+## The Framework Landscape
+
+Different signal implementations offer varying levels of granularity, SolidJS
+for example leverages fully fine-grained reactivity, each function component
+only runs once. Preact is more a middle ground where we try our best to balance
+optimized rendering and familiar paradigms. A text-node or attribute-node will receive
+the update directly while if we subscribe in the function body (by calling `.value` on a signal)
+we will re-render the component when the signal value changes. In React, Preact signals
+will re-render the component when the signal value changes, but it won't update the DOM directly.
+You can isolate the re-rendering to specific parts of the component tree by creating wrapper components
+but we'll still re-render the specific wrapper. An example of this is the `Text` component above.
+
+## Have the cake and eat it too
+
+We touched on how GraphQL fragments optimize data fetching, but what if you could combine the best of both worlds?
+What if your GraphQL normalized cache only operated in signals, allowing you to fetch data precisely while still
+benefiting from surgical rendering? Relay already does a great job at re-rendering only the component depending on
+a given Fragment but clients like `urql` and `apollo-client` don't but a more signals-oriented mindset could shift
+the way we think about GraphQL clients while benefiting everyone.
+
+## Conclusion
+
+Signals fundamentally change how we think about frontend performance.
+While GraphQL fragments optimize the data fetching layer, signals optimize the rendering layer.
+In many real-world scenarios, especially those with frequent updates or complex UIs, the rendering optimization provided
+by signals can outweigh the network optimization provided by GraphQL fragments.
+
+The key insight is that **fine-grained reactivity decouples data fetching strategies from rendering performance**.
+With signals, your rendering system becomes inherently more efficient, regardless of how you fetch your data.
+
+As we move toward more interactive, real-time applications, the ability to update individual pieces of UI without cascading re-renders becomes increasingly valuable.
+Signals provide this capability while maintaining compatibility with any backend API architecture.
+
+The future of frontend performance isn't just about fetching less data—it's about being smarter about what we re-render when that data changes.
