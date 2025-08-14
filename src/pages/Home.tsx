@@ -139,7 +139,7 @@ const Home = () => (
           />
           <OSSBox
             name="GraphQLSP"
-            description="A TypeScript LSP Plugin to properly support inline-hints/diagnostics/... while developing front-end GraphQL applications."
+            description="A TypeScript LSP Plugin to support authoring GraphQL documents."
             link="https://github.com/0no-co/graphqlsp"
           />
         </Grid>
