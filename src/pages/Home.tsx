@@ -228,7 +228,7 @@ const OSSBox = (props: { name: string; description: string; link: string }) => {
 
     // The styled thing gives us a VNode rather than
     // forwarding the ref
-    const b = (box.current as any).base as any
+    const b = box.current
     const rect = b.getBoundingClientRect()
     b.style.setProperty(
       '--mouse-x',
