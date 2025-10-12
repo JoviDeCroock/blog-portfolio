@@ -73,6 +73,22 @@ GET /graphql/a3f5b8c2d9e1/GetUser?variables={id: "123"}
 
 The URL now includes the operation hash and name, making network requests immediately recognizable.
 
+### Automatic Persisted Queries: Performance Without Pre-Registration
+
+There's a lighter-weight variant called **Automatic Persisted Queries (APQ)** that provides performance benefits without requiring build-time pre-registration.
+
+With APQ, the client generates a hash of the query at runtime and sends it to the server. If the server doesn't recognize the hash, it responds with a `PersistedQueryNotFound` error. The client then resends the request with both the hash and the full query text. The server caches this association, and subsequent requests only need the hash.
+
+This handshake protocol means:
+
+- **No build pipeline changes**: No need to generate manifest files or coordinate deployments
+- **Performance gains**: After the first request, payload sizes are reduced
+- **Better caching**: Once learned, the hash can be used as a cache key
+
+However, APQ trades off the security benefits of trusted documents. Since any query can be "learned" by the server, it doesn't prevent arbitrary queries—it only optimizes them after first use. This makes APQ ideal for performance optimization but not for security hardening.
+
+For production systems where security is a concern, pre-registered persisted operations (trusted documents) are the better choice. For internal tools or scenarios where you primarily want performance wins, APQ can be easier to adopt.
+
 ### Addressing Myth #1: GET Requests for Queries
 
 With persisted operations, the request payload shrinks dramatically—just a hash and variables instead of the entire query string.
@@ -141,12 +157,15 @@ It's simpler than versioning REST endpoints or maintaining backwards compatibili
 
 ## Performance Benefits
 
-Persisted operations offer additional performance advantages. When operations have a consistent, small size (hash plus variables),
+Both pre-registered persisted operations and APQ offer performance advantages. When operations have a consistent, small size (hash plus variables),
 requests are uniformly smaller and faster. This might save only a few kilobytes per request,
 but at scale across thousands or millions of requests, it becomes significant.
 
 More importantly, the consistent size makes network behavior predictable.
 No more debugging slow requests caused by massive query strings or investigating cases where complex queries exceed URL length limits or HTTP header constraints.
+
+APQ provides these same performance benefits with less upfront setup, making it a good first step for teams looking to optimize GraphQL performance.
+Once you've experienced the benefits and want to add security hardening, migrating to pre-registered persisted operations is a natural evolution.
 
 ## When to Use Persisted Operations
 
@@ -159,7 +178,7 @@ For local development, dynamic queries can be enabled to make iteration faster. 
 The common myths about GraphQL persist because they describe the default configuration, not the optimal setup.
 A basic GraphQL implementation uses POST requests to `/graphql` and accepts arbitrary queries, but this is a configuration choice, not a fundamental limitation.
 
-Persisted operations are straightforward to implement with mature tooling support across Apollo, Relay, urql, and other GraphQL clients.
+Persisted operations—whether through Automatic Persisted Queries for performance or pre-registered trusted documents for security—are straightforward to implement with mature tooling support across Apollo, Relay, urql, and other GraphQL clients.
 They provide better security, performance, debugging, and caching while addressing all major GraphQL criticisms in one solution.
 
 A thorough specification for persisted operations is available in the [GraphQL over HTTP spec](https://github.com/graphql/graphql-over-http/pull/264).
