@@ -51,6 +51,7 @@ const StateModels = lazy(() => import('./pages/posts/state-models/index.mdx'))
 const SurgicalRendering = lazy(
   () => import('./pages/posts/signals-fetch/index.mdx')
 )
+const GraphQLMyths = lazy(() => import('./pages/posts/graphql-myths/index.mdx'))
 
 export function App() {
   return (
@@ -101,6 +102,7 @@ export function App() {
               component={SurgicalRendering}
               path="/blog/surgical-rendering"
             />
+            <Route component={GraphQLMyths} path="/blog/graphql-myths" />
             <Route component={NotFound} default />
           </Router>
         </div>

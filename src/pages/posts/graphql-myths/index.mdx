@@ -1,0 +1,161 @@
+﻿import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# GraphQL Myths
+
+GraphQL has been around for nearly a decade, yet the same misconceptions persist in tech discussions and architecture reviews.
+Let's tackle three of the most common myths about GraphQL and explore how persisted operations address them all.
+
+## Common Misconceptions
+
+### Myth #1: Everything is a POST Request
+
+A frequent criticism: "GraphQL doesn't use proper HTTP semantics. Everything is just POST to `/graphql`."
+
+While many GraphQL implementations default to POST requests, this isn't a requirement of the specification.
+It's a configuration choice made for convenience. The protocol itself is transport-agnostic and
+works perfectly well with GET requests.
+
+### Myth #2: All URLs Look Like `/graphql`
+
+Another complaint: "You lose all the benefits of RESTful URLs. Everything just goes to one endpoint."
+
+When the network tab shows `POST /graphql` repeated endlessly, it does feel like we've abandoned decades
+of URL design principles. This lack of semantic URLs makes debugging and monitoring significantly harder.
+
+### Myth #3: Anyone Can Write Arbitrary Queries
+
+The security concern: "GraphQL is a security nightmare. Users can introspect your schema and write arbitrary queries that could DOS your server."
+
+This isn't entirely unfounded. Out-of-the-box GraphQL introspection reveals the entire schema, and without proper safeguards,
+clients can craft expensive queries. However, this is a configuration issue, not an inherent flaw in GraphQL.
+
+## The Solution: Persisted Operations
+
+All three myths are addressed by implementing **persisted operations** (also known as **trusted documents**).
+
+### How Persisted Operations Work
+
+Instead of sending the full query text in every request, operations are pre-registered with the server at build time.
+Each operation gets a unique hash, and clients send only that hash instead of the entire query string.
+
+Instead of:
+
+```http
+POST /graphql
+Content-Type: application/json
+
+{
+  "query": "query GetUser($id: ID!) { user(id: $id) { name email avatar } }",
+  "variables": { "id": "123" }
+}
+```
+
+You send:
+
+```http
+GET /graphql/a3f5b8c2d9e1/GetUser?variables={id: "123"}
+```
+
+> The variables in the URL should be URL-encoded in a real request, but for clarity, I've shown them unencoded here.
+
+The URL now includes the operation hash and name, making network requests immediately recognizable.
+
+### Addressing Myth #1: GET Requests for Queries
+
+With persisted operations, the request payload shrinks dramatically—just a hash and variables instead of the entire query string.
+This enables the use of URL parameters and **GET requests** for queries.
+
+GET requests provide:
+
+- **Browser caching**: Queries can be cached at every layer
+- **CDN compatibility**: Cache query responses at the edge
+- **Easier debugging**: Copy-paste URLs directly in the browser
+- **Better monitoring**: Proxy logs become useful again
+
+> Configure your server to reject GET requests for mutations to prevent CSRF attacks.
+> Mutations should require POST with proper CSRF tokens.
+
+### Addressing Myth #2: Meaningful URLs
+
+The URL `/graphql/a3f5b8c2d9e1/GetUser` is both readable and functional. When debugging in the network tab,
+you can instantly identify which operation failed. Server logs become meaningful, and monitoring can alert on specific operations.
+
+Network tab comparison:
+
+**Without persisted operations:**
+
+```
+POST /graphql
+POST /graphql
+POST /graphql
+POST /graphql
+```
+
+**With persisted operations:**
+
+```
+GET /graphql/a3f5b8c2/GetUser
+GET /graphql/7d4e1f9/GetPosts
+GET /graphql/3c8a2b5/GetComments
+POST /graphql/9f1e4a7/CreatePost
+```
+
+The second approach makes debugging significantly easier.
+
+### Addressing Myth #3: Trusted Documents as an Allow List
+
+Persisted operations can evolve into **trusted documents** by using operation hashes as an allow list.
+
+The server loads the same operation manifest that clients use. When a request arrives,
+it validates: "Is this hash in my trusted set?" If not, the request is rejected.
+
+This approach provides:
+
+- No arbitrary queries that could be crafted by malicious users
+- No data access beyond what the product actually uses
+- Built-in operation tracking and analytics by URL
+
+### Mobile Versioning Considerations
+
+When using trusted documents with mobile applications (or any client with multiple concurrent versions),
+maintain operation manifests for all active versions.
+
+For example, with app versions 1.2.3, 1.2.4, and 1.3.0 in production, the server needs to accept operations from all three manifests.
+Operation hashes can only be deprecated once no active clients use them.
+
+This is manageable—track hash usage in metrics and gradually deprecate old versions.
+It's simpler than versioning REST endpoints or maintaining backwards compatibility for unstructured requests.
+
+## Performance Benefits
+
+Persisted operations offer additional performance advantages. When operations have a consistent, small size (hash plus variables),
+requests are uniformly smaller and faster. This might save only a few kilobytes per request,
+but at scale across thousands or millions of requests, it becomes significant.
+
+More importantly, the consistent size makes network behavior predictable.
+No more debugging slow requests caused by massive query strings or investigating cases where complex queries exceed URL length limits or HTTP header constraints.
+
+## When to Use Persisted Operations
+
+In production environments, persisted operations are essential. The benefits in security, performance, debugging, and caching are too valuable to ignore.
+
+For local development, dynamic queries can be enabled to make iteration faster. Many GraphQL servers support a hybrid mode: trusted documents in production, free-form queries in development.
+
+## Conclusion
+
+The common myths about GraphQL persist because they describe the default configuration, not the optimal setup.
+A basic GraphQL implementation uses POST requests to `/graphql` and accepts arbitrary queries, but this is a configuration choice, not a fundamental limitation.
+
+Persisted operations are straightforward to implement with mature tooling support across Apollo, Relay, urql, and other GraphQL clients.
+They provide better security, performance, debugging, and caching while addressing all major GraphQL criticisms in one solution.
