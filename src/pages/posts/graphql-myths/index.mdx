@@ -1,8 +1,10 @@
 ﻿import SEO from '../../../components/Seo'
 import CodeTheme from '../../../components/CodeTheme'
+import Dates from '../../../components/Dates'
 import { documentProps } from './documentProps'
 
 <CodeTheme />
+<Dates createdAt={documentProps.createdAt} />
 <SEO
   title={documentProps.title}
   description={documentProps.description}
@@ -159,3 +161,5 @@ A basic GraphQL implementation uses POST requests to `/graphql` and accepts arbi
 
 Persisted operations are straightforward to implement with mature tooling support across Apollo, Relay, urql, and other GraphQL clients.
 They provide better security, performance, debugging, and caching while addressing all major GraphQL criticisms in one solution.
+
+A thorough specification for persisted operations is available in the [GraphQL over HTTP spec](https://github.com/graphql/graphql-over-http/pull/264).

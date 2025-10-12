@@ -3,7 +3,7 @@ export const documentProps = {
   title: 'GraphQL Myths',
   description:
     'Common misconceptions about GraphQL and how persisted operations address them.',
-  image: 'https://www.jovidecroock.com/graphql-myths.png',
+  image: 'https://www.jovidecroock.com/graphql-myths.jpg',
   path: '/blog/graphql-myths',
   tags: ['graphql', 'performance', 'front-end'],
 }
