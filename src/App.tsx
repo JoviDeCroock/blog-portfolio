@@ -52,6 +52,9 @@ const SurgicalRendering = lazy(
   () => import('./pages/posts/signals-fetch/index.mdx')
 )
 const GraphQLMyths = lazy(() => import('./pages/posts/graphql-myths/index.mdx'))
+const GraphQLParadigm = lazy(
+  () => import('./pages/posts/graphql-is-not-weird/index.mdx')
+)
 
 export function App() {
   return (
@@ -103,6 +106,10 @@ export function App() {
               path="/blog/surgical-rendering"
             />
             <Route component={GraphQLMyths} path="/blog/graphql-myths" />
+            <Route
+              component={GraphQLParadigm}
+              path="/blog/graphql-is-not-weird"
+            />
             <Route component={NotFound} default />
           </Router>
         </div>
