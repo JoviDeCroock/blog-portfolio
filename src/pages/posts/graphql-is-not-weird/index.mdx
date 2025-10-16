@@ -1,0 +1,163 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<Dates createdAt={documentProps.createdAt} />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# GraphQL, a paradigm, not a paradigm shift
+
+When people start using GraphQL, it can feel... weird. You're suddenly sending POST requests for reads,
+seeing talk about normalized caches, and wondering whether all your old HTTP knowledge still applies.
+
+Here's the thing: **GraphQL shouldn't feel weird—it should feel familiar**.
+
+GraphQL isn't a paradigm shift. It's a paradigm—one that works with the same web fundamentals
+you already know: HTTP, caching, and stale-while-revalidate patterns. You don't need to unlearn REST to use GraphQL.
+You just need to recognize that the same principles apply.
+
+The concepts are incrementally adoptable. You don't have to adopt everything at once.
+
+## The Complexity Trap
+
+The GraphQL ecosystem can look intimidating: Apollo, Relay, normalized caches, generated types,
+subscription servers... It's easy to assume you need all of it from day one.
+
+These tools exist because GraphQL *makes them possible*, not because they're necessary.
+
+Just as React doesn't require Redux, GraphQL doesn't require a normalized cache.
+
+## SWR Still Works (And That's Perfectly Valid)
+
+Let's talk about a pattern that works brilliantly with REST APIs: stale-while-revalidate (SWR).
+You fetch data, cache it by URL, and revalidate in the background. Simple, effective, well-understood.
+
+**This pattern works just as well with GraphQL.**
+
+Consider two approaches:
+
+- **Normalized caching** treats your client like a tiny database: merging results, tracking entity identity, reusing data across queries. Powerful, but complex.
+- **SWR** takes a simpler view—cache the response by key, show it instantly, revalidate in the background.
+
+Both are valid in GraphQL. The extra structure GraphQL provides is optional metadata, not a requirement for correctness.
+
+```javascript
+// With REST
+const { data } = useFetchData('/api/users/123')
+
+// With GraphQL
+const { data } = useFetchData(['UserQuery', { id: '123' }])
+```
+
+The only difference? With GraphQL, you have more information about what's in that cache entry.
+This is a *good thing*. You can derive information about the entity thanks to `__typename` and the fields you requested.
+The query tells you exactly which fields you're fetching. That's not complexity—that's clarity.
+
+You can use query strings as cache keys, just like URLs. In urql, we start you out with a document cache [by default](https://nearform.com/open-source/urql/docs/basics/document-caching/).
+You can use HTTP caching headers. You can invalidate on mutation.
+All the patterns you already know continue to work—just with a different structure.
+
+## GraphQL Doesn't Replace HTTP
+
+In [a previous post](https://www.jovidecroock.com/blog/graphql-myths), I talked about how GraphQL doesn't replace HTTP—it sits on top of it.
+
+> GraphQL is transport-agnostic. That's why the HTTP specification is a separate spec.
+
+- Queries can use GET requests (making them cacheable by CDNs and browsers)
+- Mutations use POST requests (because they modify state)
+
+GraphQL over GET is now officially supported in major client libraries like Apollo Client and urql. This isn't just theoretical—it's the recommended practice for queries.
+
+> Relay has recommended persisted operations and GET for queries for years.
+
+A GET request with GraphQL looks like this:
+
+```bash
+GET /graphql?query={user(id:"123"){name,email}}
+```
+
+This is cacheable by your browser, your CDN, intermediate proxies—all the HTTP infrastructure you already have.
+An alternative to encoding the query in the URL is to use persisted operations, covered in [the other post](https://www.jovidecroock.com/blog/graphql-myths).
+
+## Status Codes and Error Handling
+
+The [GraphQL over HTTP spec](https://graphql.github.io/graphql-over-http/) defines how status codes should work:
+
+- 200 OK for successful requests (even with GraphQL errors in the response)
+- 400 Bad Request for invalid GraphQL queries
+- 500 Internal Server Error for server failures
+
+Could this be better? Yes. There's ongoing discussion about using more specific status codes (like 404 for not found).
+But the key point is that GraphQL *uses* HTTP status codes—it doesn't ignore them. Personally, I'd prefer having a `PARTIAL` status code for when you have partial data with errors, and allowing alternative status codes even when `data` is present but null.
+
+And for application-level errors, GraphQL's structured error format actually gives you *more* information than a typical REST API:
+
+```json
+{
+  "errors": [
+    {
+      "message": "User not found",
+      "path": ["user"],
+      "extensions": {
+        "code": "NOT_FOUND",
+        "userId": "123"
+      }
+    }
+  ],
+  "data": {
+    "user": null
+  }
+}
+```
+
+## HTTP Caching Still Works
+
+The assumption that "GraphQL breaks caching" usually comes from seeing everything sent via POST. But once you switch to GET for queries, all your usual caching tools are back in play.
+
+- GET requests with GraphQL queries can use `Cache-Control` headers
+- ETags work perfectly fine
+- CDNs can cache GraphQL responses just like REST responses
+- You can use `Vary` headers to handle different queries
+
+```http
+GET /graphql?query={posts{id,title}}
+Cache-Control: public, max-age=3600
+ETag: "abc123"
+```
+
+The cache granularity is different—you're caching entire query responses, not individual resources. But the *mechanism* is identical.
+
+> Invalidation can be trickier, but you can be aggressive: when a mutation affects a certain `__typename`, invalidate all queries containing that typename. This is similar to document caching.
+
+## Start Simple, Optimize When Needed
+
+My recommendation for teams adopting GraphQL:
+
+1. **Start with simple caching.** Use query strings as cache keys, don't worry about normalization yet unless you really understand what you're starting.
+2. **Use HTTP properly.** GET for queries, POST for mutations. Add cache headers where appropriate.
+3. **Monitor what matters.** Are you making too many requests? Are users waiting for data? Let real problems guide your optimizations.
+4. **Add complexity only when needed.** If you're building a real-time collaborative app with frequent mutations, *then* look at normalized caching. If you're building a content site with mostly read operations, SWR might be all you need.
+
+## The Extra Knowledge Is Exactly That: Extra
+
+GraphQL gives you extra knowledge—schemas, types, precise queries—and that's valuable. But it's optional power, not mandatory complexity.
+
+This information enables optimizations like normalized caching, automatic prefetching, and intelligent cache invalidation. These are **enhancements**, not requirements.
+
+Use that extra knowledge when it helps. Ignore it when it doesn't.
+
+## Closing Thoughts
+
+Start with what you know: HTTP, caching, SWR, and you'll realize GraphQL isn't weird at all. It's just another way to describe data needs, one that fits neatly into everything the web already gives you.
+
+Start simple. Use the patterns you know. Add complexity only when you need it.
+
+GraphQL isn't a paradigm shift. It's a paradigm that works with the web, not against it.
