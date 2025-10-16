@@ -17,7 +17,7 @@
     "goober": "2.1.16",
     "hoofd": "^1.7.3",
     "preact": "beta",
-    "preact-iso": "^2.10.0",
+    "preact-iso": "^2.11.0",
     "preact-render-to-string": "^6.6.1",
     "rehype-highlight": "^7.0.0",
     "remark-gfm": "^4.0.1"
