@@ -23,6 +23,7 @@ import { documentProps as graphqlAsteriskProblemDocumentProps } from './posts/gr
 import { documentProps as stateModelsDocumentProps } from './posts/state-models/documentProps'
 import { documentProps as surgicalRenderingDocumentProps } from './posts/signals-fetch/documentProps'
 import { documentProps as graphqlMythsDocumentProps } from './posts/graphql-myths/documentProps'
+import { documentProps as stateVsSignalsDocumentProps } from './posts/state-vs-signals/documentProps'
 
 export interface Post {
   title: string
@@ -35,6 +36,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  stateVsSignalsDocumentProps,
   graphqlMythsDocumentProps,
   surgicalRenderingDocumentProps,
   stateModelsDocumentProps,
