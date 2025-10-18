@@ -1,0 +1,217 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+import StateBasedDiagram from './StateBasedDiagram'
+import SignalBasedDiagram from './SignalBasedDiagram'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# State-based vs Signal-based rendering
+
+When we think about state management in front-end frameworks, we often focus on the API—hooks, observables, or signals.
+However, there's a deeper paradigm shift at play: **where rendering happens**.
+Traditional state management like React hooks triggers renders at the point where state is created,
+while signal-based approaches like Preact Signals or Solid.js trigger renders only where state is consumed.
+
+This shift from "render where you create state" to "render where you use state" has profound implications
+for performance, code organization, and mental models.
+
+## The Core Difference
+
+In traditional state management with React hooks, when you call `useState`, any update to that state causes the component—and
+all its descendants—to re-render. It doesn't matter whether those descendants actually use the state; they're caught in the
+render wave simply because they're children of the component that holds the state.
+
+```javascript
+const Parent = () => {
+  const [count, setCount] = useState(0);
+  return (
+    <>
+      {/* re-renders even though it doesn't use count */}
+      <ChildA />
+      <ChildB />
+      {/* re-renders, actually uses count */}
+      <ChildC count={count} />
+    </>
+  );
+};
+```
+
+With signal-based rendering, the paradigm inverts.
+A signal is a reactive primitive that tracks its own dependencies.
+When you create a signal, it doesn't trigger re-renders at the creation site. Instead, rendering only occurs at components
+that actually **access** the signal's value.
+
+```javascript
+const Parent = () => {
+  const count = useSignal(0);
+  return (
+    <>
+      {/* do NOT re-render */}
+      <ChildA />
+      <ChildB />
+      {/* only re-renders if it reads count.value */}
+      <ChildC count={count} />
+    </>
+  );
+};
+```
+
+This granular reactivity means only the precise components that depend on the signal will re-render when it updates.
+The mental model shifts from "prevent unnecessary re-renders" to "re-renders only happen where they're needed."
+
+## Context: The Paradigm Shift Amplified
+
+This difference becomes even more pronounced when dealing with the Context API. In React, when you distribute state through context
+and update it, **all consumers** of that context re-render, regardless of whether they actually read the updated value.
+
+```javascript
+const CountContext = createContext();
+
+const Provider = ({ children }) => {
+  const [count, setCount] = useState(0);
+  const [name, setName] = useState('');
+  return (
+    <CountContext.Provider
+      value={{ count, name, setCount, setName }}
+    >
+      {children}
+    </CountContext.Provider>
+  );
+};
+
+const ComponentA = () => {
+  const { name } = useContext(CountContext);
+  // Re-renders when count changes,
+  // even though it only uses name.
+  return <div>{name}</div>;
+};
+```
+
+With signals in context, the reactivity is surgical. The context can hold signals, and only components
+that actually call `.value` on a signal will subscribe to its updates.
+
+```javascript
+const CountContext = createContext();
+
+const Provider = ({ children }) => {
+  const count = useSignal(0);
+  const name = useSignal('');
+  return (
+    <CountContext.Provider value={{ count, name }}>
+      {children}
+    </CountContext.Provider>
+  );
+};
+
+const ComponentA = () => {
+  const { name } = useContext(CountContext);
+  // Only re-renders when name changes,
+  // not when count changes
+  return <div>{name.value}</div>;
+};
+```
+
+This is a game-changer for large applications where context is used to distribute state across many components.
+You no longer need to split contexts to prevent unnecessary re-renders or reach for complex optimization patterns.
+
+<aside class="post-callout">
+  💡This changes context from a way to distribute state and orchestrate renders to only be a form of dependency injection.
+</aside>
+
+## Rendering Propagation
+
+Let's visualize how re-renders propagate through a component tree:
+
+### State-Based (React Hooks)
+
+In state-based rendering, when state updates, the entire subtree from the point of state creation re-renders.
+You need to manually optimize with `React.memo`, `shouldComponentUpdate`, `useMemo`, and `useCallback` to
+prevent unnecessary work.
+
+<StateBasedDiagram />
+
+All descendants re-render (shown in red), regardless of whether they actually use the state.
+Only `GC 2` genuinely needs the update, but `Child 1`, `Child 2`, `Child 3`, `GC 1`, and `GC 3`
+all re-render unnecessarily.
+
+### Signal-Based (Preact Signals / Solid.js)
+
+In signal-based rendering, only components that actually read the signal's value re-render.
+The component hierarchy is irrelevant—what matters is **data dependency**, not **component ancestry**.
+
+<SignalBasedDiagram />
+
+Only `GC 2`, which actually accesses `signal.value`, re-renders (shown in green).
+All other components remain unchanged (shown in gray), even though they're part of the same component tree.
+
+## Granular Control with Control Flow
+
+Preact has a few utilities to take this further with control flow components like `Show` and `For`.
+These components scope reactivity even more precisely.
+
+```javascript
+const items = signal([]);
+// When the items signal updates, only the affected items re-render
+<For each={items}>
+  {(item) => (
+    <div>
+      {/* Only this item re-renders when item.value changes */}
+      <span>{item.name.value}</span>
+      <button
+        onClick={() => item.count.value++}
+      >
+        {item.count.value}
+      </button>
+    </div>
+  )}
+</For>
+```
+
+Compare this to classic hooks, where changing an item in a list might trigger re-renders across sibling items,
+the parent component, and any other children—unless you've carefully memoized everything.
+
+These control-flow components scope the re-render of a Signal (be that a derived computed or plain signal value) down
+to its JSX children.
+
+## Performance Implications
+
+This paradigm shift has tangible performance implications:
+
+- **Less computational work**: Fewer components re-render means less JavaScript execution.
+You're not running render functions, diffing virtual DOM, or applying effects for components that don't care about the state change.
+- **Reduced bundle size**: No need for memoization helpers like `React.memo`, `shouldComponentUpdate`, `useMemo`, or `useCallback`.
+The framework's reactivity system handles optimization automatically.
+- **Predictable performance**: Re-render locations are determined by where signals are accessed, not by component hierarchy.
+This makes performance predictable and debugging easier—you can trace which components update by following signal reads.
+- **No prop drilling**: Signals can be passed through context or even imported directly without triggering unnecessary re-renders.
+You're not forced to split contexts or create provider pyramids.
+
+## When State-Based Makes Sense
+
+It's worth noting that state-based rendering isn't inherently bad. For small components or applications where re-renders are cheap,
+the hooks model is simple and sufficient. The cost of re-rendering a few dozen components is often negligible.
+
+The trade-off becomes significant in:
+
+- Large component trees with deep nesting
+- High-frequency updates (animations, real-time data)
+- Applications with complex state distribution (multiple contexts, global state)
+
+## Conclusion
+
+The shift from state-based to signal-based rendering is more than a performance optimization—it's a paradigm shift in how we think about reactivity.
+Instead of preventing re-renders through memoization, we **only trigger re-renders where they're needed**.
+
+This inversion—from "render where you create state" to "render where you use state"—aligns our code with the actual data flow.
+It makes applications faster by default and simplifies the mental model: if you read a signal, you'll update when it changes. If you don't, you won't.
+
+As frameworks like Preact Signals and Solid.js demonstrate, this isn't a theoretical improvement—it's a practical one that makes building performant, maintainable applications easier.
+The future of front-end reactivity is fine-grained, and it's already here.
