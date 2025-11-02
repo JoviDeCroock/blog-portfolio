@@ -28,7 +28,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.4",
     "typescript": "^5.9.2",
-    "vite": "^6.3.6"
+    "vite": "^6.4.1"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,json,html}": ["biome format --write"]
