@@ -55,6 +55,7 @@ const GraphQLMyths = lazy(() => import('./pages/posts/graphql-myths/index.mdx'))
 const StateVsSignals = lazy(
   () => import('./pages/posts/state-vs-signals/index.mdx')
 )
+const Platform = lazy(() => import('./pages/posts/platform/index.mdx'))
 
 export function App() {
   return (
@@ -107,6 +108,7 @@ export function App() {
             />
             <Route component={GraphQLMyths} path="/blog/graphql-myths" />
             <Route component={StateVsSignals} path="/blog/state-vs-signals" />
+            <Route component={Platform} path="/blog/platform" />
             <Route component={NotFound} default />
           </Router>
         </div>

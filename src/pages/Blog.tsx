@@ -24,6 +24,7 @@ import { documentProps as stateModelsDocumentProps } from './posts/state-models/
 import { documentProps as surgicalRenderingDocumentProps } from './posts/signals-fetch/documentProps'
 import { documentProps as graphqlMythsDocumentProps } from './posts/graphql-myths/documentProps'
 import { documentProps as stateVsSignalsDocumentProps } from './posts/state-vs-signals/documentProps'
+import { documentProps as platformDocumentProps } from './posts/platform/documentProps'
 
 export interface Post {
   title: string
@@ -36,6 +37,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  platformDocumentProps,
   stateVsSignalsDocumentProps,
   graphqlMythsDocumentProps,
   surgicalRenderingDocumentProps,

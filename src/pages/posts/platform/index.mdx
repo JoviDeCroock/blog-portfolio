@@ -1,0 +1,182 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# The Browser Has Everything You Need
+
+There's this false dichotomy in web development between SPAs and server-side rendered applications,
+as if choosing one means sacrificing the benefits of the other. The narrative goes: SPAs give you instant
+navigation but slow initial loads, while SSR gives you fast first paint but clunky subsequent navigation.
+We treat loading data and loading JavaScript as mutually exclusive operations.
+
+But here's the thing, the browser has had solutions for these problems all along.
+
+## The False Choice
+
+I've seen this pattern repeat itself countless times: teams build a SPA, struggle with initial load performance,
+then swing completely to SSR with progressive enhancement. They throw out the SPA architecture because they think
+it's fundamentally at odds with performance. But the real issue isn't the architecture—it's that we're not leveraging
+what the browser already gives us.
+
+When you server-render HTML, the browser starts parsing it immediately. During that parse, it discovers resources
+it needs: stylesheets, scripts, images. The browser is already doing parallel loading—that's its default behavior.
+The problem is we're not telling it about our data dependencies early enough.
+
+## Say what?
+
+`<link rel="preload">` isn't new, but it's criminally underutilized for data fetching.
+When you inline these hints in your server-rendered HTML the browser will discover them during HTML parsing:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="preload" as="fetch" href="/api/user/123" crossorigin>
+  <link rel="preload" as="script" href="/bundle.js">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <!-- Your app -->
+</body>
+</html>
+```
+
+The browser discovers all of these during HTML parsing and dispatches the requests in parallel.
+By the time your JavaScript bundle loads and executes, your data fetch might already be in the browser's cache.
+No waterfalls, no sequential loading, no choosing between data and code.
+
+This is the key insight: **you can preload data the same way you preload any other resource**.
+Your REST endpoints, your GraphQL queries—they're just HTTP resources.
+
+If `bundle.js` depends on `/api/user/123`, tell the browser to start fetching that data
+as soon as possible. When the JS loads and it does the fetch it will hook in to the existing
+process if it's still ongoing or get the cached response if it's already done.
+
+## Making this work
+
+Say you're rendering a product page, you know from the URL that you need product data:
+
+```javascript
+// Server-side rendering
+export async function renderProductPage(req, res) {
+  const productId = req.params.id;
+
+  // Generate the HTML with preload hints
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <link rel="preload"
+        as="fetch"
+        href="/api/products/${productId}"
+        crossorigin
+      >
+      <link rel="preload" as="script" href="/app.js">
+      <link rel="stylesheet" href="/styles.css">
+    </head>
+    <body>
+      <div id="root"></div>
+      <script src="/app.js"></script>
+    </body>
+    </html>
+  `;
+
+  res.send(html);
+}
+```
+
+Then in your client code:
+
+```javascript
+// Client-side data fetching
+async function fetchProduct(productId) {
+  // This request likely hits the browser's cache
+  // because we preloaded it
+  const response = await fetch(`/api/products/${productId}`);
+  return response.json();
+}
+```
+
+The fetch call in your JavaScript might complete instantly because the response is already cached.
+You get the benefits of SSR (fast HTML delivery, progressive enhancement) with the benefits of a SPA (fast client-side hydration).
+
+With REST endpoints this is straightforward, the URL is stable and predictable.
+GraphQL is trickier because queries are typically sent via POST with dynamic request bodies,
+you can't preload a POST request.
+
+This is where **persisted operations** (also called trusted documents) come in, read more about it in [my other post](../persisted-operations/index.mdx).
+The gist of it is you send a hash that represents the query:
+
+```graphql
+GET /graphql?documentId=abc123&variables={"id":"123"}
+```
+
+Now it's a GET request with a predictable URL structure, which means you can preload it:
+
+```html
+<link rel="preload"
+  as="fetch"
+  href="/graphql?documentId=abc123&variables={&quot;id&quot;:&quot;123&quot;}"
+  crossorigin
+>
+```
+
+## The catch
+
+There's one limitation here, to insert preload hints during server-side rendering you need to know the variables ahead of time. This generally means:
+
+- **URL-derived variables** - Product IDs, user IDs, category slugs, anything in the URL path or query string
+- **Cookie-derived variables** - User authentication, preferences
+- **Header-derived variables** - Locale, device type
+
+Variables that depend on client-side state or user interaction can't be preloaded, you don't know them during SSR.
+In practice the initial page load queries are usually derivable from the request context.
+
+## Why this matters
+
+What I'm describing isn't some bleeding-edge technique, it's using the platform as designed.
+The browser is built to load resources in parallel, preload hints are a standard well-supported feature,
+GraphQL persisted operations have been around for years.
+
+Yet we keep building increasingly complex frameworks to solve what is fundamentally a resource loading problem,
+we server-render, then client-render, then partially hydrate, then stream render... when sometimes we just
+need to tell the browser "hey, you're going to need this data, start fetching it now."
+
+This doesn't mean you should abandon your framework or rewrite everything, it does mean you should think
+about resource loading as a first-class concern in your architecture. Whether you're using Next.js, Remix,
+SvelteKit, or rolling your own SSR you can benefit from preload hints.
+
+You shouldn't preload everything but loading the critical data upfront can drastically improve perceived performance
+and save you from choosing between SSR and SPA architectures for waterfall reasons.
+
+## The mental model shift
+
+The key shift is thinking about your data dependencies as **static analysis** rather than runtime composition, instead of:
+
+> "When the component mounts, it will figure out what data it needs and fetch it"
+
+Think:
+
+> "Based on the route, we know what data will be needed, so we can preload it before the component even executes"
+
+This is how Relay works by the way, the Relay compiler analyzes your components' data dependencies at build time and generates optimized queries.
+You can apply similar principles without buying into Relay's full architecture.
+
+## Closing thoughts
+
+I'm not saying preload hints solve every performance problem, they don't help with data that depends on user interactions,
+they don't eliminate the need for code splitting, and they don't magically make your API faster.
+
+But they do eliminate a specific class of problem—the false choice between SSR and SPA, between fast initial load and fast client-side navigation.
+The browser already loads resources in parallel, we just need to tell it about our data dependencies.
+
+Stop treating SPAs and SSR as opposing paradigms, start thinking about resource hints as core infrastructure. The browser has everything you need, you just have to use it.
