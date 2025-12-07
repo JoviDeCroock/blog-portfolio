@@ -20,11 +20,7 @@ const Footer = () => (
       BlueSky
     </FooterLink>
     -
-    <FooterLink
-      rel="nofollow"
-      target="blank"
-      href="https://x.com/jovidec"
-    >
+    <FooterLink rel="nofollow" target="blank" href="https://x.com/jovidec">
       Twitter
     </FooterLink>
     -
