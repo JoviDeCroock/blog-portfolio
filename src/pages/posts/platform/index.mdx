@@ -181,7 +181,7 @@ You can apply similar principles without buying into Relay's full architecture.
 I'm not saying preload hints solve every performance problem, they don't help with data that depends on user interactions,
 they don't eliminate the need for code splitting, and they don't magically make your API faster.
 
-But they do eliminate a specific class of problem—the false choice between SSR and SPA, between fast initial load and fast client-side navigation.
+But they do eliminate a specific class of problem: the false choice between SSR and SPA, between fast initial load and fast client-side navigation.
 The browser already loads resources in parallel, we just need to tell it about our data dependencies.
 
 Stop treating SPAs and SSR as opposing paradigms, start thinking about resource hints as core infrastructure. The browser has everything you need, you just have to use it.
