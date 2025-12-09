@@ -25,11 +25,11 @@ But here's the thing, the browser has had solutions for these problems all along
 
 I've seen this pattern repeat itself countless times: teams build a SPA, struggle with initial load performance,
 then swing completely to SSR with progressive enhancement. They throw out the SPA architecture because they think
-it's fundamentally at odds with performance. But the real issue isn't the architecture—it's that we're not leveraging
+it's fundamentally at odds with performance. But the real issue isn't the architecture, it's that we're not leveraging
 what the browser already gives us.
 
 When you server-render HTML, the browser starts parsing it immediately. During that parse, it discovers resources
-it needs: stylesheets, scripts, images. The browser is already doing parallel loading—that's its default behavior.
+it needs: stylesheets, scripts, images. The browser is already doing parallel loading, by default.
 The problem is we're not telling it about our data dependencies early enough.
 
 ## Say what?
@@ -60,7 +60,7 @@ By the time your JavaScript bundle loads and executes, your data fetch might alr
 No waterfalls, no sequential loading, no choosing between data and code.
 
 This is the key insight: **you can preload data the same way you preload any other resource**.
-Your REST endpoints, your GraphQL queries—they're just HTTP resources.
+Your REST endpoints, your GraphQL queries, they're just HTTP resources.
 
 If `bundle.js` depends on `/api/user/123`, tell the browser to start fetching that data
 as soon as possible. When the JS loads and it does the fetch it will hook in to the existing
