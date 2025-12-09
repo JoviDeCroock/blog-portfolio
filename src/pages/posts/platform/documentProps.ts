@@ -1,5 +1,5 @@
 export const documentProps = {
-  createdAt: '2025-11-05',
+  createdAt: '2025-12-09',
   title: 'The Browser Has Everything You Need',
   description:
     'Stop treating SPAs and SSR as opposing paradigms. The browser already loads resources in parallel but you have to use it.',
