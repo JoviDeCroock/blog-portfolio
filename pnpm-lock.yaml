@@ -13,16 +13,16 @@ dependencies:
     version: 2.1.16(csstype@3.2.3)
   hoofd:
     specifier: ^1.7.3
-    version: 1.7.3(react@19.2.0)
+    version: 1.7.3(react@19.2.3)
   preact:
     specifier: beta
     version: 11.0.0-beta.0
   preact-iso:
     specifier: ^2.10.0
-    version: 2.10.0(preact-render-to-string@6.6.3)(preact@11.0.0-beta.0)
+    version: 2.10.0(preact-render-to-string@6.6.4)(preact@11.0.0-beta.0)
   preact-render-to-string:
-    specifier: ^6.6.3
-    version: 6.6.3(preact@11.0.0-beta.0)
+    specifier: ^6.6.4
+    version: 6.6.4(preact@11.0.0-beta.0)
   rehype-highlight:
     specifier: ^7.0.0
     version: 7.0.0
@@ -1700,12 +1700,12 @@ packages:
     engines: {node: '>=12.0.0'}
     dev: false
 
-  /hoofd@1.7.3(react@19.2.0):
+  /hoofd@1.7.3(react@19.2.3):
     resolution: {integrity: sha512-ssVCn3i3w97C4ubB6Xf4oGbil5lj/r9rn7ZRlY5p1JmLa6i7ZviCk9Huo9WDK2OvP6K7HTga5+SRnw07e2uKOw==}
     peerDependencies:
       react: '>= 16.8.0'
     dependencies:
-      react: 19.2.0
+      react: 19.2.3
     dev: false
 
   /husky@9.1.7:
@@ -2479,18 +2479,18 @@ packages:
       source-map-js: 1.2.1
     dev: true
 
-  /preact-iso@2.10.0(preact-render-to-string@6.6.3)(preact@11.0.0-beta.0):
+  /preact-iso@2.10.0(preact-render-to-string@6.6.4)(preact@11.0.0-beta.0):
     resolution: {integrity: sha512-zQ0dZdgdZ+L+WmD0IgbPrgSajahbrbkNSuCbXG5ZDHaT6vDSaRRlvt3NIP5+w8iltMCBqj8YPROM3El/qIKjvA==}
     peerDependencies:
       preact: '>=10 || >= 11.0.0-0'
       preact-render-to-string: '>=6.4.0'
     dependencies:
       preact: 11.0.0-beta.0
-      preact-render-to-string: 6.6.3(preact@11.0.0-beta.0)
+      preact-render-to-string: 6.6.4(preact@11.0.0-beta.0)
     dev: false
 
-  /preact-render-to-string@6.6.3(preact@11.0.0-beta.0):
-    resolution: {integrity: sha512-7oHG7jzjriqsFPkSPiPnzrQ0GcxFm6wOkYWNdStK5Ks9YlWSQQXKGBRAX4nKDdqX7HAQuRvI4pZNZMycK4WwDw==}
+  /preact-render-to-string@6.6.4(preact@11.0.0-beta.0):
+    resolution: {integrity: sha512-Bn6eQZ5SQ5loVEcC/mZmKT7HzO5Z/+vYzxfE/W2N468oSoNMJVdFGApF0GyXq0lDthuyXKTmtZ8k20NpYjr6Rw==}
     peerDependencies:
       preact: '>=10 || >= 11.0.0-0'
     dependencies:
@@ -2504,8 +2504,8 @@ packages:
     resolution: {integrity: sha512-TwEZ+X+yCJmYfL7TPUOcvBZ4QfoT5YenQiJuX//0th53DE6w0xxLEtfK3iyryQFddXuvkIk51EEgrJQ0WJkOmQ==}
     dev: false
 
-  /react@19.2.0:
-    resolution: {integrity: sha512-tmbWg6W31tQLeB5cdIBOicJDJRR2KzXsV7uSK9iNfLWQ5bIZfxuPEHp7M8wiHyHnn0DD1i7w3Zmin0FtkrwoCQ==}
+  /react@19.2.3:
+    resolution: {integrity: sha512-Ku/hhYbVjOQnXDZFv2+RibmLFGwFdeeKHFcOTlrt7xplBnya5OGn/hIRDsqDiSUcfORsDC7MPxwork8jBwsIWA==}
     engines: {node: '>=0.10.0'}
     dev: false
 
