@@ -17,6 +17,7 @@ import { documentProps as unreliableVendorsDocumentProps } from './posts/unrelia
 import { documentProps as graphqlsMissingFeatureDocumentProps } from './posts/document-authoring-missing-feature/documentProps'
 import { documentProps as fragmentVdomDocumentProps } from './posts/fragments-in-vdom/documentProps'
 import { documentProps as signalsDocumentProps } from './posts/signals/documentProps'
+import { documentProps as signalsDebuggingDocumentProps } from './posts/signals-debugging/documentProps'
 import { documentProps as skewDocumentProps } from './posts/skew-based-diff/documentProps'
 import { documentProps as trackingContextDocumentProps } from './posts/tracking-context/documentProps'
 import { documentProps as graphqlAsteriskProblemDocumentProps } from './posts/graphql-asterisk-problem/documentProps'
@@ -37,6 +38,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  signalsDebuggingDocumentProps,
   platformDocumentProps,
   stateVsSignalsDocumentProps,
   graphqlMythsDocumentProps,

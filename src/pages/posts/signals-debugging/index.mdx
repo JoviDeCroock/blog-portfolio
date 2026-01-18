@@ -1,7 +1,6 @@
 import SEO from '../../../components/Seo'
 import CodeTheme from '../../../components/CodeTheme'
 import { documentProps } from './documentProps'
-import WaterfallDiagram from './WaterfallDiagram'
 
 <CodeTheme />
 <SEO
@@ -67,4 +66,11 @@ React transform you can just add `debug: true` to your settings and you can just
 the `@preact/signals-preact-transform` plugin to your babel config and it will also automatically
 name your signals. The name will be derived from the variable you assign it to.
 
+The one thing that the console _currently_ doesn't surface is the graph structure of the dependencies, and
+how components tie into this.
 
+This is where the extension comes in, we are working on an extension that you can use as a chrome-extension
+or just embed it in your page for local debugging. This will have a graph visualization of the dependencies
+as well as tie in components to the graph.
+
+Go try it out, give us feedback and help us improve it!
