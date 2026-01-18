@@ -1,0 +1,70 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+import WaterfallDiagram from './WaterfallDiagram'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# Debugging signals
+
+Over time we have grown very used to the paradigm of React components calling
+a state setter that triggers a re-render. Generally there is only one type of re-render,
+we call `setState`, React goes to where that state is created and initializes the rendering
+process.
+
+From there a few things can happen, React may bail out of rendering because the state eventually
+amounted to the same value, it may re-render a subtree of components (our typical top-down rendering),
+or we are dealing with a react context and it will _notify_ every component that consumes that context.
+
+In our signals based world it becomes a bit different when we want to debug why something re-rendered or
+why something changed more generally. It isn't neccessarily harder but you have to think differently about it.
+
+Let's unwrap the above, a signal change can amount to a handful of things happening:
+
+- A component uses that signal directly and re-renders
+- A computed that uses that signal re-evaluates
+  - When this computed has no change in eventual value, nothing further happens
+  - When this computed has a change in eventual value, anything that uses that computed will re-compute/re-render.
+- An effect is tracking that signal and re-runs
+
+All of the above can propagate changes in a graph-like manner, where one change causes another change, which causes another change, etc.
+
+I've personally ran into issues finding the graph myself hence I started working on some debugging tools
+to help visualize and understand what is going on.
+
+## Console debugging
+
+This is the package I personally feel most confident in at the moment, it is called [`@preact/signals-debug`](https://www.npmjs.com/package/@preact/signals-debug).
+When you import the package it will augment signals to log to the console whenever something happens.
+
+Pseudo console example:
+
+```
+Signal changed: from 1 to 2
+  | -> Computed re-evaluated: from 2 to 4
+```
+
+This looks hard to reason about because we see an abstractly named signal/computed, in practice
+we can fix that because we can give our signals and computeds proper names:
+
+```js
+import { signal, computed } from '@preact/signals-debug';
+const count = signal(0, {name: 'count'});
+const doubleCount = computed(() => count.value * 2, {name: 'doubleCount'});
+```
+
+This will be reflected into the debugging output which will help you track down the source of changes.
+
+We've added this functionality as a babel transform for both React as well as praect. In the
+React transform you can just add `debug: true` to your settings and you can just add
+the `@preact/signals-preact-transform` plugin to your babel config and it will also automatically
+name your signals. The name will be derived from the variable you assign it to.
+
+
