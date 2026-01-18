@@ -5,5 +5,5 @@ export const documentProps = {
     'Understanding how to debug signals-based state changes and visualize the dependency graph.',
   image: 'https://www.jovidecroock.com/signals-debugging.jpg',
   path: '/blog/signals-debugging',
-  tags: ['signals', 'debugging', 'front-end', 'preact'],
+  tags: ['front-end'],
 }
