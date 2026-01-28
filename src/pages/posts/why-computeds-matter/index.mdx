@@ -1,0 +1,171 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<Dates createdAt={documentProps.createdAt} />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# Why Computed Signals Matter
+
+When you first start using signals, it's tempting to treat them like any other state primitive.
+You access `.value`, use it in your component, and everything works.
+But there's a subtle performance cliff that many developers fall off without realizing it.
+
+Let's look at two seemingly similar examples:
+
+## The state-like Approach
+
+```javascript
+import { useSignal } from '@preact/signals'
+
+function Component() {
+  const count = useSignal(0)
+
+  const isEven = count.value % 2 === 0
+
+  return <p>Your input is {isEven ? 'even' : 'uneven'}</p>
+}
+```
+
+This looks reasonable. We're deriving a value from our signal, using it in the JSX. Ship it, right?
+
+## The Computed Approach
+
+```javascript
+import { useSignal, useComputed } from '@preact/signals'
+
+function Component() {
+  const count = useSignal(0)
+
+  const isEven = useComputed(() => (count.value % 2 === 0 ? 'even' : 'uneven'))
+
+  return <p>Your input is {isEven}</p>
+}
+```
+
+At first glance, this might seem like over-engineering. We've wrapped our simple boolean expression in `useComputed`. Why bother?
+
+## The Critical Difference
+
+Here's where it gets interesting. Let's trace what happens when `count` changes from 2 to 4:
+
+**State-like approach:**
+
+1. `count` signal updates from 2 to 4
+2. Component is subscribed to `count` because it accessed `.value`, so it re-renders when `count` changes
+3. During re-render, `isEven` is recalculated: `4 % 2 === 0` → `true`
+4. JSX re-evaluates with the same value
+5. Virtual DOM diff happens
+6. No actual DOM update needed, but we've done all the work anyway
+
+**Computed approach:**
+
+1. `count` signal updates from 2 to 4
+2. `isEven` computed recalculates: `4 % 2 === 0 ? 'even' : 'uneven'` → `'even'`
+3. `isEven` value hasn't changed (still `'even'`)
+4. Component never re-renders because its dependency (`isEven`) didn't change
+5. No virtual DOM work needed
+
+The component in the second example doesn't know or care that `count` changed.
+It only subscribes to `isEven`, and `isEven` correctly determined that the derived state remained the same.
+
+## Understanding the Subscription Graph
+
+This is the fundamental insight about signals: they create a dependency graph,
+and computeds are nodes in that graph that can absorb changes.
+
+```
+count (signal)
+  └─> isEven (computed)
+       └─> Component
+```
+
+When you use `count.value` directly in your component, you're creating this graph:
+
+```
+count (signal)
+  └─> Component
+```
+
+The component has no buffer against changes. Every update to `count` triggers a re-render,
+even when the derived state that the component actually cares about hasn't changed.
+
+<aside class="post-callout">
+  💡 Computeds recalculate independently of the component lifecycle
+</aside>
+
+## The Mental Model Shift
+
+Coming from React hooks, you're used to thinking: "I need to memoize this expensive calculation with `useMemo`."
+With signals, the question becomes: "What is this component actually subscribing to?"
+
+If your component is subscribing to raw signals when it should be subscribing to derived state,
+you're doing unnecessary work. Computeds let you refine what your components react to.
+
+Think of computeds as cache nodes in your dependency graph. They sit between volatile data and your components,
+only propagating changes when something meaningful actually changed.
+
+## Preact's Granular Updates
+
+In Preact specifically, this becomes even more powerful.
+Preact Signals can update DOM nodes directly without re-rendering components,
+but this only works when signals (or computeds) are used directly in JSX:
+
+```javascript
+function Component() {
+  const count = useSignal(0)
+  const isEven = useComputed(() => (count.value % 2 === 0 ? 'even' : 'uneven'))
+
+  // This text node updates directly, no component re-render
+  return <p>Your input is {isEven}</p>
+}
+```
+
+But if you break the signal chain:
+
+```javascript
+function Component() {
+  const count = useSignal(0)
+  const isEven = count.value % 2 === 0 ? 'even' : 'uneven'
+
+  // Now we have to re-render the component
+  return <p>Your input is {isEven ? 'even' : 'uneven'}</p>
+}
+```
+
+You've lost both benefits: the component re-renders on every `count` change, and Preact can't do direct DOM updates because `isEven` isn't a signal.
+
+## Visualizing Your Dependency Graph
+
+One of the challenges when learning to think in signals is understanding what your actual dependency graph looks like.
+Which components subscribe to which signals? When does a computed recalculate versus propagate unchanged?
+
+Fortunately, there are tools to help you see this. The [`@preact/signals-debug`](https://github.com/preactjs/signals/tree/main/packages/debug) package
+logs signal changes to the console, showing you the cascade of updates in real-time.
+
+This makes it immediately visible when computeds are absorbing changes versus propagating them.
+
+For a more visual approach, [`@preact/signals-devtools-ui`](https://github.com/preactjs/signals/tree/main/packages/devtools-ui) provides a graph visualization of
+your entire dependency tree. You can see signals, computeds, and components as nodes, with edges showing the subscription relationships.
+When you update a signal, you can watch the cascade of updates flow through the graph.
+
+## Conclusion
+
+Computeds aren't just about caching expensive operations, they're about controlling the propagation of change through your component tree.
+By placing computeds between your raw state and your components, you're creating semantic boundaries: "This component cares about whether the number is even, not what the number actually is."
+
+This is the pull-based reactivity model working for you. Components pull the values they need, but they only re-render when those specific values change.
+Computeds are the mechanism that makes this precision possible.
+
+It's a different mental model from hooks, but once it clicks, you'll find yourself thinking less about optimization and more about what your
+components actually depend on. The performance improvements come naturally from expressing your dependencies correctly.
+
+And that's kind of the point of signals, isn't it? Make the straightforward code also be the fast code.
