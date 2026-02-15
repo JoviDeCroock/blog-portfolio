@@ -27,6 +27,7 @@ import { documentProps as graphqlMythsDocumentProps } from './posts/graphql-myth
 import { documentProps as stateVsSignalsDocumentProps } from './posts/state-vs-signals/documentProps'
 import { documentProps as platformDocumentProps } from './posts/platform/documentProps'
 import { documentProps as whyComputedsMatterDocumentProps } from './posts/why-computeds-matter/documentProps'
+import { documentProps as effectSubscriptionsDocumentProps } from './posts/effect-subscriptions/documentProps'
 
 export interface Post {
   title: string
@@ -39,6 +40,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  effectSubscriptionsDocumentProps,
   whyComputedsMatterDocumentProps,
   signalsDebuggingDocumentProps,
   platformDocumentProps,
