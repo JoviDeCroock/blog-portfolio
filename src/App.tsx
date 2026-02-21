@@ -62,6 +62,9 @@ const Platform = lazy(() => import('./pages/posts/platform/index.mdx'))
 const whyComputedsMatter = lazy(
   () => import('./pages/posts/why-computeds-matter/index.mdx')
 )
+const EffectSubscriptions = lazy(
+  () => import('./pages/posts/effect-subscriptions/index.mdx')
+)
 
 export function App() {
   return (
@@ -122,6 +125,10 @@ export function App() {
             <Route
               component={whyComputedsMatter}
               path="/blog/why-computed-matters"
+            />
+            <Route
+              component={EffectSubscriptions}
+              path="/blog/effect-subscriptions"
             />
             <Route component={NotFound} default />
           </Router>

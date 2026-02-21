@@ -1,0 +1,139 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# Thinking About Effect Subscriptions
+
+The `effect` API from `@preact/signals` has a great ergonomic property: you don't declare dependencies.
+They're derived automatically from which signals you access during execution.
+
+```typescript
+effect(() => {
+  if (mySignal.value) {
+    // do work
+  }
+})
+```
+
+When `mySignal` changes, the callback re-runs. No dependency arrays, no stale closures, no forgetting to add a dep.
+
+## Conditional Branches Are Fine
+
+A common concern is conditional signal access. What happens when a signal is only accessed in one branch?
+
+```typescript
+effect(() => {
+  if (mySignal.value) {
+    return
+  } else if (myOtherSignal.value) {
+    return
+  }
+})
+```
+
+This looks like `myOtherSignal` might be missed when `mySignal` is truthy. It won't be — but that's actually fine.
+While `mySignal` is truthy, we don't care about `myOtherSignal`. The effect's work is already done.
+When `mySignal` eventually becomes falsy, the effect re-runs, hits the `else if` branch, and subscribes
+to `myOtherSignal` at that point.
+
+The dependency set is rebuilt on every execution. Signals that weren't accessed are unsubscribed,
+signals that were accessed are subscribed. This is a feature, not a limitation — it means effects
+only track what they actually need right now.
+
+## When Lazy Subscriptions Break Down
+
+There are two cases where this automatic tracking falls short and you need to think more carefully
+about what you're subscribing to.
+
+### 1. Untracked Access
+
+If you use `.peek()` or `untracked()` to read a signal without subscribing, you've created a blind spot.
+A common example is skipping work on first render:
+
+```typescript
+effect(() => {
+  if (isFirstRender.peek()) {
+    isFirstRender.value = false
+    return
+  }
+
+  // Real work that should be reactive
+  updateUI(count.value)
+})
+```
+
+The intent is clear — don't run the side effect on first render, only on subsequent signal changes.
+But `count` is never tracked in that initial run. When it changes value in subsequent renders, the
+effect has no idea. It's stuck in its bailed-out state because it never subscribed to the signal
+that controls whether it should run.
+
+The fix is to eagerly subscribe before bailing:
+
+```typescript
+effect(() => {
+  const currentCount = count.value // Subscribe eagerly
+  if (isFirstRender.peek()) {
+    isFirstRender.value = false
+    return
+  }
+
+  updateUI(currentCount)
+})
+```
+
+Now `count` is tracked. When it changes value later, the effect re-runs, skips the bail-out,
+and hits the real work. This is the general pattern: if a signal gates whether the effect should
+do anything, you need to subscribe to it even if you want to skip the current execution.
+
+### 2. Async Callbacks
+
+Effect dependencies are registered synchronously. Any signal access inside an async callback,
+a `setTimeout`, or a `Promise.then` happens outside the tracking scope.
+
+```typescript
+effect(() => {
+  fetchData().then(() => {
+    // This runs asynchronously — outside tracking
+    target.value = result.value
+  })
+})
+```
+
+`result` is accessed after the synchronous execution completes, so it's never tracked.
+Changes to `result` won't re-trigger the effect.
+
+If you need the effect to react to a signal that's only relevant asynchronously, access it
+synchronously first:
+
+```typescript
+effect(() => {
+  const currentResult = result.value // Subscribe synchronously
+  fetchData().then(() => {
+    target.value = currentResult
+  })
+})
+```
+
+Now `result` is tracked. The effect re-runs when `result` changes, which triggers a new `fetchData`
+call with the updated value. Whether that's the behavior you actually want is a separate question
+— but at least the subscription is explicit.
+
+## The Mental Model
+
+Effects track what they touch during synchronous execution. That tracking is rebuilt every run.
+This gives you two properties:
+
+- **Conditional branches naturally narrow the dependency set** — you only subscribe to what matters for the current state
+- **Anything outside synchronous execution is invisible** — `peek`, `untracked`, and async callbacks all create blind spots
+
+The first property is almost always what you want. The second requires you to be intentional about
+when you're opting out of tracking and what consequences that has.
