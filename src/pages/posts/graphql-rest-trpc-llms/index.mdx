@@ -1,0 +1,207 @@
+import SEO from '../../../components/Seo'
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<Dates createdAt={documentProps.createdAt} />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# I changed my mind about GraphQL, REST and tRPC
+
+I used to think a lot of the API discussion came down to developer ergonomics.
+How easy is it for the front-end to ask for exactly the data it needs? How easy
+is it to evolve the contract? How much duplicated glue code do we have to write
+between the back-end and the UI?
+
+With that framing GraphQL looked extremely compelling to me. In many ways it still
+does. It gives us a strong contract, composable fragments, better co-location and
+an explicit model for shaping data around the UI.
+
+But over the last year I noticed that my weighting changed.
+
+The reason wasn't that GraphQL got worse. The reason was that LLM-driven
+development made a bunch of the old REST pain a lot less painful.
+
+<aside class="post-callout">
+  A lot of this is written from my personal point of view writing several solo side-projects.
+</aside>
+
+## My old position
+
+The strongest argument for GraphQL was never that it was trendy or that one endpoint
+was somehow more elegant. It was that front-end development gets materially better
+when the data contract is explicit and queryable.
+
+When a component owns a fragment and the page owns a query, we get a workflow that
+is easy to reason about.
+
+- The UI expresses its data requirements directly.
+- The schema gives us a shared language.
+- Generated types close the gap between server and client.
+- We avoid a lot of endpoint proliferation and response-shape drift.
+
+REST by comparison often felt like a negotiation with the past. You get back too much,
+too little or the wrong shape, so now you either add another endpoint, add another query
+parameter or stitch together multiple requests on the client.
+
+tRPC solved a different problem. It made the server-client boundary feel almost invisible
+for TypeScript teams. Instead of maintaining a more formal contract, you could lean on
+shared types and just call procedures.
+
+So my mental ranking used to be fairly simple.
+
+- GraphQL when I wanted the best front-end workflow.
+- tRPC when the whole system was TypeScript and it was mostly web to API.
+- REST when I had to live with existing infrastructure.
+
+I do not think that ranking holds as cleanly anymore.
+
+## What changed
+
+A lot of the historical pain around REST was authoring overhead.
+
+Someone had to define the endpoint, document it, wire the handler, shape the response,
+write the client call, write the local types and keep all of that in sync while the UI
+kept changing.
+
+That work is still real, but it is exactly the kind of work LLMs are surprisingly good at.
+
+If I need:
+
+- a `GET /products/:id` handler,
+- a typed client wrapper,
+- a Zod schema for the response,
+- a React query hook,
+- and a quick test,
+
+that is no longer an afternoon of tedious glue work. It is often a single prompt, a review,
+and maybe some edge case corrections.
+
+This matters because a lot of the practical pressure toward GraphQL came from how painful it was
+to keep front-end data needs aligned with REST endpoints by hand. If the cost of creating and
+maintaining boring endpoint glue drops sharply, REST starts looking better than it used to.
+
+Not because it became more expressive, but because the tax got smaller.
+
+## Why REST looks better to me now
+
+REST benefits a lot from LLM-assisted development because its units are simple.
+
+Endpoints are easy to describe, easy to inspect in a network tab, easy to mock and easy to
+reason about in isolation. The model is boring in a good way. When I ask an LLM to generate
+or update a REST handler there is less ambient context to keep in its head.
+
+That simplicity compounds in practice.
+
+- The request and response are obvious.
+- Caching semantics are often easier to apply.
+- Logs and traces tend to be more legible.
+- Incremental changes are cheap.
+- Tooling is good enough almost everywhere.
+
+If a team is shipping a product with fairly understandable resource boundaries, then REST plus
+good typing and validation has become much more attractive to me than it was a few years ago.
+
+Especially now that LLMs can help fill in the repetitive parts that used to push me toward more
+abstract solutions.
+
+## Why this does not mean GraphQL lost me
+
+I have not changed my mind in the direction of "just use REST for everything."
+
+GraphQL still solves real problems that LLMs do not erase.
+
+For larger products, the ability to compose data requirements around the UI is still a huge win.
+Fragments are still a better scaling mechanism than manually keeping endpoint payloads aligned with
+component needs. A strong schema is still a great integration surface between teams. Persisted
+operations are still an underrated deployment, security and performance story.
+
+But GraphQL also brings a lot of complexity with it. You are not just choosing a query language,
+you are choosing schema design work, client tooling, cache behavior, type generation, governance,
+operation management and a fairly high expectation of consistency across teams. When that investment
+is there the model can be great. When it is not, the complexity shows up fast.
+
+What changed is the threshold.
+
+I now think GraphQL needs to justify itself with system-level advantages, not just with "it gives the
+front-end a cleaner data model."
+
+That means I reach for GraphQL when I expect things like:
+
+- many surfaces needing different projections of the same domain,
+- lots of UI composition pressure,
+- a long-lived API contract consumed by multiple clients,
+- strong investment in schema discipline and tooling,
+- and a team willing to uphold the operational rigor that makes GraphQL actually good.
+
+Without that rigor GraphQL often degrades into an expensive abstraction that still has all the complexity
+of a distributed system, plus a new language to argue about.
+
+## Where tRPC fits for me
+
+tRPC still makes a lot of sense, but I think the sweet spot is narrower than people sometimes admit.
+
+When you have a TypeScript-heavy team, a single application boundary and a strong desire to move quickly,
+tRPC can feel fantastic. The feedback loop is short, types flow naturally and the amount of ceremony is low.
+
+That is real value.
+
+But the same thing that makes it feel great locally can become a limitation as the system grows.
+
+The contract is less explicit outside the TypeScript world. The API is less naturally consumable by other
+platforms. The architecture can become tightly coupled to one stack and one organization shape.
+
+LLMs help here too, but in a different way. They make shared TypeScript and procedure glue easier to work with,
+yet they do not change the fact that tRPC is optimized for a relatively specific environment.
+
+So for me tRPC is no longer "the modern replacement" for everything. It is the right answer for teams that know
+they want a tight TypeScript boundary and are comfortable with the tradeoff that comes with it.
+
+## What LLMs changed in the debate
+
+The old debate often assumed that humans were paying the full cost of boilerplate, client generation, repetitive
+handlers and contract maintenance by hand.
+
+That assumption is weaker now.
+
+LLMs do not remove the need for good API design. They do not remove the need for clear boundaries, caching strategy,
+backward compatibility or observability. But they do reduce the pain of straightforward implementation work.
+
+That shifts the comparison.
+
+If the implementation tax gets lower, then you have to care more about:
+
+- how visible the system is,
+- how easy it is to debug,
+- how broadly consumable the contract is,
+- how much discipline the model requires,
+- and whether the abstraction earns its place over time.
+
+That is why my position changed. LLMs did not make GraphQL worse. They made implementation overhead a
+weaker argument in its favor.
+
+## My current rule of thumb
+
+Today my default is much more pragmatic.
+
+Use REST when the domain is understandable, the resource boundaries are clear and the team benefits from simplicity.
+
+Use GraphQL when you truly need composition, a durable schema contract and a front-end workflow that would otherwise
+turn into endpoint sprawl.
+
+Use tRPC when the boundary is intentionally narrow, the team is deeply invested in TypeScript and cross-platform API
+consumption is not a major concern.
+
+That is less elegant than my old opinion, but I think it is more honest.
+
+We should still care about good abstractions. We should still invest in good developer workflows. But in a world where
+LLMs can generate a lot of the boring code, I am much less interested in architectures that win primarily by smoothing
+over endpoint and integration churn.
+
+The question I care about more now is simple: what shape of API will still feel understandable, operable and adaptable
+after the implementation boost wears off?

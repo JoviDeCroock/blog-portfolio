@@ -29,6 +29,7 @@ import { documentProps as stateVsSignalsDocumentProps } from './posts/state-vs-s
 import { documentProps as platformDocumentProps } from './posts/platform/documentProps'
 import { documentProps as whyComputedsMatterDocumentProps } from './posts/why-computeds-matter/documentProps'
 import { documentProps as effectSubscriptionsDocumentProps } from './posts/effect-subscriptions/documentProps'
+import { documentProps as graphqlRestTRPCLLMsDocumentProps } from './posts/graphql-rest-trpc-llms/documentProps'
 
 export interface Post {
   title: string
@@ -42,6 +43,7 @@ export interface Post {
 
 export const posts: Array<Post> = [
   llmSignalsDebuggingDocumentProps,
+  graphqlRestTRPCLLMsDocumentProps,
   effectSubscriptionsDocumentProps,
   whyComputedsMatterDocumentProps,
   signalsDebuggingDocumentProps,
