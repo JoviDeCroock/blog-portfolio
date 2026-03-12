@@ -3,6 +3,7 @@ import { useState } from 'preact/hooks'
 
 import SEO from '../components/Seo'
 
+import { documentProps as llmSignalsDebuggingDocumentProps } from './posts/llm-signals-debugging/documentProps'
 import { documentProps as VDomDocumentProps } from './posts/vdom-compilers/documentProps'
 import { documentProps as inputsDocumentProps } from './posts/controlled-inputs/documentProps'
 import { documentProps as ssrDocumentProps } from './posts/suspense-data-ssr/documentProps'
@@ -40,6 +41,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  llmSignalsDebuggingDocumentProps,
   effectSubscriptionsDocumentProps,
   whyComputedsMatterDocumentProps,
   signalsDebuggingDocumentProps,

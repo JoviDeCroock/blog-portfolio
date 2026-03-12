@@ -12,6 +12,9 @@ const Home = lazy(() => import('./pages/Home'))
 const Blueprint = lazy(() => import('./pages/Blueprint'))
 
 // Posts
+const LlmSignalsDebugging = lazy(
+  () => import('./pages/posts/llm-signals-debugging/index.mdx')
+)
 const VDom = lazy(() => import('./pages/posts/vdom-compilers/index.mdx'))
 const Inputs = lazy(() => import('./pages/posts/controlled-inputs/index.mdx'))
 const Suspense = lazy(() => import('./pages/posts/suspense-data-ssr/index.mdx'))
@@ -75,6 +78,10 @@ export function App() {
             <Route component={Home} path="/" />
             <Route component={Blog} path="/blog" />
             <Route component={Blueprint} path="/blueprint" />
+            <Route
+              component={LlmSignalsDebugging}
+              path="/blog/llm-signals-debugging"
+            />
             <Route component={VDom} path="/blog/vdom-compilers" />
             <Route component={Inputs} path="/blog/controlled-inputs" />
             <Route component={Suspense} path="/blog/suspense-data-ssr" />
