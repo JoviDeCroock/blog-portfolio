@@ -69,7 +69,7 @@ const EffectSubscriptions = lazy(
   () => import('./pages/posts/effect-subscriptions/index.mdx')
 )
 const GraphQLRestTRPCLLMs = lazy(
-  () => import('./pages/posts/graphql-rest-trpc-llms/index.mdx')
+  () => import('./pages/posts/mind-graphql/index.mdx')
 )
 
 export function App() {
@@ -142,7 +142,7 @@ export function App() {
             />
             <Route
               component={GraphQLRestTRPCLLMs}
-              path="/blog/graphql-rest-trpc-llms"
+              path="/blog/changed-my-mind-about-graphql"
             />
             <Route component={NotFound} default />
           </Router>
