@@ -1,0 +1,185 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<Dates createdAt={documentProps.createdAt} />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# Letting LLMs Debug Signal Lifecycles
+
+In [preactjs/signals#900](https://github.com/preactjs/signals/pull/900) we built something I have wanted for a while: a way for an LLM to debug a running page without being limited to the DOM it can see.
+
+Browser automation is already good enough for an agent to open a page, click buttons, fill inputs, and submit forms through something like Chrome DevTools MCP. The missing piece is that most bugs do not live in the pixels. They live in the state graph behind the pixels.
+
+When I am debugging a Signals app, the question is usually not just "what is on the page?" It is:
+
+- which signal changed first
+- which computed re-ran because of it
+- whether an effect fired
+- whether a component render actually happened
+- what network request or page interaction happened right before the state diverged
+
+That is what this Vite plugin gives us.
+
+## The basic idea
+
+We added a new `signalsVite()` plugin:
+
+```ts
+import { defineConfig } from 'vite'
+import { signalsVite } from '@preact/signals-vite-plugin'
+
+export default defineConfig({
+  plugins: [signalsVite()],
+})
+```
+
+In development it does a few things for you automatically:
+
+- injects `@preact/signals-debug`
+- applies the React or Preact Signals transform
+- names signals so the debug stream is readable
+- injects a client module into the page
+- exposes a local HTTP API from the Vite dev server
+
+That injected client module listens to `window.__PREACT_SIGNALS_DEVTOOLS__`, captures page events, captures network metadata, sanitizes values, and forwards everything to the Vite server.
+
+The server keeps an in-memory event buffer and lets clients create filtered sessions, fetch matching events, or stream them over SSE.
+
+## Why an API matters
+
+Console logs are useful for humans, but not ideal for automation.
+
+An LLM needs structured data. It needs to ask for the last events after a known cursor, filter down to `AuthForm`, and correlate a submit with the signal updates that followed. Reading free-form console output is possible, but it is a much worse interface than a queryable local API.
+
+With the plugin running, an agent can do this:
+
+```bash
+curl -X POST http://localhost:5173/__signals_agent__/sessions \
+  -H 'content-type: application/json' \
+  -d '{"filterPatterns":["AuthForm","auth","login"]}'
+```
+
+Then it reproduces the issue in the browser, and fetches the timeline:
+
+```bash
+curl http://localhost:5173/__signals_agent__/sessions/<session-id>/events
+```
+
+And if it wants a clean run between attempts:
+
+```bash
+curl -X POST http://localhost:5173/__signals_agent__/reset
+```
+
+That sounds small, but it changes the role of the model completely. The LLM is no longer guessing from symptoms. It can inspect the actual reactive timeline.
+
+## What the model gets to see
+
+The event stream combines three sources:
+
+- `signals` events such as updates, effects, component renders, and disposals
+- `page` events such as ready, navigation, submit, click, and runtime errors
+- `network` events such as request, response, and failure metadata
+
+That means an agent can build a sequence like this:
+
+1. user clicked submit
+2. `POST /api/login` started
+3. `AuthForm.status` changed from `idle` to `submitting`
+4. the request returned `401`
+5. `AuthForm.status` changed to `success`
+
+At that point the model has something much more useful than "login looks broken." It has the contradiction.
+
+The bug is no longer a vague UI symptom. It is a specific branch in the state flow that does not match reality.
+
+## Why this is especially useful for Signals
+
+Signals apps are graph-shaped.
+
+A signal update may lead to a computed re-evaluation, which may or may not propagate, which may or may not trigger an effect, which may or may not cause a component render. That is great for performance, but it means debugging from the outside can be misleading.
+
+You can look at the final DOM and still have no idea whether:
+
+- the wrong signal changed
+- the right signal changed but a computed absorbed the update
+- an effect wrote the wrong state later
+- the component was no longer subscribed
+- the node that should have re-rendered was already disposed
+
+The plugin makes those transitions visible in a format an LLM can reason over.
+
+## A concrete example
+
+The auth form demo in the branch has this bug:
+
+```tsx
+<input
+  type="password"
+  name="password"
+  value={password.value}
+  onInput={(e) =>
+    (username.value = (e.currentTarget as HTMLInputElement).value)
+  }
+/>
+```
+
+Typing in the password field updates `username`, not `password`.
+
+An LLM driving the browser through Chrome DevTools MCP can:
+
+1. create a filtered debug session for `AuthForm`
+2. type into the password input
+3. submit the form
+4. fetch the captured events
+
+And now it can see something the DOM alone does not tell it clearly enough: the interaction happened on a password input, but the signal timeline shows `AuthForm.username` changing while `AuthForm.password` does not.
+
+That is a strong enough signal to point straight at the wrong `onInput` handler.
+
+## The agent workflow I care about
+
+The workflow I want is very simple:
+
+1. the model opens the app
+2. it creates a filtered debugging session
+3. it reproduces the issue through browser automation
+4. it fetches the session timeline
+5. it explains the first contradiction in the state flow
+6. it proposes the smallest fix
+
+This is why I also added a `signals-debugging` skill in the branch. The skill tells the model how to read the stream: start at the interaction, identify the root signal change, follow derived state, and stop at the first place where state and reality disagree.
+
+That is a much better debugging loop than asking a model to stare at a screenshot and guess.
+
+## A small but important detail
+
+The API is designed for repeated local debugging runs.
+
+Sessions can keep their filters while `reset` clears the buffered events. That matters when an agent is trying a bug several times and wants a fresh timeline without recreating all of its context every time.
+
+We also sanitize transported values and redact sensitive keys like `password`, `token`, `secret`, and `authorization`. The goal is to make the stream useful for diagnosis without casually leaking everything on the page.
+
+## Where I think this goes
+
+I do not think the interesting part here is "LLMs can call another endpoint." The interesting part is that we can model the internals of a running web page as a local debugging API.
+
+Once that exists, a model can move between two worlds:
+
+- the external world, where it clicks, types, navigates, and inspects the UI
+- the internal world, where it sees signal updates, reactive dependencies, page events, and network context
+
+That combination is what makes lifecycle debugging possible.
+
+For Signals specifically, this feels like a natural fit. The system already knows a lot about how change propagates. We just needed to expose that information in a way an agent can query while it is driving the page.
+
+I think we will end up building more tools like this: APIs that let models debug behavior, not just observe output.
