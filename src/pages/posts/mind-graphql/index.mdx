@@ -1,0 +1,141 @@
+import SEO from '../../../components/Seo'
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<Dates createdAt={documentProps.createdAt} />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# I have changed my mind about GraphQL
+
+I used to think a lot of the API discussion came down to developer ergonomics.
+How easy is it for the front-end to ask for exactly the data it needs? How easy
+is it to evolve the contract? How much duplicated glue code do we have to write
+between the back-end and the UI?
+
+With that framing GraphQL looked extremely compelling to me. In many ways it
+still does. It gives us a strong contract, composable fragments and an explicit
+model for shaping data around the UI.
+
+But my weighting changed.
+
+The reason is not that GraphQL got worse. The reason is that boilerplate became
+cheap.
+
+<aside class="post-callout">
+  A lot of this is written from my personal point of view writing several solo
+  side-projects.
+</aside>
+
+## What changed
+
+A lot of the historical pain around more straightforward API styles was the sheer
+amount of glue work.
+
+Someone had to define the endpoint, wire the handler, shape the response, write
+the client call, add validation, add local types and keep all of that in sync
+while the UI kept changing.
+
+That work is still real, but it is exactly the kind of work LLMs are good at.
+
+If I need a route, a typed client wrapper, a schema, a query hook and a quick
+test, that is no longer an afternoon of tedious work. It is often one prompt,
+a review and a few corrections.
+
+That matters because a lot of the practical pressure toward GraphQL came from the
+cost of keeping front-end data needs aligned with the back-end by hand. If that
+boilerplate becomes cheap, one of GraphQL's most practical advantages gets weaker.
+
+## The part that does not translate well to LLMs
+
+I do not think the strongest argument is "LLMs make REST good" or "LLMs make
+tRPC good."
+
+I think the more interesting point is that GraphQL does not currently expose the
+right abstractions for an LLM.
+
+On paper GraphQL looks very machine-friendly. There is a schema, an operation and
+a typed response. But in practice a useful GraphQL system asks you to reason about
+far more than the query language itself.
+
+- How is auth enforced?
+- Where does batching happen?
+- Which fields need a dataloader?
+- What are the cache boundaries?
+- Which resolvers are safe to compose?
+- Who owns schema changes and deprecations?
+
+That is not impossible for an LLM to work through, but it is much more human-centric
+than the happy-path pitch suggests. A lot of the actual GraphQL value depends on team
+discipline, shared conventions and architectural context that lives around the schema,
+not inside it.
+
+That is exactly where I think the model starts to feel heavier in the age of AI-assisted
+development.
+
+## Why simpler transports benefit more
+
+Other transports are often easier for an LLM to reason about because either the system
+is simpler or the abstractions are already in the right place.
+
+An endpoint or procedure usually gives you a smaller unit of work.
+
+- The boundary is more obvious.
+- The control flow is easier to inspect.
+- Auth is usually closer to the handler.
+- Caching and invalidation are more explicit.
+- Logs and traces are more legible.
+
+That does not make those transports universally better. It just means they map more
+cleanly to the way LLM-assisted implementation works today.
+
+GraphQL, by contrast, often asks the model to reason across a web of resolvers,
+loaders, policies, cache layers and team conventions before it can make a safe
+change with confidence.
+
+## So where GraphQL still wins for me
+
+I have not changed my mind on the core thing that is uniquely strong about GraphQL.
+
+If you need to make additions and changes against a known schema, with multiple teams,
+multiple clients and only limited cross-company control over how those changes roll out,
+GraphQL is still extremely compelling.
+
+In that setting the schema really is the product. The fact that clients can compose their
+needs against a durable contract is a real advantage, and LLMs lower the threshold of pain
+around all the surrounding work.
+
+But that only holds when the organization is willing to make GraphQL actually work.
+
+You need schema discipline. You need resolver conventions. You need consistency around auth,
+batching and caching. You need people treating the contract as a serious shared surface.
+
+That is why this feels connected to my earlier post on the
+[GraphQL Asterisk Problem](/blog/graphql-asterisk-problem).
+
+GraphQL's benefits often come with caveats, and LLMs do not remove those caveats. If anything,
+they make the contrast sharper: the easy boilerplate got cheaper, but the organizational and
+architectural work is still there.
+
+## My current view
+
+So yes, I have changed my mind about GraphQL.
+
+Not because I suddenly think it is bad. Not because I think everything should be REST again.
+And not because there is some magical "X in the age of LLMs" winner for all API design.
+
+My view is simpler now.
+
+If the main thing an abstraction buys you is relief from repetitive implementation work,
+LLMs weaken that case.
+
+If the main thing it buys you is a durable contract across teams and clients, GraphQL still
+has a uniquely strong argument.
+
+That is why I now see GraphQL as something that should be chosen for its coordination model,
+not for the fact that it once made front-end boilerplate feel less painful.
