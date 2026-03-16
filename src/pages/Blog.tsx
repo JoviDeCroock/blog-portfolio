@@ -42,8 +42,8 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
-  llmSignalsDebuggingDocumentProps,
   graphqlRestTRPCLLMsDocumentProps,
+  llmSignalsDebuggingDocumentProps,
   effectSubscriptionsDocumentProps,
   whyComputedsMatterDocumentProps,
   signalsDebuggingDocumentProps,
