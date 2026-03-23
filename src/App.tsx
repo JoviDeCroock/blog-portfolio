@@ -71,6 +71,7 @@ const EffectSubscriptions = lazy(
 const GraphQLRestTRPCLLMs = lazy(
   () => import('./pages/posts/mind-graphql/index.mdx')
 )
+const MixedSignals = lazy(() => import('./pages/posts/mixed-signals/index.mdx'))
 
 export function App() {
   return (
@@ -144,6 +145,7 @@ export function App() {
               component={GraphQLRestTRPCLLMs}
               path="/blog/changed-my-mind-about-graphql"
             />
+            <Route component={MixedSignals} path="/blog/mixed-signals" />
             <Route component={NotFound} default />
           </Router>
         </div>

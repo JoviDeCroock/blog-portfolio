@@ -30,6 +30,7 @@ import { documentProps as platformDocumentProps } from './posts/platform/documen
 import { documentProps as whyComputedsMatterDocumentProps } from './posts/why-computeds-matter/documentProps'
 import { documentProps as effectSubscriptionsDocumentProps } from './posts/effect-subscriptions/documentProps'
 import { documentProps as graphqlRestTRPCLLMsDocumentProps } from './posts/mind-graphql/documentProps'
+import { documentProps as mixedSignalsDocumentProps } from './posts/mixed-signals/documentProps'
 
 export interface Post {
   title: string
@@ -42,6 +43,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  mixedSignalsDocumentProps,
   graphqlRestTRPCLLMsDocumentProps,
   llmSignalsDebuggingDocumentProps,
   effectSubscriptionsDocumentProps,
