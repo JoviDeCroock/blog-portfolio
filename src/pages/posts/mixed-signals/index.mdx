@@ -249,7 +249,9 @@ programming model is just mixed-signals.
 There are things this does not solve. Offline support requires client-side state that can diverge and
 reconcile. Optimistic updates are trickier when the server owns the truth. Large-scale fan-out to
 thousands of subscribers per object has limits. And you are coupling your client to a specific wire
-protocol rather than a standard REST or GraphQL endpoint.
+protocol rather than a standard REST or GraphQL endpoint. Not to say this couldn't exist in some future
+iteration where CRDT principles, ... could be applied to reconcile local and remote state but as it stands
+that is a limitation.
 
 But for applications where multiple clients need to coordinate around shared mutable state in real time,
 mixed-signals removes a remarkable amount of accidental complexity. No REST endpoints to design. No cache
