@@ -14,31 +14,25 @@ const Footer = () => (
   <Wrapper>
     <FooterLink
       rel="nofollow"
-      target="blank"
+      target="_blank"
       href="https://bsky.app/profile/jovidecroock.com"
     >
       BlueSky
     </FooterLink>
     -
-    <FooterLink rel="nofollow" target="blank" href="https://x.com/jovidec">
+    <FooterLink rel="nofollow" target="_blank" href="https://x.com/jovidec">
       Twitter
     </FooterLink>
     -
     <FooterLink
       rel="nofollow"
-      target="blank"
+      target="_blank"
       href="https://www.github.com/jovidecroock"
     >
       Github
     </FooterLink>
     -<FooterLink href="mailto:decroockjovi@gmail.com">Contact</FooterLink>-
-    <FooterLink
-      rel="nofollow"
-      target="blank"
-      href="https://jovidecroock.com/blog"
-    >
-      Blog
-    </FooterLink>
+    <FooterLink href="/blog">Blog</FooterLink>
   </Wrapper>
 )
 

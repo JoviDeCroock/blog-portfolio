@@ -4,6 +4,18 @@ import { useRef } from 'preact/hooks'
 
 const Hero = styled('div')`
   width: 100%;
+  position: relative;
+  padding-top: 1rem;
+
+  &::after {
+    content: '';
+    display: block;
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(90deg, #EB29A9, #6366f1, transparent);
+    margin-bottom: 1.5rem;
+    border-radius: 2px;
+  }
 `
 
 const QuoteList = styled('ul')`
@@ -81,13 +93,13 @@ const Home = () => (
       <h2>Work experience</h2>
       <QuoteList>
         <QuoteListItem>
-          <BoldLink rel="nofollow" target="blank" href="https://shopify.com/">
+          <BoldLink rel="nofollow" target="_blank" href="https://shopify.com/">
             Shopify
           </BoldLink>{' '}
           Staff Software Engineer (2024-Now)
         </QuoteListItem>
         <QuoteListItem>
-          <BoldLink rel="nofollow" target="blank" href="https://stellate.co/">
+          <BoldLink rel="nofollow" target="_blank" href="https://stellate.co/">
             Stellate
           </BoldLink>{' '}
           Staff Software Engineer - Director of R&D (2021-2024)
@@ -95,7 +107,7 @@ const Home = () => (
         <QuoteListItem>
           <BoldLink
             rel="nofollow"
-            target="blank"
+            target="_blank"
             href="https://formidable.com/"
           >
             Formidable
@@ -103,7 +115,7 @@ const Home = () => (
           Senior software engineer - Tech lead (2019-2021)
         </QuoteListItem>
         <QuoteListItem>
-          <BoldLink rel="nofollow" target="blank" href="https://codifly.be">
+          <BoldLink rel="nofollow" target="_blank" href="https://codifly.be">
             Codifly
           </BoldLink>{' '}
           Web and Mobile engineer (2017-2019)
@@ -149,19 +161,19 @@ const Home = () => (
       <h2>Achievements</h2>
       <QuoteList>
         <QuoteListItem>
-          <BoldLink rel="nofollow" target="blank" href="https://stellate.co">
+          <BoldLink rel="nofollow" target="_blank" href="https://stellate.co">
             Partial Query Caching GraphQL at Stellate
           </BoldLink>
         </QuoteListItem>
         <QuoteListItem>
-          <BoldLink rel="nofollow" target="blank" href="https://us.puma.com">
+          <BoldLink rel="nofollow" target="_blank" href="https://us.puma.com">
             The modernisation of the tech-stack of Puma.com
           </BoldLink>
         </QuoteListItem>
         <QuoteListItem>
           <BoldLink
             rel="nofollow"
-            target="blank"
+            target="_blank"
             href="https://github.com/FredKSchott/esm-hmr"
           >
             Collaboration on the ESM HMR Spec
@@ -170,7 +182,7 @@ const Home = () => (
         <QuoteListItem>
           <BoldLink
             rel="nofollow"
-            target="blank"
+            target="_blank"
             href="https://opensource.googleblog.com/2020/01/announcing-2019-second-cycle-google.html"
           >
             The Google Open Source Peer Bonus 2019 Cycle 2
@@ -247,7 +259,7 @@ const OSSBox = (props: { name: string; description: string; link: string }) => {
           <H3>{props.name}</H3>
           <P>{props.description}</P>
         </div>
-        <a rel="nofollow noopener noreferrer" target="blank" href={props.link}>
+        <a rel="nofollow noopener noreferrer" target="_blank" href={props.link}>
           {props.link}
         </a>
       </Wrapper>
