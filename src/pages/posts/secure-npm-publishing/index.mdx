@@ -128,49 +128,37 @@ a flat `node_modules`. Each package can only access what it explicitly declares 
 dependency. A compromised transitive dependency can't silently reach code it was never
 supposed to touch.
 
-npm doesn't have a built-in mechanism for delaying installs based on release age — you
-need Renovate for that. pnpm doesn't have it natively either, but the ecosystem tooling
-around pnpm workspaces is generally better maintained and you're less likely to hit
-package manager bugs on top of the security work you're trying to do.
+### minimumReleaseAge
 
-### Use minimumReleaseAge in Renovate
+pnpm has native support for delaying resolution of newly published packages. Since pnpm
+v11 this defaults to 1440 minutes (one day), so you're already protected out of the box.
+You can tune it in `pnpm-workspace.yaml`:
 
-Give the community a few days to catch anything suspicious before your project
-automatically pulls in a new version. In Renovate, this is `minimumReleaseAge`:
-
-```json
-{
-  "packageRules": [
-    {
-      "matchManagers": ["npm"],
-      "minimumReleaseAge": "3 days"
-    }
-  ]
-}
+```yaml
+minimumReleaseAge: 4320 # 3 days, in minutes
+minimumReleaseAgeStrict: true # fail resolution rather than fall back to an older version
 ```
 
-A three-day window doesn't stop everything, but it gives time for compromised versions to
-be identified, yanked, and reported before your automated update merged them. It's a
-surprisingly low-cost mitigation.
+`minimumReleaseAgeStrict` is the important one — without it, pnpm will silently fall back
+to a version that does meet the age requirement rather than erroring. If you want the
+protection to be meaningful, turn strict mode on.
+
+If you need to install a security fix before the age window clears, `pnpm audit --fix`
+will automatically add the package to `minimumReleaseAgeExclude` so it's not blocked.
 
 ### Watch for provenance regressions
 
-Once a package starts publishing with provenance, losing it in a subsequent release is a
-signal worth noticing. Packages don't usually stop signing attestations by accident.
+pnpm's `trustPolicy` setting handles this directly. Set it to `no-downgrade` and pnpm
+will refuse to install a version whose trust level is lower than a previously installed
+version of the same package — for example, if a package drops from trusted publisher
+attestation down to provenance-only, or from provenance down to nothing:
 
-[Socket](https://socket.dev) and similar tools track these kinds of changes as part of
-their supply chain analysis. If you're using npm's native tooling, `npm audit signatures`
-will verify the signatures of installed packages against the npm registry's public keys.
-
-You can also check a package manually:
-
-```bash
-npm install --dry-run <package>@<version>
-npm audit signatures
+```yaml
+trustPolicy: no-downgrade
 ```
 
-A package that goes from provenance → no provenance between versions deserves a closer look
-before you upgrade.
+A package that goes from provenance → no provenance between versions deserves a closer
+look before you upgrade, and with `no-downgrade` you won't accidentally pull it in.
 
 ---
 
