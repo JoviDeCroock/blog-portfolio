@@ -102,7 +102,7 @@ const PostGrid = styled('ul')`
 `
 
 const PostCard = styled('li')`
-  border: 1px solid #2D2C2C;
+  border: 1px solid #2d2c2c;
   border-radius: 8px;
   padding: 1.25rem;
   display: flex;
@@ -110,7 +110,9 @@ const PostCard = styled('li')`
   gap: 0.5rem;
   position: relative;
   overflow: hidden;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
 
   &::before {
     content: '';
@@ -119,13 +121,13 @@ const PostCard = styled('li')`
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, #EB29A9, #6366f1);
+    background: linear-gradient(90deg, #eb29a9, #6366f1);
     opacity: 0;
     transition: opacity 0.2s ease;
   }
 
   &:hover {
-    border-color: #EB29A9;
+    border-color: #eb29a9;
     transform: translateY(-2px);
   }
 
@@ -144,7 +146,7 @@ const TitleLink = styled('a')`
   font-size: 1.1rem;
   font-weight: 600;
   text-decoration: none;
-  color: #FCFCFD;
+  color: #fcfcfd;
   line-height: 1.35;
 
   &:hover {
@@ -154,7 +156,7 @@ const TitleLink = styled('a')`
 
 const PostDescription = styled('p')`
   font-size: 0.875rem;
-  color: #A1A1AA;
+  color: #a1a1aa;
   margin: 0;
   line-height: 1.5;
   flex: 1;
@@ -247,7 +249,7 @@ const tagBgs: Record<string, string> = {
   llm: '#be185d', // rose
   signals: '#c2410c', // burnt orange
   web: '#1d4ed8', // blue
-  security: '#c0392b',
+  security: '#334155',
 } as const
 
 const ALL_TAGS = posts

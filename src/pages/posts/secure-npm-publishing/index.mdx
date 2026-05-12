@@ -116,11 +116,27 @@ people who genuinely need it.
 
 ## For consumers
 
-### Use minimumReleaseAge
+### Use pnpm
 
-Most package managers support some form of delay before auto-merging new versions. In
-Renovate, this is `minimumReleaseAge`. The idea is simple: give the community a few days
-to catch anything suspicious before your project automatically pulls it in.
+If you're still using npm as your package manager, it's worth switching to pnpm. Beyond
+the well-known performance wins, pnpm is simply more reliable day-to-day — npm has a
+long history of subtle bugs around lockfile resolution, lifecycle script ordering, and
+peer dependency handling that have a habit of causing problems at the worst moments.
+
+More relevant to security: pnpm's default module resolution doesn't hoist packages into
+a flat `node_modules`. Each package can only access what it explicitly declares as a
+dependency. A compromised transitive dependency can't silently reach code it was never
+supposed to touch.
+
+npm doesn't have a built-in mechanism for delaying installs based on release age — you
+need Renovate for that. pnpm doesn't have it natively either, but the ecosystem tooling
+around pnpm workspaces is generally better maintained and you're less likely to hit
+package manager bugs on top of the security work you're trying to do.
+
+### Use minimumReleaseAge in Renovate
+
+Give the community a few days to catch anything suspicious before your project
+automatically pulls in a new version. In Renovate, this is `minimumReleaseAge`:
 
 ```json
 {
