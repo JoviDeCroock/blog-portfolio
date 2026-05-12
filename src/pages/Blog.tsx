@@ -31,6 +31,7 @@ import { documentProps as whyComputedsMatterDocumentProps } from './posts/why-co
 import { documentProps as effectSubscriptionsDocumentProps } from './posts/effect-subscriptions/documentProps'
 import { documentProps as graphqlRestTRPCLLMsDocumentProps } from './posts/mind-graphql/documentProps'
 import { documentProps as mixedSignalsDocumentProps } from './posts/mixed-signals/documentProps'
+import { documentProps as secureNpmPublishingDocumentProps } from './posts/secure-npm-publishing/documentProps'
 
 export interface Post {
   title: string
@@ -43,6 +44,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  secureNpmPublishingDocumentProps,
   mixedSignalsDocumentProps,
   graphqlRestTRPCLLMsDocumentProps,
   llmSignalsDebuggingDocumentProps,
@@ -245,6 +247,7 @@ const tagBgs: Record<string, string> = {
   llm: '#be185d', // rose
   signals: '#c2410c', // burnt orange
   web: '#1d4ed8', // blue
+  security: '#c0392b',
 } as const
 
 const ALL_TAGS = posts

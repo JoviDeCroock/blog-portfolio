@@ -1,0 +1,171 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<Dates createdAt={documentProps.createdAt} />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# Hardening npm Publishing
+
+Supply chain attacks on npm packages aren't hypothetical anymore. Compromised
+maintainer credentials, malicious publish workflows, and stolen tokens have
+caused real harm to real users. This post isn't here to point fingers at
+anyone, maintaining open-source is hard and most of these problems don'tab
+have silver-bullet fixes, it's all about building as much protection as we can
+together.
+
+What I want to share is the setup I've been pushing in projects I maintain,
+most recently in [preactjs/prefresh#615](https://github.com/preactjs/prefresh/pull/615),
+and what I think both maintainers and consumers can do to make this better together.
+
+## For maintainers
+
+### Automate publishing with OIDC, not stored tokens
+
+The most common setup I still see is a long-lived npm token stored as a
+repository secret, used in a CI workflow that publishes on every push to main.
+The problem is that this token is available to any workflow in that repository.
+A compromised workflow, a malicious contributor getting a merge through — any
+of these can exfiltrate the token and publish whatever they want.
+
+The better approach is [npm's trusted publishing](https://docs.npmjs.com/generating-provenance-statements#publishing-with-provenance-via-github-actions)
+combined with OIDC. Instead of storing a token at all, your CI job requests a
+short-lived credential directly from npm using GitHub's OIDC identity. No secret
+to store, no secret to steal.
+
+```yaml
+publish:
+  runs-on: ubuntu-latest
+  environment:
+    name: npm
+    url: https://www.npmjs.com/search?q=%40yourscope
+  permissions:
+    contents: write
+    id-token: write
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm publish --provenance --access public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+```
+
+The `id-token: write` permission is what enables the OIDC flow. The `environment: npm`
+is what gates it.
+
+<aside class="post-callout">
+  Sadly up until this day npm does not allow to disable manual publishing with
+  some kind of break glass emergency switch.
+</aside>
+
+### Gate publishing behind a GitHub Environment
+
+That `environment: npm` declaration in the workflow is doing more work than it might
+look like. GitHub Environments can require manual approval before a job runs, restrict
+which branches can deploy to them, and have their own scoped secrets. This means even
+if someone pushes a bad commit to main, the publish job won't run without an explicit
+approval step from someone with access to that environment.
+
+Set this up in your repository's **Settings → Environments**. Create a `npm` environment,
+add protection rules (required reviewers, or at minimum branch restrictions), and scope
+any publish-related secrets to that environment rather than the repository.
+
+### Enable provenance for your packages
+
+Provenance links a published npm package back to the exact source commit and CI run that
+produced it. Consumers can verify the chain from package back to code. Add this to your
+`package.json` publishConfig:
+
+```json
+{
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}
+```
+
+When combined with OIDC publishing, npm will attach a signed attestation to the release.
+Anyone who installs your package can verify that the bits they got came from your repository
+and not from someone's local machine.
+
+### Limit who can publish manually
+
+Automation is the goal, but sometimes someone needs to publish manually. The important
+thing here is keeping that list short. The more accounts hold publish access to a package,
+the more credential compromise vectors there are.
+
+On npm, this means auditing your package's collaborator list regularly and removing people
+who no longer need access. For the remaining publishers, 2FA on their npm account is
+non-negotiable — npm has supported enforcing this at the package level since granular
+access tokens were introduced.
+
+The mental model I use: every additional publisher is another door. Keep the list to the
+people who genuinely need it.
+
+## For consumers
+
+### Use minimumReleaseAge
+
+Most package managers support some form of delay before auto-merging new versions. In
+Renovate, this is `minimumReleaseAge`. The idea is simple: give the community a few days
+to catch anything suspicious before your project automatically pulls it in.
+
+```json
+{
+  "packageRules": [
+    {
+      "matchManagers": ["npm"],
+      "minimumReleaseAge": "3 days"
+    }
+  ]
+}
+```
+
+A three-day window doesn't stop everything, but it gives time for compromised versions to
+be identified, yanked, and reported before your automated update merged them. It's a
+surprisingly low-cost mitigation.
+
+### Watch for provenance regressions
+
+Once a package starts publishing with provenance, losing it in a subsequent release is a
+signal worth noticing. Packages don't usually stop signing attestations by accident.
+
+[Socket](https://socket.dev) and similar tools track these kinds of changes as part of
+their supply chain analysis. If you're using npm's native tooling, `npm audit signatures`
+will verify the signatures of installed packages against the npm registry's public keys.
+
+You can also check a package manually:
+
+```bash
+npm install --dry-run <package>@<version>
+npm audit signatures
+```
+
+A package that goes from provenance → no provenance between versions deserves a closer look
+before you upgrade.
+
+---
+
+None of this is a complete solution. A sufficiently motivated attacker can compromise a CI
+system directly, social-engineer their way into an environment approval, or find other angles.
+But the goal isn't perfection — it's reducing the blast radius of the most common paths.
+
+Most incidents involve stolen credentials, long-lived tokens in repository secrets, or broad
+publish access that nobody audited. The mitigations above close all three of those directly.
+
+Both sides of this — the maintainer publishing the package and the consumer pulling it in —
+have a part to play. The more packages adopt provenance, the more consumers can use it as a
+signal. The more consumers configure minimumReleaseAge, the more time there is for the
+community to catch problems. It compounds.

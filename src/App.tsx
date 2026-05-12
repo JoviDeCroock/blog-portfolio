@@ -72,6 +72,9 @@ const GraphQLRestTRPCLLMs = lazy(
   () => import('./pages/posts/mind-graphql/index.mdx')
 )
 const MixedSignals = lazy(() => import('./pages/posts/mixed-signals/index.mdx'))
+const SecureNpmPublishing = lazy(
+  () => import('./pages/posts/secure-npm-publishing/index.mdx')
+)
 
 export function App() {
   return (
@@ -146,6 +149,10 @@ export function App() {
               path="/blog/changed-my-mind-about-graphql"
             />
             <Route component={MixedSignals} path="/blog/mixed-signals" />
+            <Route
+              component={SecureNpmPublishing}
+              path="/blog/secure-npm-publishing"
+            />
             <Route component={NotFound} default />
           </Router>
         </div>
