@@ -75,6 +75,9 @@ const MixedSignals = lazy(() => import('./pages/posts/mixed-signals/index.mdx'))
 const SecureNpmPublishing = lazy(
   () => import('./pages/posts/secure-npm-publishing/index.mdx')
 )
+const DrydockReleaseDefenses = lazy(
+  () => import('./pages/posts/drydock-release-defenses/index.mdx')
+)
 
 export function App() {
   return (
@@ -152,6 +155,10 @@ export function App() {
             <Route
               component={SecureNpmPublishing}
               path="/blog/secure-npm-publishing"
+            />
+            <Route
+              component={DrydockReleaseDefenses}
+              path="/blog/drydock-release-defenses"
             />
             <Route component={NotFound} default />
           </Router>

@@ -32,6 +32,7 @@ import { documentProps as effectSubscriptionsDocumentProps } from './posts/effec
 import { documentProps as graphqlRestTRPCLLMsDocumentProps } from './posts/mind-graphql/documentProps'
 import { documentProps as mixedSignalsDocumentProps } from './posts/mixed-signals/documentProps'
 import { documentProps as secureNpmPublishingDocumentProps } from './posts/secure-npm-publishing/documentProps'
+import { documentProps as drydockReleaseDefensesDocumentProps } from './posts/drydock-release-defenses/documentProps'
 
 export interface Post {
   title: string
@@ -44,6 +45,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  drydockReleaseDefensesDocumentProps,
   secureNpmPublishingDocumentProps,
   mixedSignalsDocumentProps,
   graphqlRestTRPCLLMsDocumentProps,
