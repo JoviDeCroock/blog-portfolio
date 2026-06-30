@@ -28,7 +28,7 @@
     "lint-staged": "^16.4.0",
     "oxfmt": "^0.46.0",
     "typescript": "^5.9.2",
-    "vite": "^6.4.2"
+    "vite": "^6.4.3"
   },
   "lint-staged": {
     "*": [
