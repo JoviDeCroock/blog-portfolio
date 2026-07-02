@@ -1,0 +1,207 @@
+import SEO from '../../../components/Seo'
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<Dates createdAt={documentProps.createdAt} />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# Fed up with Belgium
+
+This is not my usual post. No GraphQL, no signals, no VDOM. This one is about
+the country I live in, work in, and pay into, because after eight or nine years
+of doing exactly that... I'm fed up.
+
+Let me get one thing out of the way first: this isn't a "taxes are theft" rant.
+I've spent a large chunk of my career happily in the highest tax bracket and I
+honestly did not mind. We have healthcare that doesn't bankrupt you, roads that
+mostly work, schools, a safety net. For years I looked at the line on my payslip
+that disappeared and told myself that's the deal, and I believed in the deal.
+What I've slowly realised is that the deal keeps changing, and it only ever
+changes in one direction.
+
+## The hole we dug
+
+Belgium is broke. Not "tightening the belt" broke, structurally broke. Public
+debt sits at roughly [107% of GDP, about €692 billion](https://tradingeconomics.com/belgium/government-debt-to-gdp),
+and the projections have it drifting _up_ towards 113% by 2027, not down. We
+spend around 2.2% of GDP every year just servicing the interest. That's money
+that buys nothing, builds nothing, treats no one. It just pays for the fact that
+we spent it already.
+
+So what's the plan to fill the hole? As far as I can tell, it's two ideas on a
+loop:
+
+- Raise the taxes we already have.
+- Invent taxes we didn't have.
+
+That's it. That's the strategy. Not "spend less", not "make the machine
+smaller", not "make it easier to build something here". Just... find the next
+thing to tax.
+
+## The most taxed labour on the planet
+
+We are not a low-tax country that's nudging rates up. We are, per the OECD's own
+[Taxing Wages numbers](https://www.oecd.org/en/blogs/2025/09/how-much-tax-do-workers-pay-oecd-taxing-wages-knows-the-answer.html),
+the most heavily taxed labour market in the developed world. Year after year. The
+tax wedge for a single worker on average pay is about 52.5%, the highest of all
+38 OECD countries, against an OECD average of ~35%. Put differently, the average
+Belgian worker takes home around 60% of what they cost. Elsewhere in the OECD,
+it is closer to 75%. And the 50% bracket starts biting at a salary a mid-career
+engineer clears without trying.
+
+I was in that top bracket for about five of my employed years. I want to be clear
+again, I made my peace with that. But you have to understand the starting point
+here before anyone in Brussels opens their mouth about people "not contributing
+their fair share". We were already number one. There was no headroom being left
+on the table. We were already the example every other country points at.
+
+## Meanwhile, on the spending side
+
+The part that turns "fed up" into actual anger: while we're the most taxed
+workers on earth, the machine we're funding is... a lot of machine.
+
+We are a country of roughly eleven and a half million people with
+[six governments](https://www.fedasilinfo.be/en/belgium-has-6-governments) and,
+famously, [nine ministers of health](https://www.brusselstimes.com/news/belgium-all-news/98588/heres-why-belgium-has-nine-health-ministers-regions-communities-powers-responsibilities-coronavirus/).
+Nine. Almost one health minister per million inhabitants. Every one of those
+governments is a full set of ministers, cabinets, advisors and salaries, for a
+country you can drive across in two hours.
+
+At the same time, we have a huge inactivity problem. Unemployment in Brussels
+runs north of 12%, Wallonia around 8%, and [Statbel puts the 20-64 employment
+rate](https://statbel.fgov.be/en/themes/work-training/employment-and-unemployment)
+at 63.9% in Brussels and 67.9% in Wallonia. More than a third of working-age
+people in Brussels are not working. In 2025, we were [the last country in the
+EU](https://brusselssignal.eu/2025/09/belgium-last-eu-country-to-end-lifetime-entitlement-to-unemployment-benefit/)
+to end unlimited-in-time unemployment benefits. The last one.
+
+And the companies that actually generate the wealth to pay for all of it? They're
+leaving. [Audi Brussels shut its doors](https://www.brusselstimes.com/1463904/audi-factory-in-brussels-shuts-up-shop-after-more-than-75-years)
+in February 2025 after more than 75 years, around 3,000 direct and indirect jobs
+gone, the Q8 e-tron moved to Mexico. Van Hool collapsed the year before, another
+~1,850 jobs. Volvo in Ghent is now the _last_ major car plant standing in the
+whole country, and even that one needs a government task force to keep it here.
+We are actively watching our industrial base walk out the door, and the response
+is to reach deeper into the pockets of whoever's left.
+
+## And now, capital gains
+
+This year we finally got a
+[capital gains tax](https://www.ey.com/en_be/insights/tax/the-new-belgian-capital-gains-tax-what-changes-in-2026),
+a 10% "solidarity contribution" on financial assets, live since 1 January 2026,
+with a €10,000 yearly exemption. And look, 10% is objectively low compared to
+plenty of other countries, I'm not going to pretend it's confiscatory.
+
+But notice what it taxes. This lands on the money you managed not to spend. You
+already gave up half of your salary on the way in. You saved what survived. Now,
+when that already-taxed money grows, there's a fresh hand out for that too. The
+direction of travel is hard to miss: every remaining pocket of "someone here has
+a bit of money" gets a new line item. "Solidarity" is a wonderful word for it,
+isn't it.
+
+## My actual story
+
+This is where it stops being abstract for me.
+
+I was a regular employee for eight, nine years. Top bracket, no complaints,
+covered above. Then I moved to a company where an EOR arrangement wasn't on the
+table, so if I wanted the role I had to go freelance. Fine. I registered as a
+sole trader, an _eenmanszaak_, and I stayed... right where I'd always been, in
+the highest bracket, now paying it personally on business income.
+
+Then I went looking for one of the genuinely nice things this country still
+offers the self-employed: buying a car through your business. To actually use
+that in any sensible way, you form a company, a BV. So I did.
+
+The part nobody tells you until you're inside it: a BV isn't just about the car.
+Once you're a company, the structure genuinely lets you do more.
+Your effective rate can drop, you can leave money in the company and reinvest it,
+you can pay yourself out over time in more efficient ways. I was actually
+_excited_ discovering this. For the first time in my working life it felt like
+the system had a door in it that opened towards building something, rather than
+just a meter that ran while I worked.
+
+That door did not stay open for long.
+
+## Going after the people who stayed
+
+It turns out the government has decided that people like me forming a BV is a
+problem to be solved. Not a behaviour to encourage, but a leak to plug. If your
+tax drops because you are using legal paths, that's apparently revenue they
+would rather have back. So the [Arizona-coalition measures](https://www.deloitte.com/be/en/services/tax/perspectives/federal-government-major-tax-measures-in-the-arizona-government-agreement.html)
+come for exactly that structure, from several directions at once:
+
+- The minimum director's salary you must pay yourself to keep the reduced 20%
+  corporate rate goes [from €45,000 to €50,000](https://www.bnpparibasfortis.be/en/public/article/remuneration-dirigeant-arizona),
+  indexed upward every year from here.
+- Benefits in kind can now make up _at most 20%_ of that remuneration, which
+  quietly guts the one benefit that sent me down this road in the first place,
+  the car.
+- The liquidation reserve, the mechanism for eventually getting your own money
+  out, becomes less attractive: the reduced withholding that used to be 5% is
+  moving through 6.5% and then to 9.8%.
+- The favourable withholding on dividends (VVPRbis) goes from 15% to 18%, and the
+  intermediate rate disappears entirely for new contributions.
+
+Read the justification behind it in plain language and it's almost refreshing in
+its honesty: the goal is to "curb tax optimisation through management companies",
+aimed squarely at "management companies and SMEs where the director takes an
+insufficient salary". Which is a bureaucrat's way of describing me. One person.
+One or two clients. No employees. A laptop and an invoice.
+
+That's the target. Not the multinational with a Luxembourg holding and a floor
+full of tax lawyers. They'll be fine, they're always fine. Me. The freelancer who
+finally found the one legal, government-designed door that pointed towards
+building, and walked through it a little too visibly.
+
+## The part they never say out loud
+
+Go read [r/BEFreelance](https://www.reddit.com/r/BEFreelance/comments/1ukzb8e/consider_the_end_near/)
+and you'll find a whole community that saw this coming. One thing someone wrote
+there stuck with me: none of the coverage even _tries_ to show both sides. There
+is endless talk about the freelancer's lower effective rate, and total silence on
+the risk they carry to earn it. No paid holiday, no sick pay, no notice period,
+no unemployment safety net, you eat the gap between contracts yourself, you carry
+the liability yourself.
+
+And the whole crackdown rests on an assumption that falls apart the second you
+poke it: that if a freelancer billing €137k a year is pushed off this structure,
+they simply become an employee earning €137k a year, and the treasury collects
+the difference. That's not what happens. That job at that number frequently doesn't
+exist on payroll, so best case the state collects far less than it imagined, and
+worst case it collects _nothing_, because the person just... leaves.
+
+And that is what I'm starting to see. The higher earners are already doing the
+maths. Some are chasing international clients so their income no longer depends
+on this place at all. Some are quietly looking at where to move. More
+opportunity, higher rates, lower taxes, and a government that isn't redesigning
+its rules every eighteen months specifically to catch _them_. When your most
+productive, most mobile people start treating your country as a problem to route
+around, that's not a loophole closing. That's a warning.
+
+---
+
+I want to end where I started, because I don't want this to read like it came
+from someone who never wanted to pay in. I did. For the better part of a decade
+I paid the highest labour taxes in the developed world and genuinely believed in
+the trade. I still believe in the idea behind it: healthcare, education, a floor
+under people. That is worth funding. I'll fund it.
+
+But you cannot run the most expensive labour market on earth, staff six
+governments and nine health ministers on top of it, watch your factories close
+one by one, and then decide the real problem, the pocket that finally needs
+emptying, is the one-person company with a laptop and two clients. That isn't
+solidarity. It's eating the seed corn and calling it a harvest.
+
+The hole is real and it does need filling. But you don't fill it by chasing off
+the last people still willing to build something here. And more of us are
+noticing that the cheapest way to stop being the target... is to stop being
+here.
+
+That's the rant. I wish it felt less rational.

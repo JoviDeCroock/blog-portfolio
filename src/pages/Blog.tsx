@@ -33,6 +33,7 @@ import { documentProps as graphqlRestTRPCLLMsDocumentProps } from './posts/mind-
 import { documentProps as mixedSignalsDocumentProps } from './posts/mixed-signals/documentProps'
 import { documentProps as secureNpmPublishingDocumentProps } from './posts/secure-npm-publishing/documentProps'
 import { documentProps as drydockReleaseDefensesDocumentProps } from './posts/drydock-release-defenses/documentProps'
+import { documentProps as fedUpWithBelgiumDocumentProps } from './posts/fed-up-with-belgium/documentProps'
 
 export interface Post {
   title: string
@@ -45,6 +46,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  fedUpWithBelgiumDocumentProps,
   drydockReleaseDefensesDocumentProps,
   secureNpmPublishingDocumentProps,
   mixedSignalsDocumentProps,
@@ -252,6 +254,7 @@ const tagBgs: Record<string, string> = {
   signals: '#c2410c', // burnt orange
   web: '#1d4ed8', // blue
   security: '#334155',
+  personal: '#a21caf', // fuchsia
 } as const
 
 const ALL_TAGS = posts

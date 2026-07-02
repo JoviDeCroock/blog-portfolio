@@ -78,6 +78,9 @@ const SecureNpmPublishing = lazy(
 const DrydockReleaseDefenses = lazy(
   () => import('./pages/posts/drydock-release-defenses/index.mdx')
 )
+const FedUpWithBelgium = lazy(
+  () => import('./pages/posts/fed-up-with-belgium/index.mdx')
+)
 
 export function App() {
   return (
@@ -159,6 +162,10 @@ export function App() {
             <Route
               component={DrydockReleaseDefenses}
               path="/blog/drydock-release-defenses"
+            />
+            <Route
+              component={FedUpWithBelgium}
+              path="/blog/fed-up-with-belgium"
             />
             <Route component={NotFound} default />
           </Router>
