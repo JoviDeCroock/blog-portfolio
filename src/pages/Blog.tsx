@@ -9,6 +9,7 @@ import { documentProps as inputsDocumentProps } from './posts/controlled-inputs/
 import { documentProps as ssrDocumentProps } from './posts/suspense-data-ssr/documentProps'
 import { documentProps as stateDocumentProps } from './posts/state-in-vdom/documentProps'
 import { documentProps as hydrationDocumentProps } from './posts/hydration/documentProps'
+import { documentProps as resumedHydrationPreactDocumentProps } from './posts/resumed-hydration-preact/documentProps'
 import { documentProps as timingsDocumentProps } from './posts/browser-timings/documentProps'
 import { documentProps as useIdDocumentProps } from './posts/preact-use-id/documentProps'
 import { documentProps as persistedOperationDocumentProps } from './posts/persisted-operations/documentProps'
@@ -46,6 +47,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  resumedHydrationPreactDocumentProps,
   fedUpWithBelgiumDocumentProps,
   drydockReleaseDefensesDocumentProps,
   secureNpmPublishingDocumentProps,
