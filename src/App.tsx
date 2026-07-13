@@ -20,6 +20,9 @@ const Inputs = lazy(() => import('./pages/posts/controlled-inputs/index.mdx'))
 const Suspense = lazy(() => import('./pages/posts/suspense-data-ssr/index.mdx'))
 const State = lazy(() => import('./pages/posts/state-in-vdom/index.mdx'))
 const Hydration = lazy(() => import('./pages/posts/hydration/index.mdx'))
+const ResumedHydrationPreact = lazy(
+  () => import('./pages/posts/resumed-hydration-preact/index.mdx')
+)
 const Timings = lazy(() => import('./pages/posts/browser-timings/index.mdx'))
 const UseId = lazy(() => import('./pages/posts/preact-use-id/index.mdx'))
 const PersistedOperations = lazy(
@@ -100,6 +103,10 @@ export function App() {
             <Route component={Suspense} path="/blog/suspense-data-ssr" />
             <Route component={State} path="/blog/state-in-vdom" />
             <Route component={Hydration} path="/blog/hydration-and-preact" />
+            <Route
+              component={ResumedHydrationPreact}
+              path="/blog/resumed-hydration-preact"
+            />
             <Route component={Timings} path="/blog/browser-timings" />
             <Route component={UseId} path="/blog/preact-use-id" />
             <Route
