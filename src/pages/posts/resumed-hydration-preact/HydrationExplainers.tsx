@@ -103,7 +103,7 @@ export function ResumedHydrationDiagram() {
         <title id="resumed-hydration-title">Resumed hydration flow</title>
         <desc id="resumed-hydration-desc">
           Server rendering awaits async boundaries before sending HTML. The
-          client hydrates the shell, leaves markers for paused boundaries, and
+          client hydrates the shell, pauses boundaries that aren't ready, and
           resumes them as their data or JavaScript arrives.
         </desc>
         <defs>
@@ -121,7 +121,7 @@ export function ResumedHydrationDiagram() {
         </defs>
 
         <Label x={410} y={32} size={22} weight={700}>
-          One HTML tree, several hydration checkpoints
+          One HTML tree, several resumable boundaries
         </Label>
 
         <Label x={70} y={104} fill={pink} weight={700} anchor="start">
@@ -205,7 +205,7 @@ export function ResumedHydrationDiagram() {
         </Box>
         <Box x={335} y={214} width={150} height={64} stroke={amber}>
           <Label x={410} y={240}>
-            leave marker
+            pause boundary
           </Label>
           <Label x={410} y={262} fill={mutedText} size={12}>
             wait for A
@@ -213,7 +213,7 @@ export function ResumedHydrationDiagram() {
         </Box>
         <Box x={535} y={214} width={150} height={64} stroke={indigo}>
           <Label x={610} y={240}>
-            resume marker
+            resume boundary
           </Label>
           <Label x={610} y={262} fill={mutedText} size={12}>
             continue B
@@ -426,9 +426,9 @@ export function StreamingHydrationDiagram() {
           Streaming compared to resumed hydration
         </title>
         <desc id="streaming-desc">
-          Resumed hydration sends completed HTML and resumes client hydration at
-          markers. Streaming sends the shell earlier, includes fallbacks, and
-          streams completed boundary HTML later.
+          Resumed hydration sends completed HTML and resumes paused client
+          boundaries later. Streaming sends the shell earlier, includes
+          fallbacks, and streams completed boundary HTML later.
         </desc>
         <defs>
           <marker
