@@ -1,16 +1,16 @@
 {
   "name": "portfolio",
-  "type": "module",
   "private": true,
-  "author": "Jovi De Croock",
   "description": "My own portfolio",
   "homepage": "https://jovidecroock.com/",
   "license": "MIT",
-  "packageManager": "pnpm@8.6.7",
+  "author": "Jovi De Croock",
+  "type": "module",
   "scripts": {
     "prepare": "husky install",
     "dev": "vite",
-    "build": "vite build --outDir dist"
+    "build": "vite build --outDir dist",
+    "og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
     "@mdx-js/rollup": "^3.1.1",
@@ -23,21 +23,26 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@fontsource/inter": "^5.2.8",
     "@preact/preset-vite": "^2.10.3",
+    "@resvg/resvg-js": "^2.6.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "oxfmt": "^0.46.0",
+    "satori": "^0.28.0",
+    "sharp": "^0.35.3",
     "typescript": "^5.9.2",
     "vite": "^6.4.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "*": [
       "oxfmt --no-error-on-unmatched-pattern"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  }
+  "packageManager": "pnpm@8.6.7"
 }
