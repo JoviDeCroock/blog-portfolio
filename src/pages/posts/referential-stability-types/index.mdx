@@ -1,0 +1,271 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<Dates createdAt={documentProps.createdAt} />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# Making Referential Stability a Type
+
+If you've worked on a (P)React codebase of any real size, you've had the referential stability
+conversation more times than you'd like. Someone adds a `useMemo`, someone else adds a `useCallback`,
+an exhaustive-deps warning gets silenced, and we all hope that the prop passed to the next component is stable.
+The code is usually correct, but we don't have all the guarantees for this implicit stability.
+
+I've spent more hours than I want to admit chasing a re-render or effect execution that came down to a new array literal
+being handed to a memoized child. The type declared `Item[]`, a prop typed as
+`Item[]` tells me about the shape of the type and what's _inside_ that shape but nothing about whether I get a stable
+array on the next render.
+
+So I've been playing with a small idea: what if the intention of referential stability was part of the type.
+
+## The type
+
+The whole thing hangs on a private phantom brand:
+
+```ts
+declare const stableBrand: unique symbol
+
+type Stable<T> = T extends object ? T & { readonly [stableBrand]: true } : T
+```
+
+Objects, arrays and functions get branded. Primitives pass straight through, because React and Preact already
+compare those by value, a `string` is always "stable enough".
+
+The `unique symbol` is doing the work here, if I'd used a string key like `_stable: true`,
+any object that happened to have that shape would satisfy the brand by accident, and someone _would_
+write `{ _stable: true }` eventually. A `unique symbol` that never leaves the package can't be
+reproduced by structural assignment from application code. You can name `Stable<T>`, you just can't
+forge one.
+
+That gives a prop the ability to describe more than its data:
+
+```ts
+type ItemListProps = {
+  items: Stable<Item[]>
+  onSelect: Stable<(id: string) => void>
+  title: string
+}
+```
+
+The array and the callback are references constructed with a stable intention, so they carry
+the brand. And now an array built inline is the wrong type:
+
+```tsx
+<ItemList
+  items={items.filter(isVisible)}
+  onSelect={(id) => select(id)}
+  title="Visible items"
+/>
+```
+
+The component boundary pushes the requirement back onto the caller, which is exactly where it should be.
+
+This is also the half of `memo()` and `PureComponent` we forget about. You wrap a component in `memo`,
+and assume it won't re-render without value changes, however the stability of complex types isn't a guarantee
+and can cause this optimization to be nullified.
+
+## Keep the hooks, replace the import
+
+My first attempt at producing these proofs used module augmentation. You import the package for its
+side effect, it augments React's hook types, and `useMemo` starts branding its result when every
+dependency is stable.
+
+It half works, and the half that doesn't is worth understanding, because it's the part that sounded
+weird to me too until I dug into _why_.
+
+Module augmentation lets you _add_ overloads to a declaration. It never lets you remove or replace the
+ones `@types/react` ships. After augmenting, `useMemo` has two overloads living side by
+side: the strict `(factory, deps: StableDeps) => Stable<T>`, and React's original
+`(factory, deps: DependencyList) => T`. TypeScript tries the strict one first, and when every
+dependency carries proof, great, you get `Stable<T>`. But the moment one dependency doesn't, the strict
+overload stops matching and resolution quietly falls through to React's original, which happily accepts
+any `DependencyList`:
+
+```ts
+const unstable = {}
+const value = useMemo(() => ({ answer: 42 }), [unstable])
+// no error. value is just { answer: number }, unbranded
+```
+
+There's no error at the dependency list, which is the place I wanted one. The proof simply
+doesn't get produced. So I stopped fighting it. The strict path is a separate entry point:
+
+```ts
+import { useCallback, useEffect, useMemo } from 'react-branded-types/react'
+```
+
+These are plain re-exports of the hooks, the difference is centered around the type:
+
+```ts
+export const useMemo = React.useMemo as <T, const D extends readonly unknown[]>(
+  factory: () => T,
+  dependencies: CheckedDeps<D>
+) => Stable<T>
+```
+
+`CheckedDeps<D>` keeps the inferred tuple intact and any unproven values will be an error
+
+```ts
+type CheckedDeps<D extends readonly unknown[]> = D & {
+  readonly [K in keyof D]: D[K] extends StableDependency ? D[K] : never
+}
+```
+
+Because this module never pulls in React's permissive overload, there's nothing to fall back to. A bad
+dependency is a `never`, and a raw object isn't assignable to `never`:
+
+```ts
+const stableFilter = useCallback(filter, [query])
+
+useMemo(() => source.filter(stableFilter), [source, stableFilter])
+// Stable<Item[]>
+
+useMemo(() => source.filter(rawFilter), [source, rawFilter])
+//                                                 ^ type error
+
+useEffect(syncSelection, [selection, page])
+//                                   ^ type error when page is an unproven object
+```
+
+The package still ships the augmentation mode, because some projects genuinely can't touch every import
+site and "proofs propagate where they can" beats nothing. But I'd reach for `react-branded-types/react`
+in anything new. It's the mode that makes a bad dependency list fail where you wrote it, instead of
+somewhere further downstream.
+
+## Bless the sources React already guarantees
+
+Not every stable reference comes out of a `useMemo`. React hands you a few for free, and the types can
+just say so:
+
+```ts
+const [state, setState] = useState(initialState)
+// state:    Stable<State>
+// setState: Stable<Dispatch<SetStateAction<State>>>
+
+const element = useRef<HTMLElement | null>(null)
+// element: Stable<RefObject<HTMLElement | null>>
+```
+
+`Stable<State>` deserves a small clarification, because it reads like a lie at first. It does _not_ mean
+the state can never change. It means React won't manufacture a new identity for state that didn't
+change. A real state transition should still invalidate a memo and re-run an effect, that's the whole
+point of state. The brand is about identity, not immutability.
+
+The initializer closures don't need proof either, they aren't dependency lists:
+
+```ts
+const [state] = useState(() => buildInitialState(props))
+const [reduced] = useReducer(reducer, props, createInitialState)
+```
+
+React only calls those to produce the initial value. The contract brands the resulting state and
+dispatcher, it doesn't care whether the initialization closure was itself stable, so I don't ask for
+that.
+
+For module-scope values that are stable by construction, there's a tiny identity helper:
+
+```ts
+export const EMPTY_ITEMS = stable([] as Item[])
+```
+
+At runtime `stable()` returns the value untouched, it's `x => x`. The useful part is the proof, not the
+function, keep it at module scope where the claim is actually true.
+
+## Context is where this pays off fast
+
+An inline context value is one of the easiest ways to quietly make a whole subtree do work it didn't
+need to:
+
+```tsx
+<ThemeContext value={{ theme, setTheme }}>{children}</ThemeContext>
+```
+
+`createStableContext` moves that requirement onto the provider:
+
+```ts
+const ThemeContext = createStableContext<ThemeValue | null>(null)
+```
+
+Now the provider only accepts a `Stable<ThemeValue>`. The place that owns the value also owns the job
+of memoizing it, and a consumer buried deep in the tree never has to know how that value got assembled.
+It just gets the contract. That's the boundary I want out of types, the knowledge stays where the
+responsibility is.
+
+## Preact
+
+Same idea, separate entry point, because of course I wasn't going to leave Preact out:
+
+```ts
+import { useEffect, useMemo, type Stable } from 'react-branded-types/preact'
+```
+
+These keep the original `preact/hooks` references and apply the same strict dependency signatures. The
+proof belongs to the value contract, it was never really about which rendering library you happened to
+pick.
+
+## What this doesn't solve
+
+A determined developer can always write:
+
+```ts
+value as Stable<typeof value>
+```
+
+No brand survives a cast, and that's true for basically every guarantee we model in TypeScript. I'm not
+shipping an ESLint plugin for it, an assertion stays an explicit escape hatch that review and
+conventions have to keep an eye on. `stable()` is the same kind of promise, so don't sprinkle it around
+to shut the compiler up.
+
+The React Compiler is the other thing people bring up, doesn't it make manual memoization obsolete? For
+a lot of cases, yeah. But I don't think it makes this idea pointless, because the two answer different
+questions. The compiler asks "can I preserve this identity automatically". `Stable<T>` says "another
+component is allowed to rely on this identity". One is an implementation detail that lives in the build,
+the other is a contract that lives in the type graph where callers can see it.
+
+## Type errors as guardrails for agents
+
+A lot of React gets written by coding agents now, and handing an inline array to a memoized child is
+exactly the kind of thing they do all day. It reads fine, it runs fine, and it quietly does more work
+than it should, which is about the worst category of bug to catch by eye. An agent can't see a
+re-render it never rendered, but it can absolutely respond to a type error, that's the feedback loop it
+already runs on.
+
+Which is why the error itself is worth some effort. When a dependency isn't proven, the strict hooks
+don't fail it against a bare `never`, they map it to a string that spells out the fix:
+
+```ts
+useMemo(() => source.filter(rawFilter), [source, rawFilter])
+// Type '() => Item[]' is not assignable to type
+// 'This dependency is not Stable<T>: memoize it with useMemo/useCallback,
+//  source it from useState/useRef, or wrap a module-scope constant with stable().'
+```
+
+The instruction rides along in the diagnostic and the caret lands on the exact dependency. A human
+reads it in their editor, an agent reads it out of `tsc`, and neither is left staring at "not
+assignable to never" trying to guess what the type system wanted. The check moves from "hope someone
+notices in review" to "the build stays red until the props are stable", which is the only kind of
+guardrail that holds up when code is being generated faster than anyone can read it.
+
+## The broader idea
+
+The part I actually care about is bigger than memoization.
+
+We're forever hauling around properties the type system _could_ carry but that we leave behind as
+comments, lint rules, and tribal knowledge instead. Referential stability is one of them, but it's not
+the only one. Once it's proof-carrying, a component can ask for it, a hook can hand it over, and a
+context can keep it intact across the whole subtree.
+
+The runtime work was already happening, we were already calling `useMemo`. The piece that was missing
+was letting the guarantee survive past the line where it was made.
+
+I've been packaging this up as `react-branded-types`. It's an experiment more than a library at this
+point, so I'd love to hear where it breaks for you.

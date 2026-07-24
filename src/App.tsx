@@ -12,6 +12,9 @@ const Home = lazy(() => import('./pages/Home'))
 const Blueprint = lazy(() => import('./pages/Blueprint'))
 
 // Posts
+const ReferentialStabilityTypes = lazy(
+  () => import('./pages/posts/referential-stability-types/index.mdx')
+)
 const LlmSignalsDebugging = lazy(
   () => import('./pages/posts/llm-signals-debugging/index.mdx')
 )
@@ -94,6 +97,10 @@ export function App() {
             <Route component={Home} path="/" />
             <Route component={Blog} path="/blog" />
             <Route component={Blueprint} path="/blueprint" />
+            <Route
+              component={ReferentialStabilityTypes}
+              path="/blog/referential-stability-types"
+            />
             <Route
               component={LlmSignalsDebugging}
               path="/blog/llm-signals-debugging"

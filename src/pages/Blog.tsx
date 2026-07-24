@@ -3,6 +3,7 @@ import { useState } from 'preact/hooks'
 
 import SEO from '../components/Seo'
 
+import { documentProps as referentialStabilityTypesDocumentProps } from './posts/referential-stability-types/documentProps'
 import { documentProps as llmSignalsDebuggingDocumentProps } from './posts/llm-signals-debugging/documentProps'
 import { documentProps as VDomDocumentProps } from './posts/vdom-compilers/documentProps'
 import { documentProps as inputsDocumentProps } from './posts/controlled-inputs/documentProps'
@@ -47,6 +48,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  referentialStabilityTypesDocumentProps,
   resumedHydrationPreactDocumentProps,
   fedUpWithBelgiumDocumentProps,
   drydockReleaseDefensesDocumentProps,
