@@ -40,6 +40,16 @@ type Stable<T> = T extends object ? T & { readonly [stableBrand]: true } : T
 Objects, arrays and functions get branded. Primitives pass straight through, because React and Preact already
 compare those by value, a `string` is always "stable enough".
 
+<aside class="post-callout">
+  "Stable" here does not mean immutable or identical for the lifetime of the
+  component. It means the reference is expected to survive unrelated renders and
+  change only when its source is invalidated, such as by a state update or a
+  memo dependency changing. Stability only within one render would be trivial,
+  every local reference already has that property. This is an optimization
+  contract, not something application correctness should rely on: React can
+  discard memoized values and callbacks when it has a reason to.
+</aside>
+
 The `unique symbol` is doing the work here, if I'd used a string key like `_stable: true`,
 any object that happened to have that shape would satisfy the brand by accident, and someone _would_
 write `{ _stable: true }` eventually. A `unique symbol` that never leaves the package can't be
@@ -100,28 +110,13 @@ There's no error at the dependency list, which is the place I wanted one. The pr
 doesn't get produced. So I stopped fighting it. The strict path is a separate entry point:
 
 ```ts
-import { useCallback, useEffect, useMemo } from 'react-branded-types/react'
+import { useCallback, useEffect, useMemo } from 'stableref/react'
 ```
 
-These are plain re-exports of the hooks, the difference is centered around the type:
-
-```ts
-export const useMemo = React.useMemo as <T, const D extends readonly unknown[]>(
-  factory: () => T,
-  dependencies: CheckedDeps<D>
-) => Stable<T>
-```
-
-`CheckedDeps<D>` keeps the inferred tuple intact and any unproven values will be an error
-
-```ts
-type CheckedDeps<D extends readonly unknown[]> = D & {
-  readonly [K in keyof D]: D[K] extends StableDependency ? D[K] : never
-}
-```
-
-Because this module never pulls in React's permissive overload, there's nothing to fall back to. A bad
-dependency is a `never`, and a raw object isn't assignable to `never`:
+These are the real React hooks at runtime, exposed under stricter type declarations. The dependency tuple
+is inferred, and each unproven element is replaced with an actionable string literal in the expected type.
+Because this entry does not include React's permissive overload, there is nothing to fall back to and a raw
+reference fails at the dependency where it was written:
 
 ```ts
 const stableFilter = useCallback(filter, [query])
@@ -136,10 +131,9 @@ useEffect(syncSelection, [selection, page])
 //                                   ^ type error when page is an unproven object
 ```
 
-The package still ships the augmentation mode, because some projects genuinely can't touch every import
-site and "proofs propagate where they can" beats nothing. But I'd reach for `react-branded-types/react`
-in anything new. It's the mode that makes a bad dependency list fail where you wrote it, instead of
-somewhere further downstream.
+The package does not ship the augmentation mode. Silently losing the proof is too easy to mistake for actual
+enforcement. Importing from `stableref/react` makes a bad dependency list fail where you wrote it,
+instead of somewhere further downstream.
 
 ## Bless the sources React already guarantees
 
@@ -186,12 +180,17 @@ An inline context value is one of the easiest ways to quietly make a whole subtr
 need to:
 
 ```tsx
-<ThemeContext value={{ theme, setTheme }}>{children}</ThemeContext>
+<ThemeContext.Provider value={{ theme, setTheme }}>
+  {children}
+</ThemeContext.Provider>
 ```
 
-`createStableContext` moves that requirement onto the provider:
+`createStableContext` moves that requirement onto the provider. It is framework-specific, so it comes from
+the React entry rather than the package root:
 
 ```ts
+import { createStableContext } from 'stableref/react'
+
 const ThemeContext = createStableContext<ThemeValue | null>(null)
 ```
 
@@ -205,7 +204,7 @@ responsibility is.
 Same idea, separate entry point, because of course I wasn't going to leave Preact out:
 
 ```ts
-import { useEffect, useMemo, type Stable } from 'react-branded-types/preact'
+import { useEffect, useMemo, type Stable } from 'stableref/preact'
 ```
 
 These keep the original `preact/hooks` references and apply the same strict dependency signatures. The
@@ -228,8 +227,8 @@ to shut the compiler up.
 The React Compiler is the other thing people bring up, doesn't it make manual memoization obsolete? For
 a lot of cases, yeah. But I don't think it makes this idea pointless, because the two answer different
 questions. The compiler asks "can I preserve this identity automatically". `Stable<T>` says "another
-component is allowed to rely on this identity". One is an implementation detail that lives in the build,
-the other is a contract that lives in the type graph where callers can see it.
+component can use this identity as an optimization contract". One is an implementation detail that lives
+in the build, the other is a contract that lives in the type graph where callers can see it.
 
 ## Type errors as guardrails for agents
 
@@ -244,9 +243,10 @@ don't fail it against a bare `never`, they map it to a string that spells out th
 
 ```ts
 useMemo(() => source.filter(rawFilter), [source, rawFilter])
-// Type '() => Item[]' is not assignable to type
+// Type '(item: Item) => boolean' is not assignable to type
 // 'This dependency is not Stable<T>: memoize it with useMemo/useCallback,
-//  source it from useState/useRef, or wrap a module-scope constant with stable().'
+//  source it from useState, depend on a useRef container rather than its mutable
+//  current value, or wrap a module-scope constant with stable().'
 ```
 
 The instruction rides along in the diagnostic and the caret lands on the exact dependency. A human
@@ -267,5 +267,5 @@ context can keep it intact across the whole subtree.
 The runtime work was already happening, we were already calling `useMemo`. The piece that was missing
 was letting the guarantee survive past the line where it was made.
 
-I've been packaging this up as `react-branded-types`. It's an experiment more than a library at this
+I've been packaging this up as `stableref`. It's an experiment more than a library at this
 point, so I'd love to hear where it breaks for you.
