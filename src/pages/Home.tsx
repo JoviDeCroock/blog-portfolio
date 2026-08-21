@@ -100,7 +100,7 @@ const Home = () => (
         </QuoteListItem>
         <QuoteListItem>
           <BoldLink rel="nofollow" target="_blank" href="https://stellate.co/">
-            Stellate
+            Stellate (acq. by Shopify)
           </BoldLink>{' '}
           Staff Software Engineer - Director of R&D (2021-2024)
         </QuoteListItem>
