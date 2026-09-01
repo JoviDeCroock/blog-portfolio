@@ -1,0 +1,169 @@
+import SEO from '../../../components/Seo'
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+import {
+  ResumedHydrationDiagram,
+  StreamingHydrationDiagram,
+  UseIdStabilityDiagram,
+} from './HydrationExplainers'
+
+<Dates createdAt={documentProps.createdAt} />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# Async hydration in Preact
+
+I've written before about hydration in [a previous post](https://www.jovidecroock.com/blog/hydration-and-preact),
+but I feel like we are overdue to revisit the topic. It might be worth catching up on
+that post, but the TL;DR is that hydration is one synchronous process where Preact
+compares the HTML it received from the server and makes it interactive through the
+executed JavaScript representation of the Virtual DOM. Each DOM node is visited and
+we apply the event-handlers, refs, and other details described by the Virtual DOM. When
+we see a discrepancy, we abort hydration and treat it as a mismatch.
+
+Why does the synchronous part matter? Because it's all-or-nothing: nothing on the page is
+interactive until every piece of JavaScript and data the tree needs has arrived and
+executed, and on a large tree the hydration pass itself can occupy the main thread long
+enough for a click to go unanswered. The bigger your app, the longer your users stare at
+a page that looks ready but isn't.
+
+This synchronous behavior is often treated as an inherent limitation of Preact. Other
+technologies like React have selective hydration, and people discount Preact for not
+having it because… well, we aren't great at talking about these topics. If at this point
+you are blaming me for not mentioning it before, then you have all the reason to.
+
+The point of this post is that Preact isn't limited to this all-or-nothing model. Resumed
+hydration already lets `Suspense` boundaries hydrate independently. Hydration 2.0 in
+Preact 11 changes how we identify the DOM owned by those boundaries, while streaming
+changes when that DOM reaches the browser. These are related steps, but they aren't the
+same feature.
+
+## Enter resumed hydration
+
+I never really settled on naming the practice we have in Preact, but I often refer to it
+as resumed hydration. Its async nature is achieved through `Suspense`. In Preact, we
+support that through the `compat` package, the `preact-suspense` package, and the
+`preact-iso` router. All of those can opt in to resumed hydration.
+
+There are two topics to consider here: the server and the client. On the server we
+historically used `renderToString` to render our Virtual DOM to an HTML string that the
+client can visualize for the user. When we enter this resumed hydration world, we
+leverage `renderToStringAsync` instead. It isn't that different, apart from the fact that
+it will `await` any suspending Virtual DOM node and continue creating the HTML string
+from each resolved piece.
+
+On the client we start hydrating the HTML string we received. When a child suspends,
+Preact pauses hydration for that subtree, remembers where it stopped in the
+server-rendered DOM, and continues hydrating the rest of the application. Once the
+missing data or JavaScript resolves, Preact returns to that subtree and makes it
+interactive.
+
+This pause-and-continue behavior is resumed hydration, and it already exists today.
+Hydration 2.0 doesn't introduce it; it changes how Preact records the DOM belonging to
+each paused subtree. While a subtree is paused, its server-rendered view remains visible
+and we don't replace it with the `Suspense` fallback.
+
+There is also less work blocking the main thread at once. While a boundary is waiting for
+code or data, the browser can render, respond to input, and run other work instead of
+spending that time hydrating a subtree that isn't ready. Hydration still uses the main
+thread when each boundary resumes, but it happens in smaller pieces rather than one long
+all-or-nothing pass. Meanwhile, the parts that have already hydrated are interactive.
+
+<ResumedHydrationDiagram />
+
+So how does this stack up against React's selective hydration? In practice it covers most
+of what people mean when they bring it up: boundaries hydrate independently, and the
+server-rendered content stays visible while they do. The difference is
+prioritization: React uses interaction as a signal and will hydrate the boundary you
+just clicked first, while Preact currently resumes boundaries in the order their code or
+data resolves.
+
+## Hydration 2.0
+
+This practice brings footguns with it, as all of them do… The original resumed-hydration
+algorithm remembered _1 and only 1 DOM node_ at which to continue. That effectively
+assumed that a suspending VNode would eventually produce exactly one DOM node.
+
+That assumption breaks when the VNode produces no DOM, such as a component returning
+`null`, or multiple nodes, such as a `Fragment` with two root elements. Preact could then
+resume from the wrong node, causing hydration mismatches, recreated DOM, duplicated
+siblings, or lost state.
+
+[Hydration 2.0](https://github.com/preactjs/preact/issues/4442) replaces that single-node
+assumption with explicit boundaries in the server-rendered HTML. `renderToStringAsync`
+emits opening and closing markers around the DOM produced by a suspending VNode.
+Adjacent markers represent no DOM; one or more nodes can sit between the same markers.
+On the client, Preact can therefore identify the complete range belonging to the
+suspended subtree before resuming it.
+
+Hydration 2.0 is best understood as making our existing resumed hydration reliable,
+rather than introducing async hydration for the first time. It will ship as part of
+Preact 11.
+
+## What we didn't solve (yet)
+
+Hydration 2.0 tells us which DOM belongs to a resumed subtree. It doesn't, by itself,
+ensure that the subtree generates the same ids on the server and client. This is where
+our `useId()` hook presents another problem. The ids it hands out are derived from
+the position in the tree, and they have to match between server and client — attributes
+like `aria-describedby` in the server HTML point at them. When suspending siblings
+resolve in a different order on the client than they did on the server, the client
+derives different ids than the ones already sitting in the HTML: references point at ids
+that no longer exist, or two elements end up sharing one. One thing we tried was
+[Fix useId stability across async Suspense (#5108)](https://github.com/preactjs/preact/commit/67f02906e857bdaf5872374019a700efc417e318),
+which made async Suspense siblings keep the same ids even when they resolved in different
+orders. We had to revert that in
+[#5135](https://github.com/preactjs/preact/pull/5135): when a client-only branch, or one
+that had already finished hydrating, rendered in the middle of hydration, it shifted the
+tree positions that later Suspense boundaries derived their ids from, which reintroduced the
+problem.
+
+<UseIdStabilityDiagram />
+
+That revert is why I'm not fully satisfied with the solution yet. I have tried a few
+versions of this, but at this point I am contemplating that we either need to let users
+specify a name for the `Suspense` boundary, or derive one from the tree position, and
+then use that as a modifier for the suspending subtree's `useId` invocations.
+
+## Streaming
+
+React solved this a bit differently. Rather than waiting for all async resolution on the
+server before sending the finished HTML, React streams the shell, fallbacks, and resolved
+HTML chunks as they become available, then hydrates them on the client. Honestly, this
+approach results in fewer of these weird edge cases and is a great feature. You will
+never hear me say otherwise. In Preact, I've also started working towards hydrating these
+streamed chunks correctly on the client, and it should be a feature in Preact 11 as well. The progress can be found in
+[this issue](https://github.com/preactjs/preact/issues/5034).
+
+<StreamingHydrationDiagram />
+
+A very positive note about streaming is that it won't _just_ stream the HTML when it's
+done. The user will see something on screen much faster because when the shell is done
+rendering and we arrive at a suspending child, the server can flush the shell and the
+fallback for the `Suspense` boundary.
+
+You can of course approximate this yourself by quickly server-rendering a skeleton,
+flushing it, starting your `renderToStringAsync`, and then flushing that. Built-in
+streaming is just the more elegant version: the user sees each piece pop in one at a
+time and become interactive ~instantly, rather than everything arriving in one late
+chunk.
+
+---
+
+To recap: resumed hydration already lets Preact make `Suspense` boundaries interactive
+independently and gives the main thread opportunities to handle other work while a
+boundary is waiting. Hydration 2.0 makes those boundaries reliable when they contain
+zero, one, or many DOM nodes. Streaming will let their HTML arrive independently as
+well. Stable `useId` generation across async boundaries remains an open problem.
+
+I hope all of this was a bit enlightening about what we've been pursuing at Preact for
+hydration. I'm hoping to make all of this more accessible with
+[pracht](https://pracht.resynapse.dev), a full-stack framework we're building where you
+pick a rendering mode (SSG, SSR, ISG, SPA) per route and get all of the above without
+wiring it up yourself. If you have anything you think is worth adding
+for us, let us know. We are really open to feedback!

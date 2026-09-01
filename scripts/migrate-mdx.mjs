@@ -12,21 +12,32 @@ import { readFileSync, writeFileSync, readdirSync, mkdirSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { join } from 'node:path'
 
+import { classifyPosts } from './classify-posts.mjs'
+
 const POSTS_DIR = 'src/content/posts'
 const WRAPPER_DIR = 'src/routes/posts'
-// Where the posts lived before `git mv`. Reading the pristine source from the
-// commit keeps this script re-runnable.
+// Where the posts lived before `git mv`, and the last commit that had them
+// there. Reading the pristine source from that commit keeps this script
+// re-runnable after the migration itself has been committed.
 const ORIGINAL_DIR = 'src/pages/posts'
+const ORIGINAL_REF = process.env.PRACHT_MIGRATION_BASE ?? '645e5c2'
 
 function pristine(slug) {
   try {
     return execFileSync(
       'git',
-      ['show', `HEAD:${ORIGINAL_DIR}/${slug}/index.mdx`],
-      { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 }
+      ['show', `${ORIGINAL_REF}:${ORIGINAL_DIR}/${slug}/index.mdx`],
+      {
+        encoding: 'utf8',
+        maxBuffer: 32 * 1024 * 1024,
+        stdio: ['ignore', 'pipe', 'ignore'],
+      }
     )
   } catch {
-    return readFileSync(join(POSTS_DIR, slug, 'index.mdx'), 'utf8')
+    throw new Error(
+      `cannot read pristine source for "${slug}" from ${ORIGINAL_REF}; ` +
+        `set PRACHT_MIGRATION_BASE to the pre-migration commit`
+    )
   }
 }
 
@@ -130,6 +141,14 @@ for (const slug of slugs) {
   })
 }
 
+// A post whose content is pure prose needs no framework JavaScript at all.
+const staticSlugs = new Set(
+  classifyPosts()
+    .filter((row) => row.static)
+    .map((row) => row.slug)
+)
+for (const entry of manifest) entry.static = staticSlugs.has(entry.slug)
+
 // --- route wrappers -------------------------------------------------------
 mkdirSync(WRAPPER_DIR, { recursive: true })
 for (const entry of manifest) {
@@ -150,10 +169,10 @@ export default Content
 
 // --- route manifest -------------------------------------------------------
 const routeLines = manifest
-  .map(
-    (e) =>
-      `    route('${e.path}', './routes/posts/${e.slug}.tsx', { id: '${e.routeId}' }),`
-  )
+  .map((e) => {
+    const meta = `{ id: '${e.routeId}'${e.static ? ", hydration: 'none'" : ''} }`
+    return `      route('${e.path}', './routes/posts/${e.slug}.tsx', ${meta}),`
+  })
   .join('\n')
 
 writeFileSync(
@@ -176,9 +195,15 @@ export const app = defineApp({
     group({ shell: 'public', render: 'ssg' }, [
       route('/', './routes/home.tsx', { id: 'home' }),
       route('/blog', './routes/blog.tsx', { id: 'blog' }),
-      route('/blueprint', './routes/blueprint.tsx', { id: 'blueprint' }),
+      // Prose only — no framework JavaScript.
+      route('/blueprint', './routes/blueprint.tsx', {
+        id: 'blueprint',
+        hydration: 'none',
+      }),
 
       // Blog posts. One route module per post, wrapping its MDX content.
+      // Posts that are pure prose declare hydration: 'none' and ship no
+      // framework JavaScript; the rest embed interactive demos and hydrate.
 ${routeLines}
     ]),
   ],

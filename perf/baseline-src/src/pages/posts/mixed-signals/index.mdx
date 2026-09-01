@@ -1,0 +1,260 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<Dates createdAt={documentProps.createdAt} />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# Bridging the Server-Client Boundary with Signals
+
+Signals have changed how we think about reactivity on the client. Instead of re-rendering entire component trees
+when state changes, we update exactly the DOM nodes that care. But signals have always been a client-side story.
+Your reactive graph lives in the browser, and getting state there from a server still means fetching JSON,
+deserializing it, and manually wiring it into your signals.
+
+What if a signal on the server could just _be_ a signal on the client?
+
+That is the idea behind [mixed-signals](https://github.com/developit/mixed-signals): an RPC and reflection layer
+for Preact Signals that synchronizes reactive state across a transport boundary. The server defines models with
+signals and methods. The client gets local proxy signals that stay in sync automatically. Method calls go over
+the wire, signal updates come back. No manual fetch, no deserialization glue, no polling.
+
+## Where do I write my logic?
+
+With most approaches to client-server communication, you spend a lot of time thinking about _where_ your logic
+lives. The server needs endpoints, the client needs fetch calls, and in between you maintain serialization
+contracts, error handling, and cache invalidation. You write your state logic twice: once on the server where
+it is authoritative, and again on the client where it needs to be reactive.
+
+mixed-signals collapses that question. You write your logic once, as signals and plain functions:
+
+```typescript
+import { signal } from '@preact/signals-core'
+import { createModel } from 'mixed-signals/server'
+
+const Counter = createModel((initial = 0) => {
+  const count = signal(initial)
+  const increment = () => count.value++
+  const decrement = () => count.value--
+  return { count, increment, decrement }
+})
+```
+
+This is just signals. No special server syntax, no decorators, no schema definition. The model is a factory
+function that returns signals and methods. You don't think about "where do I put this logic" because the
+answer is always the same: write it as a model. The interesting question becomes _where should this model run_.
+
+On the client, you create a reflected version:
+
+```typescript
+import { createReflectedModel } from 'mixed-signals/client'
+
+const CounterModel = createReflectedModel<Counter>(
+  ['count'], // signal properties to reflect
+  ['increment', 'decrement'] // methods to proxy as RPC calls
+)
+```
+
+The reflected model creates local signals that mirror the server state. When you call `increment()` on the
+client, it sends an RPC call to the server. The server mutates `count`, and the update flows back to every
+connected client's local `count` signal. Your components subscribe to that signal the same way they subscribe
+to any other signal. No special hooks, no refetching.
+
+## The glue code we stop writing
+
+The traditional way to share state between server and client looks something like this:
+
+1. Client sends a request (REST, GraphQL, whatever)
+2. Server processes it and returns JSON
+3. Client deserializes the response
+4. Client manually updates local state
+5. Framework detects state change and re-renders
+
+Every step is glue code. You are maintaining two representations of the same state and manually keeping them
+in sync. The moment you add real-time updates (WebSockets, SSE, polling) the complexity multiplies because
+now you also need to handle partial updates, ordering, and conflicts.
+
+With mixed-signals, the flow is:
+
+1. Client calls a method on the reflected model
+2. Server executes it, signal updates
+3. Update flows to all clients via the transport
+4. Client signals update, UI reacts
+
+The client code does not know it is talking to a server. It just reads `.value` from a signal and calls
+methods. The reactive graph spans the network boundary.
+
+## Nested models and delta compression
+
+A counter is the hello-world. The real power shows up when your models compose:
+
+```typescript
+const Todo = createModel((_text = '') => {
+  const text = signal(_text)
+  const done = signal(false)
+  const toggle = () => (done.value = !done.value)
+  return { text, done, toggle }
+})
+
+const TodoList = createModel(() => {
+  const all = signal<InstanceType<typeof Todo>[]>([])
+
+  function add(text: string) {
+    const todo = new Todo(text)
+    all.value = [...all.value, todo]
+    return todo
+  }
+
+  function remaining() {
+    return all.value.filter((t) => !t.done.value).length
+  }
+
+  return { all, add, remaining }
+})
+```
+
+When you call `add('Buy milk')` from any client, a new `Todo` model is created on the server, added to the
+`all` signal, and reflected to every connected client as a local signal graph. Each client gets a reactive
+`Todo` with its own `text` and `done` signals. Toggling `done` on one client updates it everywhere.
+
+The transport uses delta compression (appends for arrays, merges for objects, appends for strings) so you
+are not sending the full state on every update. This matters when your models grow beyond toy examples.
+
+## The mental model shift
+
+If you have read my earlier posts about signals, the pattern should feel familiar. Signals already decouple
+_where state is created_ from _where state is consumed_. A signal defined in one component can be read in
+a completely different part of the tree, and only the reader re-renders.
+
+mixed-signals extends that decoupling across the network. State is created on the server. It is consumed on
+the client. The client does not need to know about fetch, about JSON parsing, about cache invalidation, about
+WebSocket message formats. It just reads a signal.
+
+This is the same insight that makes signals powerful on the client, fine-grained reactivity means you only
+update what changed, but applied to the server-client boundary. You do not re-fetch the world when one field
+changes. The specific signal updates, and whatever is subscribed to it reacts.
+
+The question is no longer "how do I keep my client and server in sync." It is "where should this model run."
+A Web Worker, a Node process, a Cloudflare Worker, a different browser tab. The programming model stays the
+same. The transport is pluggable.
+
+## A concrete example: Durable Objects
+
+mixed-signals is transport-agnostic. It works over WebSockets, SSE, `postMessage`, or any bidirectional
+channel. But to make the shared-state story concrete, let's wire it to a Cloudflare Durable Object, which
+gives us a named, persistent, single-threaded server instance that multiple clients can connect to.
+
+```typescript
+import { signal } from '@preact/signals-core'
+import { RPC, createModel } from 'mixed-signals/server'
+
+const Counter = createModel((initial = 0) => {
+  const count = signal(initial)
+  const increment = () => count.value++
+  const decrement = () => count.value--
+  return { count, increment, decrement }
+})
+
+export class SharedCounter extends DurableObject {
+  counter: InstanceType<typeof Counter>
+  rpc: RPC
+
+  constructor(ctx: DurableObjectState, env: Env) {
+    super(ctx, env)
+    this.counter = new Counter(0)
+    this.rpc = new RPC({ counter: this.counter })
+    this.rpc.registerModel('Counter', Counter)
+  }
+
+  async fetch(request: Request): Promise<Response> {
+    if (request.headers.get('Upgrade') !== 'websocket') {
+      return new Response('Expected WebSocket', { status: 426 })
+    }
+
+    const pair = new WebSocketPair()
+    const [client, server] = Object.values(pair)
+
+    this.ctx.acceptWebSocket(server)
+
+    this.rpc.addClient({
+      send: (data: string) => server.send(data),
+      onMessage: (cb) => {
+        server.addEventListener('message', (event) => cb(event.data))
+      },
+      ready: Promise.resolve(),
+    })
+
+    return new Response(null, { status: 101, webSocket: client })
+  }
+}
+```
+
+The Durable Object is just a host. The interesting part is that the `Counter` model is identical to what
+you would write without any server infrastructure. mixed-signals does not care that it is running inside
+a Durable Object. It just needs a transport.
+
+On the client:
+
+```tsx
+import { RPCClient, createReflectedModel } from 'mixed-signals/client'
+
+const CounterModel = createReflectedModel<Counter>(
+  ['count'],
+  ['increment', 'decrement']
+)
+
+const ws = new WebSocket(`wss://${location.host}/my-room`)
+const rpc = new RPCClient(
+  {
+    send: ws.send.bind(ws),
+    onMessage: (cb) => ws.addEventListener('message', (e) => cb(e.data)),
+    ready: new Promise((r) => ws.addEventListener('open', r, { once: true })),
+  },
+  {}
+)
+rpc.registerModel('Counter', CounterModel)
+
+function App() {
+  return rpc.ready.then(() => {
+    const { counter } = rpc.root
+    return (
+      <div>
+        <p>Count: {counter.count}</p>
+        <button onClick={() => counter.increment()}>+</button>
+        <button onClick={() => counter.decrement()}>-</button>
+      </div>
+    )
+  })
+}
+```
+
+`counter.count` is a signal. In Preact, passing it directly into JSX means the text node updates without
+re-rendering the component. Multiple browser tabs open to the same URL will see the count change in real
+time because they share the same server-side signal graph.
+
+The Durable Object gives you identity (each URL path maps to a unique instance), persistence (state survives
+restarts), and single-threaded consistency (no locks needed). But those are infrastructure concerns. The
+programming model is just mixed-signals.
+
+## Not a silver bullet
+
+There are things this does not solve. Offline support requires client-side state that can diverge and
+reconcile. Optimistic updates are trickier when the server owns the truth. Large-scale fan-out to
+thousands of subscribers per object has limits. And you are coupling your client to a specific wire
+protocol rather than a standard REST or GraphQL endpoint. Not to say this couldn't exist in some future
+iteration where CRDT principles, ... could be applied to reconcile local and remote state but as it stands
+that is a limitation.
+
+But for applications where multiple clients need to coordinate around shared mutable state in real time,
+mixed-signals removes a remarkable amount of accidental complexity. No REST endpoints to design. No cache
+invalidation to debug. No WebSocket message schemas to version. Just signals, on both sides of the wire.
+
+Write your logic once as a model. Decide where it runs. Connect a transport. The reactive graph does the rest.
