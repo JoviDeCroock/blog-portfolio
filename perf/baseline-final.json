@@ -1,0 +1,83 @@
+{
+  "label": "baseline",
+  "clientDir": "/Users/jovi/Documents/SideProjects/blog-portfolio/.claude/worktrees/pracht-migration/perf/baseline-src/dist",
+  "totals": {
+    "htmlPages": 39,
+    "jsFiles": 76,
+    "jsRaw": 589182,
+    "jsGzip": 168437,
+    "cssFiles": 0,
+    "cssRaw": 0,
+    "htmlRaw": 745389,
+    "htmlGzip": 219677,
+    "htmlAvgRaw": 19113
+  },
+  "pages": [
+    {
+      "name": "home",
+      "url": "/",
+      "htmlFile": "index.html",
+      "jsChunks": 1,
+      "js": {
+        "raw": 35051,
+        "gzip": 13192,
+        "brotli": 11653
+      },
+      "css": {
+        "raw": 5308,
+        "gzip": 0,
+        "external": 0,
+        "inline": 5308
+      },
+      "html": {
+        "raw": 12879,
+        "gzip": 3942,
+        "brotli": 3193
+      }
+    },
+    {
+      "name": "blog-index",
+      "url": "/blog",
+      "htmlFile": "blog/index.html",
+      "jsChunks": 1,
+      "js": {
+        "raw": 35051,
+        "gzip": 13192,
+        "brotli": 11653
+      },
+      "css": {
+        "raw": 11307,
+        "gzip": 0,
+        "external": 0,
+        "inline": 11307
+      },
+      "html": {
+        "raw": 33290,
+        "gzip": 7371,
+        "brotli": 5940
+      }
+    },
+    {
+      "name": "blog-post",
+      "url": "/blog/hydration-and-preact",
+      "htmlFile": "blog/hydration-and-preact/index.html",
+      "jsChunks": 1,
+      "js": {
+        "raw": 35051,
+        "gzip": 13192,
+        "brotli": 11653
+      },
+      "css": {
+        "raw": 4064,
+        "gzip": 0,
+        "external": 0,
+        "inline": 4064
+      },
+      "html": {
+        "raw": 13653,
+        "gzip": 4622,
+        "brotli": 3675
+      }
+    }
+  ]
+}

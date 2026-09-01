@@ -1,16 +1,16 @@
 {
-  "label": "pracht-final",
+  "label": "pracht",
   "clientDir": "/Users/jovi/Documents/SideProjects/blog-portfolio/.claude/worktrees/pracht-migration/dist/client",
   "totals": {
     "htmlPages": 37,
     "jsFiles": 16,
-    "jsRaw": 199911,
-    "jsGzip": 54762,
+    "jsRaw": 199653,
+    "jsGzip": 54710,
     "cssFiles": 3,
     "cssRaw": 6217,
-    "htmlRaw": 677211,
-    "htmlGzip": 200887,
-    "htmlAvgRaw": 18303
+    "htmlRaw": 676732,
+    "htmlGzip": 200802,
+    "htmlAvgRaw": 18290
   },
   "pages": [
     {
@@ -20,8 +20,8 @@
       "jsChunks": 6,
       "js": {
         "raw": 63698,
-        "gzip": 19739,
-        "brotli": 17166
+        "gzip": 19737,
+        "brotli": 17195
       },
       "css": {
         "raw": 4199,
@@ -32,7 +32,7 @@
       "html": {
         "raw": 12303,
         "gzip": 3706,
-        "brotli": 3017
+        "brotli": 3020
       }
     },
     {
@@ -42,8 +42,8 @@
       "jsChunks": 6,
       "js": {
         "raw": 72442,
-        "gzip": 22562,
-        "brotli": 19516
+        "gzip": 22560,
+        "brotli": 19531
       },
       "css": {
         "raw": 4972,
@@ -53,8 +53,8 @@
       },
       "html": {
         "raw": 29498,
-        "gzip": 6433,
-        "brotli": 5228
+        "gzip": 6439,
+        "brotli": 5248
       }
     },
     {
