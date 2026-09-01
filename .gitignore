@@ -74,3 +74,4 @@ yarn-error.log
 perf/dist-*
 .pracht-docs/
 .docs-fetch.sh
+perf/baseline-src/
