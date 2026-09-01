@@ -1,0 +1,89 @@
+# Hydration
+
+We often talk about the concept of hydration and how the speed of it is vital to delivering a good experience, I want
+to touch on some efforts we as the Preact team have done to optimize for this metric as well as how other tools are
+aiming to shift us to a better place.
+
+## Say what?
+
+For people unfamiliar with the concept, hydration is the practice of making a HTML page interactive. When we execute the following
+code-snippet
+
+```jsx
+import { render } from 'preact'
+
+render(
+  <button
+    onClick={() => {
+      console.log('Oh hi, nice to have you here')
+    }}
+  >
+    Hello world
+  </button>,
+  document.body
+)
+```
+
+We will replace anything inside `document.body` with a `button` that has a click-listener attached. When we server-side render
+we will be receiving the following html.
+
+```html
+<body>
+  <button>Hello world</button>
+</body>
+```
+
+Which in and of itself does nothing, we can click the button however much we like it won't do anything, we could call `render` again
+like the previous code-snipper but that would destroy and recreate the DOM. Instead we will call `hydrate`.
+
+```jsx
+import { hydrate } from 'preact'
+
+hydrate(
+  <button
+    onClick={() => {
+      console.log('Oh hi, nice to have you here')
+    }}
+  >
+    Hello world
+  </button>,
+  document.body
+)
+```
+
+Now Preact will go through the existing elements in `document.body` and match them up against what the Virtual-DOM is saying has to be there.
+After this is executed our application will be interactive.
+
+It is valuable to be aware of how this will occur in practice because we first get our HTML and our HTML file will contain a script tag
+telling the client where to find the code that will make this page interactive. This means we are essentially dealing with a waterfall
+
+> Download HTML --> Parse HTML --> Download JS --> Parse JS --> Execute hydration --> Page interactive
+
+This means the bigger your JS/... the longer it will take before the user can click something or navigate further, this
+is called the [Time To Interactive metric in the core-web-vitals metrics](https://web.dev/interactive/).
+
+## Interactivity please
+
+We want to optimize this time-to-interactive metric as it determines the usability of your application, imagine someone downloading the HTML
+for your application and due to a large bundle size or a bad connection the JS loads in slow, now the users will be hitting buttons but nothing
+will actually be happening... This is the valley between first paint and interactiveness.
+
+From this we can conclude there's a few things we can do to make things interactive faster
+
+- we leverage the platform `<a>` tags for our links, these work out of the box without JS, the SPA transitions however might not work
+- we start inlining our event-handlers for critical paths in the application
+- we reduce the code downloaded for the minimal interactivity
+- we reduce the amount of surface hydration has to touch before being fully interactive
+
+The two first are interesting paths and I highly suggest looking into how [Remix](https://remix.run/) is trying to shift the status quo there,
+however for this post we will focus where front-end libraries like Preact can come in to help out.
+
+A pretty native tool to reduce bundle-size for entry points have been `async routes`, as that is the first factor that will be variable in the
+entry of an application, we split up in multiple routes which essentially all are unused code apart from the one route we render. This leads me
+to the first usable heuristic in optimizing hydration, we introduce a helper to orchestrate these async loading states, currently we have these in
+the shape of `lazy` and `Suspense` as well as in [Preact-ISO](https://github.com/preactjs/wmr/tree/main/packages/preact-iso) (which we should
+really generalize one day).
+
+For the sake of familiarity let's look at the `Suspense` approach, when a route isn't loaded `lazy` will throw a `Promise` which follows a similar
+pattern to error boundaries in that when we see `Suspense` we can stop there, render the `fallback` and go on with our lives. What if instead of just
+rendering the fallback we look at whether there is DOM and mark this `Suspense`

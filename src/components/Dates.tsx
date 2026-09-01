@@ -1,34 +1,28 @@
-import { styled } from 'goober'
+import styles from './dates.module.css'
 
 const formatDate = (date: Date) =>
   Intl.DateTimeFormat('en', { dateStyle: 'long' }).format(date)
 
-const Wrapper = styled('div')`
-  display: flex;
-  flex-direction: column;
-`
-
-const DateAnnotation = styled('span')`
-  color: #A6A7A7;
-  font-size: 0.8rem;
-`
-
-export default function Dates(props: { createdAt: string; updatedAt: string }) {
-  const createdAtDate = new Date(props.createdAt)
+export default function Dates(props: {
+  createdAt: string
+  updatedAt?: string
+}) {
   return (
-    <Wrapper>
-      <DateAnnotation>
+    <div class={styles.wrapper}>
+      <span class={styles.annotation}>
         Written on{' '}
-        <time datetime={props.createdAt}>{formatDate(createdAtDate)}</time>
-      </DateAnnotation>
+        <time datetime={props.createdAt}>
+          {formatDate(new Date(props.createdAt))}
+        </time>
+      </span>
       {props.updatedAt && (
-        <DateAnnotation>
+        <span class={styles.annotation}>
           Last updated on{' '}
           <time datetime={props.updatedAt}>
             {formatDate(new Date(props.updatedAt))}
           </time>
-        </DateAnnotation>
+        </span>
       )}
-    </Wrapper>
+    </div>
   )
 }

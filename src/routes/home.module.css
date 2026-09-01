@@ -1,0 +1,98 @@
+.hero {
+  width: 100%;
+  position: relative;
+  padding-top: 1rem;
+}
+
+.hero::after {
+  content: '';
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, #eb29a9, #6366f1, transparent);
+  margin-bottom: 1.5rem;
+  border-radius: 2px;
+}
+
+.quoteList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quoteListItem {
+  margin-bottom: 12px;
+  margin-top: 12px;
+  border-left: 1px solid #2d2c2c;
+  list-style-type: none;
+  padding-left: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.boldLink {
+  color: #fcfcfd;
+  font-weight: bold;
+}
+
+.block {
+  margin-bottom: 32px;
+}
+
+.grid {
+  display: grid;
+  list-style: none;
+  margin: 0;
+  gap: 24px;
+  padding: 0;
+  grid-template-columns: 1fr 1fr;
+}
+
+.box {
+  border: 1px solid #2d2c2c;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  filter: blur(60px);
+  transition: all 0.25s ease-in-out;
+  opacity: 0;
+  background: transparent;
+  background-repeat: no-repeat;
+  background-image: radial-gradient(
+    circle at calc(var(--mouse-x, 0) * 100%) calc(var(--mouse-y, 0) * 100%),
+    #eb29a9,
+    #0b0b0c 20%,
+    transparent 100%
+  );
+}
+
+.box:hover::before {
+  opacity: 1;
+}
+
+/*
+ * Resets the stacking context; without it the ::before hover of .box clips
+ * the content.
+ */
+.boxInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  height: 100%;
+}
+
+.boxTitle {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.boxDescription {
+  margin-top: 0;
+}
