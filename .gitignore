@@ -69,3 +69,8 @@ yarn-error.log
 .yarn-integrity
 .cache
 .gstack/
+
+# perf harness artifacts
+perf/dist-*
+.pracht-docs/
+.docs-fetch.sh
