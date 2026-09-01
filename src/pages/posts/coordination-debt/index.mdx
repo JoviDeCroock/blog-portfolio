@@ -1,0 +1,137 @@
+import SEO from '../../../components/Seo'
+import CodeTheme from '../../../components/CodeTheme'
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<CodeTheme />
+<Dates createdAt={documentProps.createdAt} />
+<SEO
+  title={documentProps.title}
+  description={documentProps.description}
+  keywords={documentProps.tags}
+  image={documentProps.image}
+  url={documentProps.path}
+/>
+
+# Coordination Debt
+
+This year I've written something like seven thousand commits across roughly twenty products. A
+registry that takes custody of your dependencies, a release gate, a workspace, a social media
+manager, a verification layer... Most of them went from nothing to a working, documented, tested
+product in a handful of days, because I pointed agents at them and the agents were good.
+
+One of those twenty has users.
+
+The tempting explanation is that the other nineteen are bad products, and some of them probably
+are. But that's not what happened to most of them. What happened is that every one of those changes
+needed a human to decide whether it was right, that human was me, and there's only one of me. I
+didn't run out of code, I ran out of the thing code spends.
+
+I want a name for that, because I keep running into it.
+
+## The definition
+
+**Coordination debt is the human attention a change owes before it's safe.**
+
+Every change carries a cost, someone has to read it, reconstruct what it was trying to do, decide
+whether it respects the system, reconcile it against everything else in flight, and carry the pager
+when it turns out it didn't. Part of that bill gets paid by machines, types, tests, lint rules, a
+schema check... our guardrails. Whatever is left over gets paid by a person, and that remainder is
+the debt.
+
+Velocity by itself doesn't create coordination debt, velocity without verification does.
+
+## It's not technical debt
+
+Technical debt is paid in future work on the code, it's owed by the codebase, and you can choose to
+carry it for as long as you like. A gnarly module that nobody touches costs you nothing this
+quarter.
+
+Coordination debt is paid in human attention, it's owed by people who aren't the author, and it
+comes due immediately. It doesn't wait for you to refactor, it shows up the moment a change wants
+to merge. If nobody has the attention to pay it then one of three things happens, the change waits,
+the change merges unread, or the project quietly stops.
+
+The reason I care about the distinction is that the two respond to opposite treatments. You pay
+down technical debt by writing code, you can't pay down coordination debt by writing code, because
+writing code is what issues it.
+
+## The interest rate
+
+The rate is set by one thing, how much of your verification needs a human.
+
+If a wrong change gets caught by `tsc` the debt on that class of error is basically zero, it's
+caught in two seconds, by a machine, with a message that says where. If a wrong change can only be
+caught by someone who has been in that subsystem for two years noticing that a comment is now a
+lie, the debt on that class is enormous, and it grows with every change you produce.
+
+Agents didn't change that arithmetic, they changed one input to it. My generation throughput went
+up by something like two orders of magnitude in a year, my reading throughput went up by zero.
+Everything I've felt since is that second number failing to move.
+
+It's also why the usual advice doesn't help me much. "Review more carefully" raises the price of
+the thing that is already the constraint. "Use a better model" produces more changes per hour,
+which is the wrong side of the equation. "Slow down" does work, and nobody does it, and honestly
+they're right not to, the teams that slow down lose to the teams that fixed the denominator
+instead.
+
+## What pays it down
+
+As far as I can tell there's only one thing, **moving verification from a person to a mechanism.**
+The question worth asking about a repository isn't whether an agent can write code in it, it's
+whether the repository can tell the agent it's wrong, without me.
+
+The examples I trust are the boring ones, and they're all older than agents:
+
+- Types generated over a GraphQL schema, so a wrong field is a compile error instead of a code
+  review comment.
+- A lint rule that bans `useState` in a codebase that has decided on signals, so the convention
+  argument happens once instead of on every pull request.
+- [Branding referential stability into the type](../referential-stability-types) of a prop, so "this
+  array has to be stable" is a compile error rather than tribal knowledge and an exhaustive-deps
+  warning that somebody silenced.
+- An invariant written down next to the code it constrains, so an agent treats a deliberate
+  constraint as a constraint rather than as cleanup.
+
+None of that is AI tooling, it's the same instinct applied in a new place, replace a social promise
+with a structural guarantee. Agents just raised the return on it, a check that used to save you one
+careless commit a week now saves you forty.
+
+If you maintain something other people build on, the highest leverage version of this is making the
+invariants of your project executable. Every invariant that only lives in a maintainer's head is a
+tax you charge every contributor, and now you're charging it to every agent that has ever been
+pointed at your repo too.
+
+## A crude way to measure it
+
+I don't have a good metric here, I have a usable one. Take the last thirty changes you merged, list
+the bugs you ran into, the implicit review comments you had, and count what fraction were caught by something that runs without a
+human in the loop. If it's low then your review process isn't rigorous, it's load-bearing, and
+it will bend exactly when you start producing more.
+
+The second number worth watching is time to spot these issues. Not how long CI takes, how long it takes to
+find out the change is wrong. An agent that learns it's wrong in four seconds fixes it itself, an
+agent that learns it's wrong in eleven minutes fixes it after you've context switched, which means
+you paid for it.
+
+## Where the metaphor breaks
+
+Debt implies you chose it, and mostly you don't. There's no moment where anyone signs for it, which
+is why it stays invisible until the interest is the entire budget.
+
+Debt also implies you eventually repay it. Often you don't, you default. In my case defaulting
+looked like nineteen repositories with good READMEs that nobody uses, which for a long time felt
+like productivity... from the inside a new repository and progress look about the same.
+
+## Closing thoughts
+
+None of this is an argument against agents. I ran them hard enough to hit this wall in eight
+months, I'd do it again, and everything I want to build next sits on the other side of the same
+wall.
+
+The argument is narrower than that. When generation gets cheap the scarce resource stops being
+output, it becomes the ability to tell, quickly and mechanically, whether that output is right.
+That capacity is a property of the system being changed, not of the model changing it. So if you're
+wondering what to work on in an industry where anyone can produce a working prototype in an
+afternoon, the prototypes aren't the bottleneck, everything that makes it cheap to know they're
+wrong is.
