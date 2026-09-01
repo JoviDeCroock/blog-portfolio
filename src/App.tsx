@@ -87,6 +87,9 @@ const DrydockReleaseDefenses = lazy(
 const FedUpWithBelgium = lazy(
   () => import('./pages/posts/fed-up-with-belgium/index.mdx')
 )
+const CoordinationDebt = lazy(
+  () => import('./pages/posts/coordination-debt/index.mdx')
+)
 
 export function App() {
   return (
@@ -180,6 +183,10 @@ export function App() {
             <Route
               component={FedUpWithBelgium}
               path="/blog/fed-up-with-belgium"
+            />
+            <Route
+              component={CoordinationDebt}
+              path="/blog/coordination-debt"
             />
             <Route component={NotFound} default />
           </Router>
