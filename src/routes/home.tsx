@@ -1,5 +1,4 @@
-import { useRef } from 'preact/hooks'
-
+import OssGrid, { type OssProject } from '../islands/OssGrid'
 import { seo } from '../lib/seo'
 import styles from './home.module.css'
 
@@ -11,38 +10,41 @@ export function head() {
   })
 }
 
-const OSSBox = (props: { name: string; description: string; link: string }) => {
-  const box = useRef<HTMLLIElement>(null)
-
-  const onMouseMove = (evt: MouseEvent) => {
-    const b = box.current
-    if (!b) return
-
-    const rect = b.getBoundingClientRect()
-    b.style.setProperty(
-      '--mouse-x',
-      `${(evt.clientX - rect.left) / rect.width}`
-    )
-    b.style.setProperty(
-      '--mouse-y',
-      `${(evt.clientY - rect.top) / rect.height}`
-    )
-  }
-
-  return (
-    <li class={styles.box} ref={box} onMouseMove={onMouseMove}>
-      <div class={styles.boxInner}>
-        <div>
-          <h3 class={styles.boxTitle}>{props.name}</h3>
-          <p class={styles.boxDescription}>{props.description}</p>
-        </div>
-        <a rel="nofollow noopener noreferrer" target="_blank" href={props.link}>
-          {props.link}
-        </a>
-      </div>
-    </li>
-  )
-}
+const OSS_PROJECTS: OssProject[] = [
+  {
+    name: 'Preact',
+    description: 'A fast and tiny alternative to React with a modern API.',
+    link: 'https://preactjs.com',
+  },
+  {
+    name: 'Signals',
+    description: 'A reactive signals primitive for Preact and React.',
+    link: 'https://github.com/preactjs/signals',
+  },
+  {
+    name: 'urql',
+    description:
+      'The highly customizable and versatile GraphQL client for React, Svelte, Solid, Vue, or plain JavaScript, with which you add on features like normalized caching as you grow.',
+    link: 'https://urql.dev',
+  },
+  {
+    name: 'GQL.tada',
+    description:
+      'The magical GraphQL parser written in TS types, this tool automatically types your GraphQL Documents without codegen.',
+    link: 'https://gql-tada.0no.co/',
+  },
+  {
+    name: 'Prefresh',
+    description: 'React Fast Refresh for PreactJS.',
+    link: 'https://github.com/preactjs/prefresh',
+  },
+  {
+    name: 'GraphQLSP',
+    description:
+      'A TypeScript LSP Plugin to support authoring GraphQL documents.',
+    link: 'https://github.com/0no-co/graphqlsp',
+  },
+]
 
 export default function Home() {
   return (
@@ -120,38 +122,7 @@ export default function Home() {
         </ul>
         <div class={styles.block}>
           <h2>Open source work</h2>
-          <ul class={styles.grid}>
-            <OSSBox
-              name="Preact"
-              description="A fast and tiny alternative to React with a modern API."
-              link="https://preactjs.com"
-            />
-            <OSSBox
-              name="Signals"
-              description="A reactive signals primitive for Preact and React."
-              link="https://github.com/preactjs/signals"
-            />
-            <OSSBox
-              name="urql"
-              description="The highly customizable and versatile GraphQL client for React, Svelte, Solid, Vue, or plain JavaScript, with which you add on features like normalized caching as you grow."
-              link="https://urql.dev"
-            />
-            <OSSBox
-              name="GQL.tada"
-              description="The magical GraphQL parser written in TS types, this tool automatically types your GraphQL Documents without codegen."
-              link="https://gql-tada.0no.co/"
-            />
-            <OSSBox
-              name="Prefresh"
-              description="React Fast Refresh for PreactJS."
-              link="https://github.com/preactjs/prefresh"
-            />
-            <OSSBox
-              name="GraphQLSP"
-              description="A TypeScript LSP Plugin to support authoring GraphQL documents."
-              link="https://github.com/0no-co/graphqlsp"
-            />
-          </ul>
+          <OssGrid projects={OSS_PROJECTS} />
         </div>
       </div>
       <div class={styles.block}>

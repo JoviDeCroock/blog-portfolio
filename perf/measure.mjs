@@ -23,6 +23,7 @@ const SAMPLES = [
   { name: 'home', url: '/' },
   { name: 'blog-index', url: '/blog' },
   { name: 'blog-post', url: '/blog/hydration-and-preact' },
+  { name: 'demo-post', url: '/blog/browser-timings' },
 ]
 
 const gz = (b) => gzipSync(b, { level: 9 }).length

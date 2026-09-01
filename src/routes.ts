@@ -14,8 +14,13 @@ export const app = defineApp({
   },
   routes: [
     group({ shell: 'public', render: 'ssg' }, [
-      route('/', './routes/home.tsx', { id: 'home' }),
-      route('/blog', './routes/blog.tsx', { id: 'blog' }),
+      // Their only interactive parts live in src/islands, so these hydrate
+      // just those components instead of loading the client router.
+      route('/', './routes/home.tsx', { id: 'home', hydration: 'islands' }),
+      route('/blog', './routes/blog.tsx', {
+        id: 'blog',
+        hydration: 'islands',
+      }),
       // Prose only — no framework JavaScript.
       route('/blueprint', './routes/blueprint.tsx', {
         id: 'blueprint',
@@ -27,9 +32,11 @@ export const app = defineApp({
       // framework JavaScript; the rest embed interactive demos and hydrate.
       route('/blog/browser-timings', './routes/posts/browser-timings.tsx', {
         id: 'browser-timings',
+        hydration: 'islands',
       }),
       route('/blog/controlled-inputs', './routes/posts/controlled-inputs.tsx', {
         id: 'controlled-inputs',
+        hydration: 'islands',
       }),
       route(
         '/blog/graphqls-missing-feature',
@@ -99,6 +106,7 @@ export const app = defineApp({
       ),
       route('/blog/platform', './routes/posts/platform.tsx', {
         id: 'platform',
+        hydration: 'islands',
       }),
       route('/blog/preact-use-id', './routes/posts/preact-use-id.tsx', {
         id: 'preact-use-id',
@@ -137,6 +145,7 @@ export const app = defineApp({
       }),
       route('/blog/state-in-vdom', './routes/posts/state-in-vdom.tsx', {
         id: 'state-in-vdom',
+        hydration: 'islands',
       }),
       route('/blog/state-models', './routes/posts/state-models.tsx', {
         id: 'state-models',
@@ -144,9 +153,11 @@ export const app = defineApp({
       }),
       route('/blog/state-vs-signals', './routes/posts/state-vs-signals.tsx', {
         id: 'state-vs-signals',
+        hydration: 'islands',
       }),
       route('/blog/suspense-data-ssr', './routes/posts/suspense-data-ssr.tsx', {
         id: 'suspense-data-ssr',
+        hydration: 'islands',
       }),
       route('/blog/tracking-context', './routes/posts/tracking-context.tsx', {
         id: 'tracking-context',
@@ -159,6 +170,7 @@ export const app = defineApp({
       ),
       route('/blog/vdom-compilers', './routes/posts/vdom-compilers.tsx', {
         id: 'vdom-compilers',
+        hydration: 'islands',
       }),
       route(
         '/blog/why-computed-matters',

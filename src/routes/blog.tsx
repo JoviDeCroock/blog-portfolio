@@ -1,7 +1,5 @@
-import { Link } from '@pracht/core'
-import { useState } from 'preact/hooks'
-
-import { posts, postRouteId, tagBgs } from '../data/posts'
+import PostFilter from '../islands/PostFilter'
+import { posts, tagBgs } from '../data/posts'
 import { seo } from '../lib/seo'
 import styles from './blog.module.css'
 
@@ -13,23 +11,7 @@ export function head() {
   })
 }
 
-const ALL_TAGS = posts
-  .flatMap((post) => post.tags)
-  .filter((tag, index, self) => self.indexOf(tag) === index)
-
 export default function Blog() {
-  const [selectedTag, setSelectedTag] = useState<string | null>(null)
-
-  const filteredPosts = selectedTag
-    ? posts.filter((post) =>
-        post.tags.includes(selectedTag as keyof typeof tagBgs)
-      )
-    : posts
-
-  const handleTagClick = (tag: string) => {
-    setSelectedTag(selectedTag === tag ? null : tag)
-  }
-
   return (
     <>
       <div class={styles.heading}>
@@ -51,73 +33,7 @@ export default function Blog() {
         around in my mind throughout a day.
       </p>
 
-      <h2>Filter by tag</h2>
-      <div class={styles.tagFilters}>
-        {ALL_TAGS.map((tag) => (
-          <button
-            key={`filter-${tag}`}
-            class={
-              selectedTag === tag
-                ? `${styles.filterTag} ${styles.filterTagSelected}`
-                : styles.filterTag
-            }
-            style={{ background: tagBgs[tag] }}
-            onClick={() => handleTagClick(tag)}
-          >
-            {tag}
-          </button>
-        ))}
-        {selectedTag && (
-          <button
-            class={styles.clearFilter}
-            onClick={() => setSelectedTag(null)}
-          >
-            Clear filter
-          </button>
-        )}
-      </div>
-
-      <div class={styles.block}>
-        <ul class={styles.postGrid}>
-          {filteredPosts.map((post) => (
-            <li class={styles.postCard} key={post.path}>
-              {post.createdAt && (
-                <span class={styles.postDate}>{post.createdAt}</span>
-              )}
-              {post.external ? (
-                <a
-                  class={styles.titleLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={post.path}
-                >
-                  {post.title}
-                </a>
-              ) : (
-                <Link class={styles.titleLink} route={postRouteId(post.path)}>
-                  {post.title}
-                </Link>
-              )}
-              <p class={styles.postDescription}>{post.description}</p>
-              <div class={styles.tags}>
-                {post.tags.map((tag) => (
-                  <span
-                    class={styles.tag}
-                    style={{ background: tagBgs[tag] }}
-                    key={tag}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </li>
-          ))}
-        </ul>
-
-        {selectedTag && filteredPosts.length === 0 && (
-          <p>No posts found with the selected tag.</p>
-        )}
-      </div>
+      <PostFilter posts={posts} tagColors={tagBgs} />
     </>
   )
 }

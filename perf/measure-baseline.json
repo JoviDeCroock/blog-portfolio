@@ -78,6 +78,28 @@
         "gzip": 4622,
         "brotli": 3675
       }
+    },
+    {
+      "name": "demo-post",
+      "url": "/blog/browser-timings",
+      "htmlFile": "blog/browser-timings/index.html",
+      "jsChunks": 1,
+      "js": {
+        "raw": 35051,
+        "gzip": 13192,
+        "brotli": 11653
+      },
+      "css": {
+        "raw": 4064,
+        "gzip": 0,
+        "external": 0,
+        "inline": 4064
+      },
+      "html": {
+        "raw": 18594,
+        "gzip": 4914,
+        "brotli": 3935
+      }
     }
   ]
 }

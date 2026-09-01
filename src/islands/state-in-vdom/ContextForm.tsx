@@ -1,6 +1,6 @@
 import { createContext } from 'preact'
 import { useState, useContext } from 'preact/hooks'
-import { RerenderTracker } from './common'
+import { RerenderTracker } from '../../content/posts/state-in-vdom/common'
 
 const FormContext = createContext<{
   values: object

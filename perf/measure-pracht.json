@@ -3,58 +3,58 @@
   "clientDir": "/Users/jovi/Documents/SideProjects/blog-portfolio/.claude/worktrees/pracht-migration/dist/client",
   "totals": {
     "htmlPages": 37,
-    "jsFiles": 16,
-    "jsRaw": 199653,
-    "jsGzip": 54710,
+    "jsFiles": 27,
+    "jsRaw": 83215,
+    "jsGzip": 31254,
     "cssFiles": 3,
-    "cssRaw": 6217,
-    "htmlRaw": 676732,
-    "htmlGzip": 200802,
-    "htmlAvgRaw": 18290
+    "cssRaw": 5354,
+    "htmlRaw": 690888,
+    "htmlGzip": 201467,
+    "htmlAvgRaw": 18673
   },
   "pages": [
     {
       "name": "home",
       "url": "/",
       "htmlFile": "index.html",
-      "jsChunks": 6,
+      "jsChunks": 4,
       "js": {
-        "raw": 63698,
-        "gzip": 19737,
-        "brotli": 17195
+        "raw": 20971,
+        "gzip": 8258,
+        "brotli": 7496
       },
       "css": {
-        "raw": 4199,
+        "raw": 2954,
         "gzip": 0,
         "external": 0,
-        "inline": 4199
+        "inline": 2954
       },
       "html": {
-        "raw": 12303,
-        "gzip": 3706,
-        "brotli": 3020
+        "raw": 12172,
+        "gzip": 3484,
+        "brotli": 2811
       }
     },
     {
       "name": "blog-index",
       "url": "/blog",
       "htmlFile": "blog/index.html",
-      "jsChunks": 6,
+      "jsChunks": 4,
       "js": {
-        "raw": 72442,
-        "gzip": 22560,
-        "brotli": 19531
+        "raw": 21666,
+        "gzip": 8480,
+        "brotli": 7651
       },
       "css": {
-        "raw": 4972,
+        "raw": 2954,
         "gzip": 0,
         "external": 0,
-        "inline": 4972
+        "inline": 2954
       },
       "html": {
-        "raw": 29498,
-        "gzip": 6439,
-        "brotli": 5248
+        "raw": 43629,
+        "gzip": 7349,
+        "brotli": 5997
       }
     },
     {
@@ -77,6 +77,28 @@
         "raw": 12148,
         "gzip": 4224,
         "brotli": 3336
+      }
+    },
+    {
+      "name": "demo-post",
+      "url": "/blog/browser-timings",
+      "htmlFile": "blog/browser-timings/index.html",
+      "jsChunks": 5,
+      "js": {
+        "raw": 21055,
+        "gzip": 8180,
+        "brotli": 7348
+      },
+      "css": {
+        "raw": 2954,
+        "gzip": 0,
+        "external": 0,
+        "inline": 2954
+      },
+      "html": {
+        "raw": 17679,
+        "gzip": 4691,
+        "brotli": 3765
       }
     }
   ]

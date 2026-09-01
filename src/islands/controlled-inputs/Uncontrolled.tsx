@@ -1,5 +1,5 @@
 import { useRef } from 'preact/hooks'
-import { RerenderTracker } from './common'
+import { RerenderTracker } from '../../content/posts/controlled-inputs/common'
 
 const Uncontrolled = () => {
   const inputRef = useRef<HTMLInputElement>()

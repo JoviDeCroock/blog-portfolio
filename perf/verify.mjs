@@ -140,6 +140,29 @@ check(
   (await page.locator('ul li').count()) === before
 )
 
+// The in-post demos are islands: the page ships no router, but those specific
+// components still have to attach their handlers.
+await page.goto(origin + '/blog/browser-timings', { waitUntil: 'networkidle' })
+const logs = []
+page.on('console', (m) => logs.push(m.text()))
+await page.locator('#example').click()
+await page.waitForTimeout(300)
+check(
+  `browser-timings demo island hydrated (${logs.length} console events)`,
+  logs.some((l) => l.includes('onClick')),
+  logs.join(' | ')
+)
+
+await page.goto(origin + '/blog/controlled-inputs', {
+  waitUntil: 'networkidle',
+})
+const input = page.locator('input:not([type=checkbox])').first()
+await input.fill('abc')
+check(
+  'controlled-inputs demo island accepts input',
+  (await input.inputValue()) === 'abc'
+)
+
 console.log('\nnavigation')
 await page.goto(origin + '/', { waitUntil: 'networkidle' })
 await page.locator('nav a', { hasText: 'Blog' }).click()

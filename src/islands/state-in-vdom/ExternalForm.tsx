@@ -1,6 +1,6 @@
 import { createContext } from 'preact'
 import { useContext, useReducer, useEffect } from 'preact/hooks'
-import { RerenderTracker } from './common'
+import { RerenderTracker } from '../../content/posts/state-in-vdom/common'
 
 class FormState {
   values

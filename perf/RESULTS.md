@@ -5,8 +5,8 @@ built and measured on one machine back to back.
 
 - **baseline** — commit `645e5c2`: preact-iso router, `@preact/preset-vite`
   prerendering, goober CSS-in-JS, hoofd for `<head>`.
-- **pracht** — commit `293d3bd`: `@pracht/core` manifest router,
-  `@pracht/adapter-static`, CSS Modules, route `head()` exports.
+- **pracht** — `@pracht/core` manifest router, `@pracht/adapter-static`,
+  CSS Modules, route `head()` exports, islands hydration.
 
 Reproduce with:
 
@@ -18,27 +18,20 @@ node perf/measure.mjs dist/client pracht
 node perf/bench.mjs   perf/baseline-src/dist baseline
 node perf/bench.mjs   dist/client pracht
 node perf/verify.mjs  dist/client   # functional parity checks
+node scripts/check-links.mjs dist/client
 ```
 
 ---
 
 ## What ships
 
-|                       | baseline            | pracht             | change |
-| --------------------- | ------------------- | ------------------ | ------ |
-| JS files in build     | 76                  | 16                 | −79%   |
-| JS total, raw         | 575.4 kB            | 195.0 kB           | −66%   |
-| JS total, gzip        | 164.5 kB            | 53.4 kB            | −68%   |
-| HTML total, raw       | 727.9 kB            | 660.9 kB           | −9%    |
-| Pages emitted         | 39                  | 37                 | see note |
-| Production build      | 1107 ms             | 1578 ms            | +43%   |
-
-The page count moves for two reasons that cancel out to a correctness win: the
-old prerenderer crawled discovered links and wrote a page for whatever the
-router rendered, so four broken post links produced 200 responses containing
-the not-found body. pracht emits only declared routes, plus a real `404.html`
-that the baseline never had. The broken links are fixed in `293d3bd`;
-`scripts/check-links.mjs` keeps them fixed.
+|                   | baseline | pracht   | change   |
+| ----------------- | -------- | -------- | -------- |
+| JS files in build | 76       | 27       | −64%     |
+| JS total, raw     | 575.4 kB | 81.3 kB  | −86%     |
+| JS total, gzip    | 164.5 kB | 30.5 kB  | **−81%** |
+| HTML total, raw   | 727.9 kB | 674.7 kB | −7%      |
+| Production build  | 1086 ms  | 1582 ms  | +46%     |
 
 ## What a visitor loads
 
@@ -47,59 +40,75 @@ Headless Chromium, cold cache, throttled to ~1.6 Mbps / 150 ms RTT, median of
 so the numbers describe the app rather than the CDN — both sides request the
 same ones.
 
-### Blog post — 27 of the 30 content routes
+| page                      | metric           | baseline              | pracht               | change   |
+| ------------------------- | ---------------- | --------------------- | -------------------- | -------- |
+| **home**                  | JS               | 45.0 kB / 4 reqs      | 20.5 kB / 4 reqs     | −54%     |
+|                           | last JS byte     | 887 ms                | 531 ms               | −40%     |
+|                           | DOMContentLoaded | 667 ms                | 536 ms               | −20%     |
+|                           | FCP              | 224 ms                | 204 ms               | −9%      |
+| **blog index**            | JS               | 56.7 kB / **37 reqs** | 21.2 kB / **4 reqs** | −63%     |
+|                           | last JS byte     | 1688 ms               | 665 ms               | **−61%** |
+|                           | FCP              | 244 ms                | 208 ms               | −15%     |
+|                           | load             | 738 ms                | 840 ms               | +14%     |
+| **blog post** (prose)     | JS               | 47.9 kB / 6 reqs      | **0 kB / 0 reqs**    | −100%    |
+|                           | DOMContentLoaded | 669 ms                | 223 ms               | **−67%** |
+|                           | total bytes      | 108.3 kB              | 58.9 kB              | −46%     |
+| **blog post** (with demo) | JS               | 54.9 kB / 6 reqs      | 20.6 kB / 5 reqs     | −62%     |
+|                           | last JS byte     | 946 ms                | 537 ms               | −43%     |
 
-|            | baseline | pracht  | change |
-| ---------- | -------- | ------- | ------ |
-| FCP        | 224 ms   | 220 ms  | −2%    |
-| DOMContentLoaded | 665 ms | 224 ms | **−66%** |
-| load       | 746 ms   | 596 ms  | −20%   |
-| JS requests| 6        | **0**   | −100%  |
-| JS bytes   | 47.9 kB  | **0 kB**| −100%  |
-| total bytes| 108.3 kB | 58.9 kB | −46%   |
+The blog index's `load` is the one regression: island props serialize the post
+registry into the HTML, so the document grows from 32.5 kB to 42.6 kB raw. It
+gzips to 7.2 kB either way, and the page still transfers 24 kB less overall.
 
-Posts are prose. Under `hydration: "none"` they contain no `<script>` tag at
-all — the document is the whole page. This is the migration's main result, and
-it is not something the preact-iso setup could express.
+---
 
-Seven posts embed live demos (`browser-timings`, `controlled-inputs`,
-`platform`, `state-in-vdom`, `state-vs-signals`, `suspense-data-ssr`,
-`vdom-compilers`) and keep full hydration. `scripts/classify-posts.mjs` derives
-that split from each post's imports.
+## How the client got small
 
-### Blog index
+The first working migration was **worse** than the baseline on the hydrated
+routes: 64.8 kB of JS on home against 45.0 kB, because pracht's client runtime
+(`client` 37.8 kB + `route-matching` 3.5 kB + `runtime-hooks` 0.8 kB) is larger
+than preact-iso's single 34 kB entry that already contained Preact.
 
-|            | baseline | pracht  | change |
-| ---------- | -------- | ------- | ------ |
-| FCP        | 244 ms   | 220 ms  | −10%   |
-| JS requests| 37       | **7**   | −81%   |
-| last JS byte| 1710 ms | 1380 ms | −19%   |
-| JS bytes   | 56.7 kB  | 73.3 kB | +29%   |
-| DOMContentLoaded | 633 ms | 849 ms | +34% |
-| load       | 740 ms   | 1025 ms | +38%   |
+Three things closed that gap, in ascending order of how much they mattered.
 
-The old index issued 37 JS requests: every post's `documentProps` was its own
-lazy chunk, discovered only after the entry bundle ran. Collapsing that
-waterfall is why the last byte of JS arrives 330 ms sooner despite pracht
-shipping more total bytes.
+### 1. `client: { prefetch: false }` — not the lever (~1 kB)
 
-### Home
+The only client feature pracht exposes as a config flag. Measured: 62.2 → 61.1 kB
+raw on home, and 3.8 kB raw / 1.9 kB gzip off the whole build. Speculation
+rules, view transitions, scroll restoration and the capability hooks are all
+still compiled in with no flag to remove them (`perf/probe-client.sh`).
 
-|            | baseline | pracht  | change |
-| ---------- | -------- | ------- | ------ |
-| FCP        | 220 ms   | 208 ms  | −5%    |
-| JS bytes   | 45.0 kB  | 64.8 kB | +44%   |
-| last JS byte| 887 ms  | 1338 ms | +51%   |
-| load       | 746 ms   | 982 ms  | +32%   |
+**Not applied.** Once every real route stopped loading the router the flag only
+affected `404.html`, while silently disabling `<Link prefetch>` for any route
+later returned to full hydration.
 
-**This is the regression.** pracht's client runtime is bigger than
-preact-iso's: `client` (38.7 kB) + `vendor` (14.3 kB) + `route-matching`
-(3.5 kB) + `runtime-hooks` (0.8 kB) against preact-iso's single 34 kB entry
-that already included Preact. On the two routes that still hydrate, that is
-about 20 kB raw / 6 kB gzip of extra framework.
+### 2. `hydration: "none"` on prose routes
 
-The trade is deliberate: two interactive routes pay for a router that 27 static
-routes then opt out of entirely.
+26 posts plus `/blueprint` contain no interactive component, so they render as
+HTML with no `<script>` tag at all. `scripts/classify-posts.mjs` derives the
+split from each post's imports rather than a hand-kept list.
+
+### 3. `hydration: "islands"` everywhere else — the actual lever
+
+Once the prose routes were static, the client router existed to serve exactly
+one transition: home ↔ blog. Everything else was already a document navigation,
+because pracht falls back to `window.location` when a full-hydration route
+links to a static one. The router was most of the bundle and bought almost
+nothing.
+
+Moving the interactive parts into `src/islands/` removed it from every real
+page:
+
+- `OssGrid` — the hover glow on the home page's project cards
+- `PostFilter` — the blog index's tag filter and the list it drives
+- 14 in-post demo components, one directory per post
+
+Home went from 62.2 kB to 20.5 kB raw. What remains is Preact (13.9 kB), the
+islands bootstrap (4.4 kB) and the islands themselves — under 1.5 kB each.
+
+`client-*.js`, the 38.5 kB router, is now loaded by exactly one document:
+`404.html`. The static adapter requires the not-found page to hydrate fully so
+it can adopt the URL the visitor actually asked for.
 
 ---
 
@@ -112,31 +121,28 @@ round trip that the old inline `<style>` did not — FCP measured 436 ms before
 `scripts/inline-css.mjs` and 216 ms after. Without that post-build step the
 migration is an FCP regression, not an improvement.
 
-**The absolute post numbers are optimistic.** The benchmark blocks third-party
-requests, but in production those posts still block first paint on a
+**The absolute numbers are optimistic.** The benchmark blocks third-party
+requests, but in production every post still blocks first paint on a
 render-blocking stylesheet from `cdnjs.cloudflare.com`, plus Google Fonts. Both
 builds carry that cost identically, so the comparison holds — but a post that
 ships 0 kB of JavaScript and then waits on two third-party origins is leaving
-most of the win on the table. See follow-ups.
+most of the win on the table.
 
 ---
 
-## Follow-ups, roughly in value order
+## Follow-ups
 
-1. **Self-host the highlight.js theme and the fonts.** Two render-blocking
-   third-party origins on every post is now the largest remaining cost on the
-   pages that otherwise ship nothing. pracht's `defineFont()` handles the font
-   half with preload links and layout-shift-free fallbacks.
-2. **Home and the blog index as islands.** Home's only interactivity is the
-   hover glow on the open-source cards; the blog index's is the tag filter.
-   Moving both into `src/islands/` would take the whole site to near-zero JS.
-   The cost is that navigation becomes full document loads sitewide — a product
-   call, not a technical one.
+1. **Self-host the highlight.js theme and the fonts.** Now clearly the largest
+   remaining cost: two render-blocking third-party origins on pages that
+   otherwise ship nothing. pracht's `defineFont()` covers the font half with
+   preload links and layout-shift-free fallbacks.
+2. **The blog index's island props.** The whole post registry is serialized
+   into the document to feed the filter. Filtering server-side with per-tag
+   routes, or with a CSS-only control, would drop both the props and the
+   island.
 3. **`pracht typegen`.** Not run, so `RouteId` is `string` and `<Link route>`
-   is unchecked. Running it makes route ids and params type-safe; the blog
-   index's computed `route={postRouteId(post.path)}` would need a cast or a
-   route id carried on the post record.
-4. **Build time.** 1107 ms → 1578 ms. Not worth attention at this size, noted
+   is unchecked. Only the shell uses `<Link>` now, so this is cheap to adopt.
+4. **Build time.** 1086 ms → 1582 ms. Not worth attention at this size, noted
    so a future regression has a reference point.
 
 ## Caveats

@@ -1,6 +1,6 @@
 // @ts-ignore
 import { useRef, useState } from 'preact/hooks'
-import { RerenderTracker } from './common'
+import { RerenderTracker } from '../../content/posts/controlled-inputs/common'
 
 const Issue = () => {
   const [value, setValue] = useState('')
