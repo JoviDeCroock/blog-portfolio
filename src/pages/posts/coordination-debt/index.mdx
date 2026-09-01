@@ -25,7 +25,7 @@ One of those twenty has users.
 The tempting explanation is that the other nineteen are bad products, and some of them probably
 are. But that's not what happened to most of them. What happened is that every one of those changes
 needed a human to decide whether it was right, that human was me, and there's only one of me. I
-didn't run out of code, I ran out of the thing code spends.
+didn't run out of code, I ran out of attention.
 
 I want a name for that, because I keep running into it.
 
@@ -49,11 +49,11 @@ quarter.
 
 Coordination debt is paid in human attention, it's owed by people who aren't the author, and it
 comes due immediately. It doesn't wait for you to refactor, it shows up the moment a change wants
-to merge. If nobody has the attention to pay it then one of three things happens, the change waits,
-the change merges unread, or the project quietly stops.
+to merge. If nobody has the attention to pay it then one of three things happens, the change sits,
+the change merges unread, or the project stops.
 
 The reason I care about the distinction is that the two respond to opposite treatments. You pay
-down technical debt by writing code, you can't pay down coordination debt by writing code, because
+down technical debt by writing code. You can't pay down coordination debt by writing code, because
 writing code is what issues it.
 
 ## The interest rate
@@ -65,21 +65,21 @@ caught in two seconds, by a machine, with a message that says where. If a wrong 
 caught by someone who has been in that subsystem for two years noticing that a comment is now a
 lie, the debt on that class is enormous, and it grows with every change you produce.
 
-Agents didn't change that arithmetic, they changed one input to it. My generation throughput went
-up by something like two orders of magnitude in a year, my reading throughput went up by zero.
+Agents didn't change any of that, they changed one number in it. My generation throughput went up
+by something like two orders of magnitude in a year, my reading throughput went up by zero.
 Everything I've felt since is that second number failing to move.
 
 It's also why the usual advice doesn't help me much. "Review more carefully" raises the price of
 the thing that is already the constraint. "Use a better model" produces more changes per hour,
-which is the wrong side of the equation. "Slow down" does work, and nobody does it, and honestly
-they're right not to, the teams that slow down lose to the teams that fixed the denominator
+which is the wrong side of the problem. "Slow down" does work, and nobody does it, and honestly
+they're right not to, the teams that slow down lose to the teams that made verification cheap
 instead.
 
 ## What pays it down
 
-As far as I can tell there's only one thing, **moving verification from a person to a mechanism.**
-The question worth asking about a repository isn't whether an agent can write code in it, it's
-whether the repository can tell the agent it's wrong, without me.
+As far as I can tell there's only one thing, moving verification from a person to a mechanism. The
+question worth asking about a repository isn't whether an agent can write code in it, it's whether
+the repository can tell the agent it's wrong, without me.
 
 The examples I trust are the boring ones, and they're all older than agents:
 
@@ -88,31 +88,32 @@ The examples I trust are the boring ones, and they're all older than agents:
 - A lint rule that bans `useState` in a codebase that has decided on signals, so the convention
   argument happens once instead of on every pull request.
 - [Branding referential stability into the type](../referential-stability-types) of a prop, so "this
-  array has to be stable" is a compile error rather than tribal knowledge and an exhaustive-deps
-  warning that somebody silenced.
+  array has to be stable" is a compile error rather than folklore and an exhaustive-deps warning
+  that somebody silenced.
 - An invariant written down next to the code it constrains, so an agent treats a deliberate
   constraint as a constraint rather than as cleanup.
 
-None of that is AI tooling, it's the same instinct applied in a new place, replace a social promise
-with a structural guarantee. Agents just raised the return on it, a check that used to save you one
-careless commit a week now saves you forty.
+None of that is AI tooling, it's the same instinct people have had for twenty years, write the rule
+down somewhere a machine can enforce it. Agents just made it pay better, a check that used to save
+you one careless commit a week now saves you forty.
 
-If you maintain something other people build on, the highest leverage version of this is making the
-invariants of your project executable. Every invariant that only lives in a maintainer's head is a
-tax you charge every contributor, and now you're charging it to every agent that has ever been
-pointed at your repo too.
+If you maintain something other people build on, the version of this that matters most is making
+your invariants executable. Every invariant that only lives in a maintainer's head is a tax you
+charge every contributor, and now you're charging it to every agent that has ever been pointed at
+your repo too.
 
 ## A crude way to measure it
 
-I don't have a good metric here, I have a usable one. Take the last thirty changes you merged, list
-the bugs you ran into, the implicit review comments you had, and count what fraction were caught by something that runs without a
-human in the loop. If it's low then your review process isn't rigorous, it's load-bearing, and
-it will bend exactly when you start producing more.
+I don't have a good metric for this, but this one works well enough. Take the last thirty changes
+you merged, list the bugs you ran into and the review comments you found yourself repeating, and
+count what fraction were caught by something that runs without a human in the loop. If it's low
+then the only thing standing between you and a bad merge is one person's attention on a good day,
+and that stops working the moment you produce more.
 
-The second number worth watching is time to spot these issues. Not how long CI takes, how long it takes to
-find out the change is wrong. An agent that learns it's wrong in four seconds fixes it itself, an
-agent that learns it's wrong in eleven minutes fixes it after you've context switched, which means
-you paid for it.
+The second number worth watching is how long it takes to find out a change is wrong. Not how long
+CI takes, how long it takes you to know. An agent that learns it's wrong in four seconds fixes it
+itself, an agent that learns it's wrong in eleven minutes fixes it after you've context switched,
+which means you paid for it.
 
 ## Where the metaphor breaks
 
@@ -123,15 +124,13 @@ Debt also implies you eventually repay it. Often you don't, you default. In my c
 looked like nineteen repositories with good READMEs that nobody uses, which for a long time felt
 like productivity... from the inside a new repository and progress look about the same.
 
-## Closing thoughts
+## What to build
 
 None of this is an argument against agents. I ran them hard enough to hit this wall in eight
-months, I'd do it again, and everything I want to build next sits on the other side of the same
-wall.
+months and I'd do it again, everything I want to build next is on the other side of it.
 
-The argument is narrower than that. When generation gets cheap the scarce resource stops being
-output, it becomes the ability to tell, quickly and mechanically, whether that output is right.
-That capacity is a property of the system being changed, not of the model changing it. So if you're
-wondering what to work on in an industry where anyone can produce a working prototype in an
-afternoon, the prototypes aren't the bottleneck, everything that makes it cheap to know they're
-wrong is.
+The claim is narrower. When generating code gets cheap, the thing you run short of is knowing
+whether the code is right, and knowing it fast enough to do something about it. That depends on the
+repository, not on the model pointed at it. Anyone can produce a working prototype in an afternoon
+now, so if you're wondering what to work on, don't build another prototype, build the things that
+make it cheap to find out a prototype is wrong.
