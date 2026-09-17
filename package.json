@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "@fontsource/inter": "^5.2.8",
-    "@preact/preset-vite": "^2.10.6",
     "@resvg/resvg-js": "^2.6.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
