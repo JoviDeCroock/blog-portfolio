@@ -4,13 +4,13 @@
   "totals": {
     "htmlPages": 39,
     "jsFiles": 76,
-    "jsRaw": 589182,
-    "jsGzip": 168437,
+    "jsRaw": 589284,
+    "jsGzip": 168675,
     "cssFiles": 0,
     "cssRaw": 0,
-    "htmlRaw": 745389,
-    "htmlGzip": 219677,
-    "htmlAvgRaw": 19113
+    "htmlRaw": 738596,
+    "htmlGzip": 220032,
+    "htmlAvgRaw": 18938
   },
   "pages": [
     {
@@ -19,20 +19,20 @@
       "htmlFile": "index.html",
       "jsChunks": 1,
       "js": {
-        "raw": 35051,
-        "gzip": 13192,
-        "brotli": 11653
+        "raw": 34778,
+        "gzip": 13298,
+        "brotli": 11749
       },
       "css": {
-        "raw": 5308,
+        "raw": 5220,
         "gzip": 0,
         "external": 0,
-        "inline": 5308
+        "inline": 5220
       },
       "html": {
-        "raw": 12879,
-        "gzip": 3942,
-        "brotli": 3193
+        "raw": 12690,
+        "gzip": 3947,
+        "brotli": 3173
       }
     },
     {
@@ -41,20 +41,20 @@
       "htmlFile": "blog/index.html",
       "jsChunks": 1,
       "js": {
-        "raw": 35051,
-        "gzip": 13192,
-        "brotli": 11653
+        "raw": 34778,
+        "gzip": 13298,
+        "brotli": 11749
       },
       "css": {
-        "raw": 11307,
+        "raw": 11221,
         "gzip": 0,
         "external": 0,
-        "inline": 11307
+        "inline": 11221
       },
       "html": {
-        "raw": 33290,
-        "gzip": 7371,
-        "brotli": 5940
+        "raw": 33104,
+        "gzip": 7393,
+        "brotli": 5927
       }
     },
     {
@@ -63,20 +63,20 @@
       "htmlFile": "blog/hydration-and-preact/index.html",
       "jsChunks": 1,
       "js": {
-        "raw": 35051,
-        "gzip": 13192,
-        "brotli": 11653
+        "raw": 34778,
+        "gzip": 13298,
+        "brotli": 11749
       },
       "css": {
-        "raw": 4064,
+        "raw": 3978,
         "gzip": 0,
         "external": 0,
-        "inline": 4064
+        "inline": 3978
       },
       "html": {
-        "raw": 13653,
-        "gzip": 4622,
-        "brotli": 3675
+        "raw": 13467,
+        "gzip": 4630,
+        "brotli": 3657
       }
     },
     {
@@ -85,20 +85,20 @@
       "htmlFile": "blog/browser-timings/index.html",
       "jsChunks": 1,
       "js": {
-        "raw": 35051,
-        "gzip": 13192,
-        "brotli": 11653
+        "raw": 34778,
+        "gzip": 13298,
+        "brotli": 11749
       },
       "css": {
-        "raw": 4064,
+        "raw": 3978,
         "gzip": 0,
         "external": 0,
-        "inline": 4064
+        "inline": 3978
       },
       "html": {
-        "raw": 18594,
-        "gzip": 4914,
-        "brotli": 3935
+        "raw": 18408,
+        "gzip": 4918,
+        "brotli": 3915
       }
     }
   ]

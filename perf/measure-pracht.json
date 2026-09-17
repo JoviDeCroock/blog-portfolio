@@ -3,14 +3,14 @@
   "clientDir": "/Users/jovi/Documents/SideProjects/blog-portfolio/.claude/worktrees/pracht-migration/dist/client",
   "totals": {
     "htmlPages": 37,
-    "jsFiles": 27,
-    "jsRaw": 83215,
-    "jsGzip": 31254,
+    "jsFiles": 26,
+    "jsRaw": 84920,
+    "jsGzip": 31387,
     "cssFiles": 3,
     "cssRaw": 5354,
-    "htmlRaw": 690888,
-    "htmlGzip": 201467,
-    "htmlAvgRaw": 18673
+    "htmlRaw": 690815,
+    "htmlGzip": 201920,
+    "htmlAvgRaw": 18671
   },
   "pages": [
     {
@@ -19,9 +19,9 @@
       "htmlFile": "index.html",
       "jsChunks": 4,
       "js": {
-        "raw": 20971,
-        "gzip": 8258,
-        "brotli": 7496
+        "raw": 20445,
+        "gzip": 8146,
+        "brotli": 7372
       },
       "css": {
         "raw": 2954,
@@ -31,8 +31,8 @@
       },
       "html": {
         "raw": 12172,
-        "gzip": 3484,
-        "brotli": 2811
+        "gzip": 3502,
+        "brotli": 2823
       }
     },
     {
@@ -41,9 +41,9 @@
       "htmlFile": "blog/index.html",
       "jsChunks": 4,
       "js": {
-        "raw": 21666,
-        "gzip": 8480,
-        "brotli": 7651
+        "raw": 21140,
+        "gzip": 8366,
+        "brotli": 7568
       },
       "css": {
         "raw": 2954,
@@ -53,8 +53,8 @@
       },
       "html": {
         "raw": 43629,
-        "gzip": 7349,
-        "brotli": 5997
+        "gzip": 7454,
+        "brotli": 6059
       }
     },
     {
@@ -75,8 +75,8 @@
       },
       "html": {
         "raw": 12148,
-        "gzip": 4224,
-        "brotli": 3336
+        "gzip": 4235,
+        "brotli": 3341
       }
     },
     {
@@ -85,9 +85,9 @@
       "htmlFile": "blog/browser-timings/index.html",
       "jsChunks": 5,
       "js": {
-        "raw": 21055,
-        "gzip": 8180,
-        "brotli": 7348
+        "raw": 20529,
+        "gzip": 8064,
+        "brotli": 7282
       },
       "css": {
         "raw": 2954,
@@ -97,8 +97,8 @@
       },
       "html": {
         "raw": 17679,
-        "gzip": 4691,
-        "brotli": 3765
+        "gzip": 4701,
+        "brotli": 3769
       }
     }
   ]

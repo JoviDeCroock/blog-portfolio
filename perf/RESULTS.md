@@ -1,9 +1,12 @@
 # preact-iso → pracht: measured difference
 
-Both sides are the same site, same content, same Vite 8, same dependency tree,
-built and measured on one machine back to back.
+Both sides are the same site, same content, same Vite 8, same dependency tree
+(Preact 11.0.0-rc.2, `@pracht/core` 0.17), built and measured on one machine
+back to back. `perf/build-baseline.sh` builds the baseline against this same
+`node_modules`, so the only variable is the framework.
 
-- **baseline** — commit `645e5c2`: preact-iso router, `@preact/preset-vite`
+- **baseline** — the commit before the conversion ("Extract post registry into
+  a JSX-free data module"): preact-iso router, `@preact/preset-vite`
   prerendering, goober CSS-in-JS, hoofd for `<head>`.
 - **pracht** — `@pracht/core` manifest router, `@pracht/adapter-static`,
   CSS Modules, route `head()` exports, islands hydration.
@@ -19,7 +22,16 @@ node perf/bench.mjs   perf/baseline-src/dist baseline
 node perf/bench.mjs   dist/client pracht
 node perf/verify.mjs  dist/client   # functional parity checks
 node scripts/check-links.mjs dist/client
+
+HYDRATION_PROBE=1 pnpm build        # then: no SSR/client hydration mismatches
+node perf/check-hydration.mjs dist/client
 ```
+
+`goober`, `hoofd` and `preact-iso` are still in `dependencies` even though
+nothing in `src/` imports them any more. `perf/build-baseline.sh` symlinks this
+`node_modules` into the baseline checkout, and the pre-migration site needs all
+three to build — dropping them removes the ability to re-measure against the
+old site.
 
 ---
 
@@ -27,11 +39,15 @@ node scripts/check-links.mjs dist/client
 
 |                   | baseline | pracht   | change   |
 | ----------------- | -------- | -------- | -------- |
-| JS files in build | 76       | 27       | −64%     |
-| JS total, raw     | 575.4 kB | 81.3 kB  | −86%     |
-| JS total, gzip    | 164.5 kB | 30.5 kB  | **−81%** |
-| HTML total, raw   | 727.9 kB | 674.7 kB | −7%      |
-| Production build  | 1086 ms  | 1582 ms  | +46%     |
+| JS files in build | 76       | 26       | −66%     |
+| JS total, raw     | 575.5 kB | 82.9 kB  | −86%     |
+| JS total, gzip    | 164.7 kB | 30.7 kB  | **−81%** |
+| HTML total, raw   | 721.3 kB | 674.6 kB | −6%      |
+| Production build  | 908 ms   | 1396 ms  | +54%     |
+
+Whole-build JS counts the 41.1 kB router chunk that only `404.html` loads, so
+it overstates what any real page costs. The per-page numbers below are the ones
+a visitor experiences.
 
 ## What a visitor loads
 
@@ -42,23 +58,24 @@ same ones.
 
 | page                      | metric           | baseline              | pracht               | change   |
 | ------------------------- | ---------------- | --------------------- | -------------------- | -------- |
-| **home**                  | JS               | 45.0 kB / 4 reqs      | 20.5 kB / 4 reqs     | −54%     |
-|                           | last JS byte     | 887 ms                | 531 ms               | −40%     |
-|                           | DOMContentLoaded | 667 ms                | 536 ms               | −20%     |
-|                           | FCP              | 224 ms                | 204 ms               | −9%      |
-| **blog index**            | JS               | 56.7 kB / **37 reqs** | 21.2 kB / **4 reqs** | −63%     |
-|                           | last JS byte     | 1688 ms               | 665 ms               | **−61%** |
-|                           | FCP              | 244 ms                | 208 ms               | −15%     |
-|                           | load             | 738 ms                | 840 ms               | +14%     |
-| **blog post** (prose)     | JS               | 47.9 kB / 6 reqs      | **0 kB / 0 reqs**    | −100%    |
-|                           | DOMContentLoaded | 669 ms                | 223 ms               | **−67%** |
-|                           | total bytes      | 108.3 kB              | 58.9 kB              | −46%     |
-| **blog post** (with demo) | JS               | 54.9 kB / 6 reqs      | 20.6 kB / 5 reqs     | −62%     |
-|                           | last JS byte     | 946 ms                | 537 ms               | −43%     |
+| **home**                  | JS               | 44.8 kB / 4 reqs      | 20.0 kB / 4 reqs     | −55%     |
+|                           | last JS byte     | 875 ms                | 516 ms               | −41%     |
+|                           | DOMContentLoaded | 650 ms                | 519 ms               | −20%     |
+|                           | FCP              | 216 ms                | 208 ms               | −4%      |
+| **blog index**            | JS               | 56.4 kB / **37 reqs** | 20.6 kB / **4 reqs** | −63%     |
+|                           | last JS byte     | 1688 ms               | 644 ms               | **−62%** |
+|                           | FCP              | 244 ms                | 204 ms               | −16%     |
+|                           | load             | 738 ms                | 818 ms               | +11%     |
+| **blog post** (prose)     | JS               | 47.7 kB / 6 reqs      | **0 kB / 0 reqs**    | −100%    |
+|                           | DOMContentLoaded | 660 ms                | 223 ms               | **−66%** |
+|                           | total bytes      | 107.8 kB              | 58.9 kB              | −45%     |
+| **blog post** (with demo) | JS               | 54.6 kB / 6 reqs      | 20.0 kB / 5 reqs     | −63%     |
+|                           | last JS byte     | 953 ms                | 523 ms               | −45%     |
 
 The blog index's `load` is the one regression: island props serialize the post
-registry into the HTML, so the document grows from 32.5 kB to 42.6 kB raw. It
-gzips to 7.2 kB either way, and the page still transfers 24 kB less overall.
+registry into the HTML, so the document grows from 32.3 kB to 42.6 kB raw. It
+gzips to about 7.2 kB either way, and the page still transfers 24 kB less
+overall.
 
 ---
 
@@ -103,10 +120,10 @@ page:
 - `PostFilter` — the blog index's tag filter and the list it drives
 - 14 in-post demo components, one directory per post
 
-Home went from 62.2 kB to 20.5 kB raw. What remains is Preact (13.9 kB), the
-islands bootstrap (4.4 kB) and the islands themselves — under 1.5 kB each.
+Home went from 62.2 kB to 20.0 kB raw. What remains is Preact (13.9 kB), the
+islands bootstrap (4.1 kB) and the islands themselves — under 1.5 kB each.
 
-`client-*.js`, the 38.5 kB router, is now loaded by exactly one document:
+`client-*.js`, the 41.1 kB router, is now loaded by exactly one document:
 `404.html`. The static adapter requires the not-found page to hydrate fully so
 it can adopt the URL the visitor actually asked for.
 
@@ -130,6 +147,27 @@ most of the win on the table.
 
 ---
 
+## Hydration
+
+Preact calls `options._hydrationMismatch(vnode, excessDomChildren)` whenever
+hydration gives up on a server-rendered node and builds a fresh one instead —
+the deopt that makes a page re-render work the server already did. The
+`hydrationProbe` plugin in `vite.config.ts` (behind `HYDRATION_PROBE=1`) hangs a
+reporter off that hook and `perf/check-hydration.mjs` walks every emitted page
+collecting what it reports.
+
+All 37 pages are clean: 10 carry JavaScript, 27 have no `<script>` at all, and
+none report a mismatch or a page error.
+
+The published Preact bundle mangles that property name, so the plugin reads the
+mangled name back off its own call site and throws if it cannot find it — a
+probe that quietly stopped matching would report a spotlessly clean site. The
+checker likewise refuses to run against a build with no probe in it. Both were
+confirmed by planting a deliberate server/client mismatch and watching the run
+fail.
+
+---
+
 ## Follow-ups
 
 1. **Self-host the highlight.js theme and the fonts.** Now clearly the largest
@@ -142,8 +180,11 @@ most of the win on the table.
    island.
 3. **`pracht typegen`.** Not run, so `RouteId` is `string` and `<Link route>`
    is unchecked. Only the shell uses `<Link>` now, so this is cheap to adopt.
-4. **Build time.** 1086 ms → 1582 ms. Not worth attention at this size, noted
+4. **Build time.** 908 ms → 1396 ms. Not worth attention at this size, noted
    so a future regression has a reference point.
+5. **The blog index's layout shift.** CLS 0.074 from the tag-filter row
+   reflowing when the web font swaps in — present identically before and after
+   the migration, and the same thing follow-up 1 would fix.
 
 ## Caveats
 

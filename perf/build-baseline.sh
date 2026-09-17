@@ -3,7 +3,21 @@
 # old and new builds can be benchmarked with the same tooling and dependencies.
 set -euo pipefail
 
-REF="${1:-645e5c2}"
+# The baseline is the last commit before the pracht conversion. Resolved by
+# subject rather than by SHA so a rebase of this branch does not silently point
+# the script at a commit that no longer exists.
+BASELINE_SUBJECT='Extract post registry into a JSX-free data module'
+REF="${1:-}"
+if [ -z "$REF" ]; then
+  REF=$(git log -1 --format='%H' --fixed-strings --grep="$BASELINE_SUBJECT")
+fi
+if [ -z "$REF" ]; then
+  echo "could not find the baseline commit (\"$BASELINE_SUBJECT\");" \
+       "pass one explicitly: $0 <ref>" >&2
+  exit 1
+fi
+echo "baseline ref: $(git log --oneline -1 "$REF")"
+
 DEST="perf/baseline-src"
 
 rm -rf "$DEST"
