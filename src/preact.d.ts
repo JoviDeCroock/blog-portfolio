@@ -8,8 +8,3 @@ declare global {
     interface IntrinsicElements extends preact.JSX.IntrinsicElements {}
   }
 }
-
-declare module '*.mdx' {
-  let MDXComponent: (props: any) => JSX.Element
-  export default MDXComponent
-}

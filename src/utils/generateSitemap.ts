@@ -1,4 +1,4 @@
-import { posts, type Post } from '../pages/Blog'
+import { posts, type Post } from '../data/posts'
 
 const siteConfig = {
   siteUrl: 'https://jovidecroock.com',

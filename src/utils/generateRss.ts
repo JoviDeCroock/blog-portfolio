@@ -1,4 +1,4 @@
-import { posts, type Post } from '../pages/Blog'
+import { posts, type Post } from '../data/posts'
 
 // Extend the Post interface to include createdAt for RSS purposes
 interface RSSPost extends Post {

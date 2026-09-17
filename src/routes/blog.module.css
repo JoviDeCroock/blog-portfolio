@@ -1,0 +1,23 @@
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.rssLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: #f59c42;
+  text-decoration: none;
+  border: 1px solid #f59c42;
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+
+.rssLink:hover {
+  background: rgba(245, 156, 66, 0.1);
+}

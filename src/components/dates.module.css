@@ -1,0 +1,9 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.annotation {
+  color: #a6a7a7;
+  font-size: 0.8rem;
+}
