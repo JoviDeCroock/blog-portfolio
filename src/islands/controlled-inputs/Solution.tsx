@@ -1,21 +1,22 @@
-// @ts-ignore
+import type { TargetedInputEvent } from 'preact'
 import { useRef, useState } from 'preact/hooks'
 import { RerenderTracker } from '../../content/posts/controlled-inputs/common'
 
 const Issue = () => {
   const [value, setValue] = useState('')
-  const inputRef = useRef<HTMLInputElement>()
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const onInput = (e) => {
+  const onInput = (e: TargetedInputEvent<HTMLInputElement>) => {
+    const input = inputRef.current
     if (e.currentTarget.value.length <= 3) {
       setValue(e.currentTarget.value)
-    } else {
-      const start = inputRef.current.selectionStart
-      const end = inputRef.current.selectionEnd
+    } else if (input) {
+      const start = input.selectionStart ?? 0
+      const end = input.selectionEnd ?? 0
       const diffLength = Math.abs(e.currentTarget.value.length - value.length)
-      inputRef.current.value = value
+      input.value = value
       // Restore selection
-      inputRef.current.setSelectionRange(start - diffLength, end - diffLength)
+      input.setSelectionRange(start - diffLength, end - diffLength)
     }
   }
 

@@ -1,14 +1,17 @@
 import { Component } from 'preact'
 
-const getData = () =>
+type Person = { id: number; name: string }
+type AppState = { data: Person[]; isLoading: boolean }
+
+const getData = (): Promise<Person[]> =>
   new Promise((res) => {
     setTimeout(() => {
       res([{ id: 1, name: 'Jovi De Croock' }])
     }, 500)
   })
 
-class App extends Component {
-  constructor(props) {
+class App extends Component<Record<string, never>, AppState> {
+  constructor(props: Record<string, never>) {
     super(props)
     this.state = {
       data: [],
@@ -22,7 +25,7 @@ class App extends Component {
     })
   }
 
-  render(props, { isLoading, data }) {
+  render(_props: Record<string, never>, { isLoading, data }: AppState) {
     if (isLoading) {
       return <p>loading...</p>
     }

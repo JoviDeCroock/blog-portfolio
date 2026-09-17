@@ -17,8 +17,8 @@ import { sitemapPlugin } from './plugins/sitemapPlugin'
  * name we read it back off its own call site and fail the build if it has moved
  * — a probe that silently stopped matching would report a clean site.
  *
- * Only installed when HYDRATION_PROBE is set; perf/check-hydration.mjs does
- * that. The shipped bundle never carries it.
+ * Only installed when HYDRATION_PROBE is set, which `pnpm check-hydration`
+ * does. The shipped bundle never carries it.
  */
 function hydrationProbe(): Plugin {
   return {

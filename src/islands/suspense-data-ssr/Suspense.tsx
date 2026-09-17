@@ -35,12 +35,13 @@ render(suspense, root);
 `
 
 const App = () => {
-  const iframe = useRef()
+  const iframe = useRef<HTMLIFrameElement | null>(null)
 
   useEffect(() => {
     if (!iframe.current) return
 
     const iframeDoc = iframe.current.contentDocument
+    if (!iframeDoc) return
     // Root
     const root = document.createElement('div')
     root.setAttribute('id', 'root')

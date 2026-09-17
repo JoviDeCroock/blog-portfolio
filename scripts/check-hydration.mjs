@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 // Loads every built page in a browser and reports Preact hydration mismatches.
 //
-// Preact 11 calls options._hydrationMismatch whenever hydration gives up on a
-// server-rendered node and creates a new one instead. The hydrationProbe plugin
-// in vite.config.ts turns that into a console message; this script collects it.
+// Preact calls options._hydrationMismatch whenever hydration gives up on a
+// server-rendered node and creates a new one instead — the deopt that makes a
+// page re-render work the server already did. The hydrationProbe plugin in
+// vite.config.ts turns that into a console message; this script collects it.
 //
-// Usage: HYDRATION_PROBE=1 pnpm build && node perf/check-hydration.mjs
+// Run it with `pnpm check-hydration`, which builds with the probe first. The
+// probe is build-only and gated behind HYDRATION_PROBE, so it never ships.
 
 import { createServer } from 'node:http'
 import { readFile, stat } from 'node:fs/promises'

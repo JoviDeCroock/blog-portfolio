@@ -1,7 +1,8 @@
+import type { ComponentChildren } from 'preact'
 import { useState } from 'preact/hooks'
 import { RerenderTracker } from '../../content/posts/vdom-compilers/common'
 
-const Counter = (props) => {
+const Counter = (props: { i: string }) => {
   const [count, setCount] = useState(0)
 
   return (
@@ -16,7 +17,7 @@ const Counter = (props) => {
   )
 }
 
-const Layout = (props) => {
+const Layout = (props: { children?: ComponentChildren }) => {
   const [darkMode, setDarkMode] = useState(false)
 
   return (

@@ -11,5 +11,12 @@
   "bracketSameLine": false,
   "arrowParens": "always",
   "endOfLine": "lf",
-  "ignorePatterns": ["dist", "node_modules"]
+  // src/pracht*.ts(.d.ts) are written by `pracht typegen`; reformatting them
+  // makes `pracht typegen --check` report them as stale on every run.
+  "ignorePatterns": [
+    "dist",
+    "node_modules",
+    "src/pracht.d.ts",
+    "src/pracht-routes.ts",
+  ],
 }

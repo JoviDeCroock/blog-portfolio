@@ -1,23 +1,31 @@
 import { createContext } from 'preact'
+import type {
+  ComponentChildren,
+  TargetedInputEvent,
+  TargetedSubmitEvent,
+} from 'preact'
 import { useContext, useReducer, useEffect } from 'preact/hooks'
 import { RerenderTracker } from '../../content/posts/state-in-vdom/common'
 
-class FormState {
-  values
-  listeners = {}
+type FormValues = Record<string, string>
+type Listener = () => void
 
-  constructor(values) {
+class FormState {
+  values: FormValues
+  listeners: Record<string, Listener[]> = {}
+
+  constructor(values: FormValues) {
     this.values = values
   }
 
-  onChange(name, value) {
+  onChange(name: string, value: string) {
     this.values[name] = value
     this.listeners[name].forEach((cb) => {
       cb()
     })
   }
 
-  register(name, cb) {
+  register(name: string, cb: Listener) {
     const listenersForField = this.listeners[name]
     if (!listenersForField) {
       this.listeners[name] = [cb]
@@ -26,7 +34,7 @@ class FormState {
     }
   }
 
-  unregister(name, cb) {
+  unregister(name: string, cb: Listener) {
     const listenersForField = this.listeners[name]
     this.listeners[name] = listenersForField.filter((x) => x !== cb)
   }
@@ -34,8 +42,10 @@ class FormState {
 
 const FormContext = createContext<FormState>(new FormState({}))
 
-const useField = (name) => {
-  const [, rerender] = useReducer((x) => x + 1, 0)
+const useField = (
+  name: string
+): [string, (e: TargetedInputEvent<HTMLInputElement>) => void] => {
+  const [, rerender] = useReducer<number, void>((x) => x + 1, 0)
   const form = useContext(FormContext)
 
   useEffect(() => {
@@ -47,13 +57,13 @@ const useField = (name) => {
 
   return [
     form.values[name],
-    (e) => {
+    (e: TargetedInputEvent<HTMLInputElement>) => {
       form.onChange(name, e.currentTarget.value)
     },
   ]
 }
 
-const Input = (props) => {
+const Input = (props: { name: string }) => {
   const [value, onInput] = useField(props.name)
   return (
     <div
@@ -76,7 +86,7 @@ const Input = (props) => {
 const Form = () => {
   const form = useContext(FormContext)
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: TargetedSubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     console.log(form.values)
   }
@@ -101,7 +111,10 @@ const Form = () => {
   )
 }
 
-const FormProvider = (props) => {
+const FormProvider = (props: {
+  initialValues: FormValues
+  children?: ComponentChildren
+}) => {
   return (
     <FormContext.Provider
       value={new FormState(props.initialValues)}

@@ -1,21 +1,30 @@
 import { createContext } from 'preact'
+import type {
+  ComponentChildren,
+  TargetedInputEvent,
+  TargetedSubmitEvent,
+} from 'preact'
 import { useState, useContext } from 'preact/hooks'
 import { RerenderTracker } from '../../content/posts/state-in-vdom/common'
 
+type FormValues = Record<string, string>
+
 const FormContext = createContext<{
-  values: object
-  setValues: (values: object) => void
+  values: FormValues
+  setValues: (values: FormValues) => void
 }>({
   values: {},
   setValues: () => {},
 })
 
-const useField = (name) => {
+const useField = (
+  name: string
+): [string, (e: TargetedInputEvent<HTMLInputElement>) => void] => {
   const form = useContext(FormContext)
 
   return [
     form.values[name],
-    (e) => {
+    (e: TargetedInputEvent<HTMLInputElement>) => {
       form.setValues({
         ...form.values,
         [name]: e.currentTarget.value,
@@ -24,7 +33,7 @@ const useField = (name) => {
   ]
 }
 
-const Input = (props) => {
+const Input = (props: { name: string }) => {
   const [value, onInput] = useField(props.name)
   return (
     <div
@@ -47,7 +56,7 @@ const Input = (props) => {
 const Form = () => {
   const form = useContext(FormContext)
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: TargetedSubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     console.log(form.values)
   }
@@ -72,7 +81,10 @@ const Form = () => {
   )
 }
 
-const FormProvider = (props) => {
+const FormProvider = (props: {
+  initialValues: FormValues
+  children?: ComponentChildren
+}) => {
   const [values, setValues] = useState(props.initialValues)
 
   return (

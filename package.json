@@ -12,7 +12,9 @@
     "build": "pracht build && node scripts/inline-css.mjs dist/client",
     "og": "node scripts/generate-og.mjs",
     "preview": "pracht preview",
-    "doctor": "pracht doctor"
+    "doctor": "pracht doctor",
+    "typegen": "pracht typegen",
+    "check-hydration": "HYDRATION_PROBE=1 pnpm build && node scripts/check-hydration.mjs dist/client"
   },
   "dependencies": {
     "@mdx-js/rollup": "^3.1.1",
@@ -20,10 +22,7 @@
     "@pracht/cli": "^1.13.0",
     "@pracht/core": "^0.17.0",
     "@pracht/vite-plugin": "^0.12.0",
-    "goober": "2.1.16",
-    "hoofd": "^1.7.3",
     "preact": "11.0.0-rc.2",
-    "preact-iso": "^2.12.0",
     "preact-render-to-string": "^6.7.0",
     "rehype-highlight": "^7.0.0",
     "remark-gfm": "^4.0.1"
@@ -38,7 +37,6 @@
     "playwright-core": "^1.62.1",
     "satori": "^0.28.0",
     "sharp": "^0.35.3",
-    "sirv-cli": "^3.0.1",
     "typescript": "^5.9.2",
     "vite": "^8.2.2"
   },
@@ -51,6 +49,9 @@
     "*": [
       "oxfmt --no-error-on-unmatched-pattern"
     ]
+  },
+  "engines": {
+    "node": ">=22.18"
   },
   "packageManager": "pnpm@8.6.7"
 }

@@ -1,11 +1,12 @@
+import type { TargetedInputEvent } from 'preact'
 import { useRef, useState } from 'preact/hooks'
 import { RerenderTracker } from '../../content/posts/controlled-inputs/common'
 
 const Issue = () => {
   const [value, setValue] = useState('')
-  const inputRef = useRef<HTMLInputElement>()
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const onInput = (e) => {
+  const onInput = (e: TargetedInputEvent<HTMLInputElement>) => {
     if (e.currentTarget.value.length > 3) return
     setValue(e.currentTarget.value)
   }

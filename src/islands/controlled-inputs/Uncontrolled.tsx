@@ -2,7 +2,7 @@ import { useRef } from 'preact/hooks'
 import { RerenderTracker } from '../../content/posts/controlled-inputs/common'
 
 const Uncontrolled = () => {
-  const inputRef = useRef<HTMLInputElement>()
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
   const printValue = () => {
     if (inputRef.current) {

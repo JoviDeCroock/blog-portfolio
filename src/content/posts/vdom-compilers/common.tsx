@@ -1,6 +1,6 @@
 import { useRef } from 'preact/hooks'
 
-export const RerenderTracker = (props) => {
+export const RerenderTracker = (props: { name: string }) => {
   const rerenders = useRef(-1)
   rerenders.current++
   return (

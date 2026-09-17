@@ -70,8 +70,6 @@ yarn-error.log
 .cache
 .gstack/
 
-# perf harness artifacts
-perf/dist-*
+# pracht docs, fetched by .docs-fetch.sh for local reference
 .pracht-docs/
 .docs-fetch.sh
-perf/baseline-src/
