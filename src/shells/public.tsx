@@ -6,7 +6,9 @@ import {
 } from '@pracht/core'
 
 import '../styles/global.css'
+import '../styles/code-theme.css'
 import styles from './public.module.css'
+import { interMedium, interRegular } from '../fonts'
 
 const NAV = [
   { route: 'home', href: '/', label: 'Home' },
@@ -104,21 +106,8 @@ export function Shell({ children }: ShellProps) {
 export function head(): HeadMetadata {
   return {
     lang: 'en',
+    fonts: [interRegular, interMedium],
     link: [
-      {
-        rel: 'preconnect',
-        href: 'https://fonts.googleapis.com/',
-        crossorigin: '',
-      },
-      {
-        rel: 'preconnect',
-        href: 'https://fonts.gstatic.com/',
-        crossorigin: '',
-      },
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;500&display=optional',
-      },
       { rel: 'icon', href: '/favicon.ico' },
       {
         rel: 'alternate',
