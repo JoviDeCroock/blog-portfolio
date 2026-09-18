@@ -43,15 +43,6 @@ function hydrationProbe(): Plugin {
 }
 
 export default defineConfig({
-  build: {
-    // Routes never enter the client bundle — `hydration: 'none'` ships no
-    // JavaScript and `hydration: 'islands'` pulls in the islands instead — so
-    // the CSS modules they import are compiled for their class names during
-    // SSR and then emitted nowhere. Letting the server build write its assets
-    // out is what gives scripts/inline-css.mjs a stylesheet to inline; nothing
-    // in dist/server is deployed.
-    ssrEmitAssets: true,
-  },
   plugins: [
     // Posts are MDX modules imported by their route wrapper in src/routes/posts.
     {
