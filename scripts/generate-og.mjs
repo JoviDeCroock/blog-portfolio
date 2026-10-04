@@ -18,7 +18,7 @@ import sharp from 'sharp'
 
 const require = createRequire(import.meta.url)
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-const postsDir = path.join(root, 'src', 'pages', 'posts')
+const postsDir = path.join(root, 'src', 'content', 'posts')
 const publicDir = path.join(root, 'public')
 
 const WIDTH = 1200

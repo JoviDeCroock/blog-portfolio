@@ -81,6 +81,11 @@ export const app = defineApp({
         id: 'graphql-myths',
         hydration: 'none',
       }),
+      route(
+        '/blog/graphql-malleable-ui',
+        './routes/posts/graphql-malleable-ui.tsx',
+        { id: 'graphql-malleable-ui', hydration: 'none' }
+      ),
       route('/blog/hydration-and-preact', './routes/posts/hydration.tsx', {
         id: 'hydration-and-preact',
         hydration: 'none',
