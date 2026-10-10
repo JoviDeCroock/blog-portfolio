@@ -22,8 +22,8 @@ changing the data those interfaces ask for.
 
 <aside class="post-callout">
   By agent I mean something reshaping the interface while the application runs,
-  on behalf of the person using it. Not a coding agent working in our repository,
-  that is a different conversation.
+  on behalf of the person using it. Not a coding agent working in our
+  repository, that is a different conversation.
 </aside>
 
 That brings us back to something GraphQL was designed for from the beginning.
@@ -95,7 +95,7 @@ client specify that response shape at the field level, one of its
 The server did not need a new endpoint for the table. It already knew how to
 provide the data; the client changed how it consumed that capability.
 
-## A generated interface is another client
+## A generated interface is just a client
 
 We have talked about this strength of GraphQL for years in terms of multiple
 clients. Mobile needs one set of fields, web needs another, a CLI might need
@@ -187,12 +187,9 @@ through that:
 - Authenticated users can run ad-hoc operations within strict cost and depth
   limits, and a view that sticks around gets promoted to a persisted operation.
 
-None of these are free, and which one fits depends a lot on whether the API is
-internal or public.
-
-GraphQL does not remove that work, and other APIs can offer selection and
+GraphQL does not remove work, and other APIs can offer selection and
 composition too. The difference is that expressing changing client data
-requirements is what GraphQL was designed for, not something bolted on later.
+requirements is what GraphQL was designed for.
 
 LLMs made writing another handler cheap. They did not make it cheap to change the
 server every time someone wants a different view. For an interface that keeps
