@@ -1,0 +1,199 @@
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<Dates createdAt={documentProps.createdAt} />
+
+# GraphQL as a foundation for malleable UI
+
+A lot of the discussion I see around GraphQL and agents focuses on context.
+How does an agent discover what an API can do without loading an entire schema?
+How do we give it enough information to write a useful query without filling its
+context with thousands of fields it will never use?
+
+[Semantic introspection](https://chillicream.com/blog/2026-04-22-semantic-introspection)
+is an interesting direction here. The proposed extension lets an agent search
+for relevant parts of a schema and retrieve the definitions it needs, rather
+than having to inspect everything up front.
+
+That is useful, but the picture is bigger. GraphQL also gives us a foundation
+for **[malleable UI](https://www.inkandswitch.com/essay/malleable-software/)**:
+interfaces that an agent can reshape around what a user needs, including
+changing the data those interfaces ask for.
+
+<aside class="post-callout">
+  By agent I mean something reshaping the interface while the application runs,
+  on behalf of the person using it. Not a coding agent working in our repository,
+  that is a different conversation.
+</aside>
+
+That brings us back to something GraphQL was designed for from the beginning.
+
+## The data needs to change with the UI
+
+Imagine an application showing a list of products. We have a grid of cards,
+each showing a name, an image and a price. The API returns the data needed for
+that view and everything works well.
+
+Now the user asks an agent to turn it into a compact table for comparing stock
+across warehouses.
+
+Changing the components is only part of that request. The table needs inventory
+data that the cards never needed, and it no longer needs the images. The shape
+of the UI has changed, so its data requirements have changed as well.
+
+With an endpoint tailored to the original grid, we might get too little data.
+The agent can build the table, but it cannot fill the warehouse columns. With
+an endpoint returning a much larger product object, we might already have
+everything, but now every version of the UI pays for data it does not use.
+
+We can add another endpoint, expand the existing response or make several
+requests and combine the results. Those are all reasonable options. They do,
+however, mean that adapting the UI depends on what the API already anticipated,
+or on our ability to change it.
+
+This is where GraphQL becomes interesting.
+
+Assuming our schema already exposes these capabilities, the original view could
+ask for:
+
+```graphql
+query ProductGrid {
+  products(first: 20) {
+    nodes {
+      id
+      name
+      imageUrl
+      price
+    }
+  }
+}
+```
+
+And the table could ask for:
+
+```graphql
+query ProductInventory {
+  products(first: 20) {
+    nodes {
+      id
+      name
+      inventory {
+        warehouse {
+          name
+        }
+        available
+      }
+    }
+  }
+}
+```
+
+We added the inventory requirements and removed the image and price requirements. GraphQL lets the
+client specify that response shape at the field level, one of its
+[original design principles](https://spec.graphql.org/September2025/#sec-Overview).
+
+The server did not need a new endpoint for the table. It already knew how to
+provide the data; the client changed how it consumed that capability.
+
+## A generated interface is another client
+
+We have talked about this strength of GraphQL for years in terms of multiple
+clients. Mobile needs one set of fields, web needs another, a CLI might need
+very little, and an internal application might need a much richer view.
+
+The schema gives those clients a shared contract without requiring them to
+share the same data requirements.
+
+Malleable UI extends that same idea. Instead of only having different
+requirements across applications, we have different requirements across views
+that users ask an agent to create. Even two people using the same application
+might want very different interfaces.
+
+One person wants a visual catalogue. Another wants an inventory table. Someone
+else wants a small view showing the products they need to reorder.
+
+Trying to anticipate every variation in an endpoint puts a lot of product
+decisions on the server. A schema that exposes useful capabilities gives the
+client room to make those decisions as its needs change.
+
+The product-centric principle of GraphQL, that what the client needs drives the
+API, feels very relevant here. The view drives
+the data requirements, even when that view was not designed before the
+application shipped.
+
+## Keeping the change on one side
+
+This also connects to my post on
+[changing my mind about GraphQL](/blog/changed-my-mind-about-graphql). There I
+argued two things: LLMs make boilerplate cheap, and GraphQL does not expose the
+right abstractions for an LLM that has to change the server. Resolvers, loaders,
+auth and cache boundaries are a lot of context to hold before making a safe change.
+
+I still believe both. But that post was about an agent working on the server.
+Here the agent only consumes the schema, and from that side GraphQL's abstractions
+are exactly the right ones: a typed contract, a catalogue of capabilities and a
+language to select from them.
+
+An agent adapting a running application usually cannot write another endpoint.
+It might only control the client. Changing the back-end could require another team, a review and a deployment.
+For a third-party API, that change might not be available to us at all.
+
+That is where the difference with a fixed endpoint actually shows. With a fixed response that
+cannot satisfy the new view, the change crosses two surfaces: the UI and the
+server API. With a sufficiently capable GraphQL schema, the UI and its operation
+can evolve together on the client. The server contract can stay as it is.
+
+When we [co-locate fragments with components](/blog/graphql-development-workflow),
+this becomes easier to express locally as well. A component carries a declaration
+of its data requirements, which we compose into an operation. GraphQL provides
+[fragments](https://graphql.org/learn/queries/#fragments) for those reusable field
+selections; our client tooling determines how well that composition works.
+
+We still need to update both the rendering and the data selection. The useful
+part is that both can belong to the same client change, without coordinating a
+new server response for every variation.
+
+## Discovery is part of the story
+
+Semantic introspection helps an agent find the capabilities it needs. That
+could be exactly how it discovers the inventory fields in the example above.
+
+But finding a field and adapting a product are different pieces of work.
+Once the agent has found the data, it needs a way to request it in the shape
+required by the new interface.
+
+Discovery and selection solve different halves: discovery tells the agent what
+exists, client-defined selections let it use that as the UI changes.
+
+## The schema still has to support it
+
+Of course, there is an [asterisk](/blog/graphql-asterisk-problem). If inventory is not exposed in the schema, the
+agent cannot invent it by writing a query. A new business capability still needs
+server work.
+
+We also need the operational discipline I have written about before: authorization,
+query cost controls and batching. Authorization matters even more here. An agent
+will happily select every field the schema lets it see, so field-level rules have
+to be right.
+
+The bigger tension is [persisted operations](/blog/persisted-operations). I have
+argued that production GraphQL should only execute operations we know about up
+front, and a generated view writes operations nobody has seen. I see a few ways
+through that:
+
+- Generated views pick from operations that are already registered, which limits
+  how far the UI can bend.
+- New operations go through an approval step before they get registered.
+- Authenticated users can run ad-hoc operations within strict cost and depth
+  limits, and a view that sticks around gets promoted to a persisted operation.
+
+None of these are free, and which one fits depends a lot on whether the API is
+internal or public.
+
+GraphQL does not remove that work, and other APIs can offer selection and
+composition too. The difference is that expressing changing client data
+requirements is what GraphQL was designed for, not something bolted on later.
+
+LLMs made writing another handler cheap. They did not make it cheap to change the
+server every time someone wants a different view. For an interface that keeps
+changing, that is the argument for GraphQL I find most convincing.
