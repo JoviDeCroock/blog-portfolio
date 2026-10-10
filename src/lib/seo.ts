@@ -1,5 +1,7 @@
 import type { HeadMetadata } from '@pracht/core'
 
+import { firaCode } from '../fonts'
+
 const author = 'Jovi De Croock'
 const baseUrl = 'https://jovidecroock.com'
 
@@ -53,24 +55,6 @@ export function seo(props: SeoInput): HeadMetadata {
   }
 }
 
-/**
- * Syntax highlighting theme for pages that contain code blocks. Previously the
- * `<CodeTheme>` component; kept on the same CDN so the migration does not
- * quietly change what the browser fetches.
- */
-const HIGHLIGHT_CSS =
-  'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github-dark.min.css'
-
-export const codeThemeLinks: HeadMetadata['link'] = [
-  {
-    rel: 'preconnect',
-    href: 'https://cdnjs.cloudflare.com/',
-    crossorigin: 'anonymous',
-  },
-  { rel: 'preload', as: 'style', href: HIGHLIGHT_CSS },
-  { rel: 'stylesheet', href: HIGHLIGHT_CSS },
-]
-
 /** `head()` for a blog post, derived from its `documentProps`. */
 export function postHead(
   documentProps: SeoInput & { tags?: readonly string[]; path?: string },
@@ -85,6 +69,8 @@ export function postHead(
     ogType: 'article',
   })
 
+  // The highlight.js theme itself is imported by the shell and inlined into
+  // every page; a post with code only needs the monospace face on top.
   if (options.code === false) return base
-  return { ...base, link: [...(base.link ?? []), ...(codeThemeLinks ?? [])] }
+  return { ...base, fonts: [firaCode] }
 }
