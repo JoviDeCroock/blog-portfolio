@@ -87,18 +87,12 @@ Change back to its author. Main only ever points at a tree that passed CI on exa
 deployment. If errors go up, the platform switches the flag off, rolls back and opens a revert
 Change.
 
-That last step is the one I'm proudest of. In one of the end-to-end runs a Change threw for 40% of
-traffic. The platform detected it 23.9 seconds after the first error, switched the flag off 0.1
-seconds later, rolled back after 1.1 seconds and opened a revert 6.8 seconds after detection. The
-platform verified it as a pure revert (identical tree), so it went through Auto-merge and deployed
-without anyone touching it.
-
 ## Where the conviction comes from
 
-Some of this will turn out to be wrong. These are the parts I'm sure of.
+Some of this will turn out to be wrong. These are the parts I'm personally pretty confident on:
 
-**The agent's claim is an input, never the decision.** An agent saying "just a small bug fix" means
-nothing on its own; the lane comes from evidence. That's also why the classifier is a pure function
+**The agent's claim is an input.** An agent saying "just a small bug fix" means
+nothing on its own, we need evidence. That's also why the classifier is a pure function
 with a lot of table tests and no I/O or clock, so you can read why a Change landed where it did.
 
 **Unknown means escalate.** A missing or errored signal can only raise the lane, never lower it. The
@@ -122,22 +116,7 @@ can't loosen the rules it's judged by.
 
 **Why belongs in git.** Every commit the queue lands gets a signed `refs/notes/why` note: the
 approved intent, who approved it, which agent wrote it and which human is accountable for that
-agent, the lane and its reasons. You can verify it from a plain clone, and editing a single word
-breaks the signature. The note leaves out the author's own summary of its work and keeps the intent
-a human approved.
-
-## Many agents at once
-
-The live demo covers Cloudflare's minimum bar. Six agents start, push and enqueue at the same time and all six land in 270 seconds;
-eight land in 286. Two of them rewrite the same README line on purpose. The second one gets told at
-`start_change` that another agent is already working on that file, and when they meet in the
-queue the resolver agent writes the fix. A resolution that adds lines of its own invalidates the
-human approval and goes back to review.
-
-Several agents can also attempt the same approved Plan. The platform ranks the attempts (finished
-and green first, then lane, tests, red/green, scope drift and diff size) and a human picks one with
-a single tap. The platform closes the others and tells their agents they were superseded, and
-picking from three ranked attempts asks a lot less of me than reading three diffs.
+agent, the lane and its reasons.
 
 ## How it was built
 
@@ -154,7 +133,7 @@ you go when you wonder why something works the way it does.
 
 The working agreements that mattered most:
 
-- **E2E over integration over unit.** Every fix lands with a test that would have caught it, against
+- For tests, **E2E > integration > unit.** Every fix lands with a test that would have caught it, against
   the real Worker with real bindings. Unit tests are for pure logic.
 - **Docs win over the spec.** A lot of the Cloudflare primitives were in beta. Agents had to check the
   current docs before coding against them, and record where reality differed from what I wrote.
@@ -167,25 +146,6 @@ six Changes through it, I reviewed them and the queue landed them. That took fiv
 of which were blockers that only a repo of that size could find: forks of a large repository that
 couldn't be cloned, a red default pipeline that could never adopt its own CI config, a queue replay
 missing its blobs and a dropped build that stalled the queue for 90 minutes.
-
-My own interventions were mostly taste. After seeing the first graded pull request on GitHub my
-feedback was "the UI looks very busy". The GitHub integration went from a check run full of tables,
-a review with seven inline comments and a summary comment, to one check run and one comment edited
-in place. A push now posts nothing new.
-"Lane 0" became "Auto-merge" in everything a person reads. And when it came to cost, my answer was
-"alert, then auto-stop": a $5 a day soft alert, a $20 a day hard stop on new paid work, and a strict
-free plan nobody is exempt from.
-
-## GitHub is the way in
-
-Nobody moves their repositories to try a review tool, but people do install an app. So gittifacts
-runs in two modes over the same core. Natively, on Cloudflare Artifacts, it's the full platform. On
-GitHub it runs report-only: it grades every pull request with the same lane, evidence and walkthrough,
-but never blocks or merges anything. A contract suite checks that the same change gets the same lane
-in both modes.
-
-That report-only mode is also where calibration happens. You get to see what would have auto-merged
-on your real pull requests before it is allowed to.
 
 ## The catch
 
