@@ -2,6 +2,7 @@
 // the route manifest) can import it from the Vite config without pulling
 // a component graph in.
 
+import { documentProps as gittifactsDocumentProps } from '../content/posts/gittifacts/documentProps'
 import { documentProps as graphqlMalleableUiDocumentProps } from '../content/posts/graphql-malleable-ui/documentProps'
 import { documentProps as referentialStabilityTypesDocumentProps } from '../content/posts/referential-stability-types/documentProps'
 import { documentProps as llmSignalsDebuggingDocumentProps } from '../content/posts/llm-signals-debugging/documentProps'
@@ -48,6 +49,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  gittifactsDocumentProps,
   graphqlMalleableUiDocumentProps,
   referentialStabilityTypesDocumentProps,
   resumedHydrationPreactDocumentProps,

@@ -62,6 +62,10 @@ export const app = defineApp({
         id: 'fragments-in-vdom',
         hydration: 'none',
       }),
+      route('/blog/gittifacts', './routes/posts/gittifacts.tsx', {
+        id: 'gittifacts',
+        hydration: 'none',
+      }),
       route(
         '/blog/graphql-abstract-types',
         './routes/posts/graphql-abstract-types.tsx',

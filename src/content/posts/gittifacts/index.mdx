@@ -1,0 +1,209 @@
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<Dates createdAt={documentProps.createdAt} />
+
+# Humans approve intent, machines prove conformance
+
+On October 1st Cloudflare published
+["We want you to build the next Git platform"](https://blog.cloudflare.com/next-git-platform-on-cloudflare/).
+It asks a few questions: how do agents coordinate, what happens when their changes conflict,
+how does their work get reviewed, and how do we record why a change was made. The bar it sets is
+several agents working on one repository at the same time.
+
+I couldn't stop thinking about it, so I spent the following week building
+[gittifacts](https://github.com/JoviDeCroock/gittifacts). It is an agent-native git platform on
+Cloudflare, and this post is about the idea behind it more than the code.
+
+<aside class="post-callout">
+  Sadly I could not enter my idea as the contest was only for US/CA citizens,
+  which was hidden in a PDF...
+</aside>
+
+## The pull request assumes a human wrote the diff
+
+The software lifecycle used to look like this: explore, plan, implement, test, monitor in
+production. Agents have collapsed implementation and they're well on their way to collapsing
+testing and monitoring. What remains is human attention, and I'd like most of it to go to the
+parts that matter for a good product: exploring and deciding what we want.
+
+The pull request has an assumption that a human wrote the diff, so a human should read the diff.
+When an agent writes 500 lines in a few minutes, that assumption turns into a queue of
+diffs nobody wants to read. Either we read them all and become the bottleneck, or we skim them and
+rubber stamp the change.
+
+gittifacts replaces that assumption with one rule:
+
+> Humans approve intent. Machines prove conformance. The platform routes each change to the
+> cheapest review that is still safe, and makes changes easy to undo after merge.
+
+Design decisions in the project fall back on that sentence. When the spec didn't cover something,
+the instruction was "choose whatever best serves this rule".
+
+## The flow
+
+The unit of work is a **Change**, not a pull request. A Change is intent plus diff plus evidence.
+
+**1. A Plan.** An agent drafts a Plan: an intent, acceptance criteria, what's out of scope and which
+paths it expects to touch. A human approves it. This is the main place a person spends attention,
+and it is a lot cheaper to read a paragraph of intent than a diff.
+
+**2. A Change is a fork.** The agent calls `start_change` and gets its own fork of the repository
+with a push token scoped to that fork only. There are no shared branches to race on and no agent can
+push to main. The loop an agent follows is short:
+
+```ts
+create_plan({ repoId, title, intent, acceptanceCriteria, scopePaths })
+start_change({ repoId, planId, title, category: 'fix' })
+// git push to the fork
+wait_for_change({ changeId, until: 'evidence_ready', timeoutSec: 50 })
+get_change_status({ changeId })
+request_review({ changeId })
+```
+
+**3. Evidence.** Every push runs CI and then a set of evidence steps on top of it: red/green proof
+for fixes (the new test fails on the base commit and passes on the head), coverage and mutation score
+on changed lines, a diff of the public API, a dependency diff, hits on sensitive paths, a preview
+deploy. The platform signs the result and stores it as a git note on the head commit, so the
+evidence travels with the repository.
+
+**4. A lane.** A pure function takes the evidence, the policy and the Plan and returns a lane with its
+reasons:
+
+- **Auto-merge** (Lane 0): everything is proven and nothing is risky.
+- **Quick review** (Lane 1): additive API, moderate size, some optional evidence missing.
+- **Full review** (Lane 2): breaking API, auth or migrations, new dependencies, scope drift, a fix
+  without proof.
+
+**5. A walkthrough.** When a human does review, they don't get a raw diff. A separate reviewer agent,
+which never sees the author's own summary, writes a walkthrough ordered by risk. Every claim points at
+evidence, and it has to list what it's least confident about and what wasn't done.
+
+**6. The merge queue.** Only the queue writes main. It batches speculatively, runs independent
+Changes on parallel tracks and hands textual conflicts to a resolver agent instead of kicking the
+Change back to its author. Main only ever points at a tree that passed CI on exactly that tree.
+
+**7. Rollout and revert.** Merged Changes ship behind their own feature flag with a gradual
+deployment. If errors go up, the platform switches the flag off, rolls back and opens a revert
+Change.
+
+That last step is the one I'm proudest of. In one of the end-to-end runs a Change threw for 40% of
+traffic. The platform detected it 23.9 seconds after the first error, switched the flag off 0.1
+seconds later, rolled back after 1.1 seconds and opened a revert 6.8 seconds after detection. The
+platform verified it as a pure revert (identical tree), so it went through Auto-merge and deployed
+without anyone touching it.
+
+## Where the conviction comes from
+
+Some of this will turn out to be wrong. These are the parts I'm sure of.
+
+**The agent's claim is an input, never the decision.** An agent saying "just a small bug fix" means
+nothing on its own; the lane comes from evidence. That's also why the classifier is a pure function
+with a lot of table tests and no I/O or clock, so you can read why a Change landed where it did.
+
+**Unknown means escalate.** A missing or errored signal can only raise the lane, never lower it. The
+same goes for anything a model says: an LLM judgment is allowed to push a Change from Quick review to
+Full review, never the other way around. A reviewer agent that runs out of budget escalates the
+Change.
+
+**Reversibility is what makes auto-merge acceptable.** I would not let a machine merge code without a
+human if I couldn't undo it in seconds. Auto-merge only makes sense because every Change sits behind
+its own flag and the platform can attribute a regression to a single Change. Without those two, I'd
+keep Auto-merge switched off.
+
+**Trust is earned per repository.** Auto-merge starts off. While a repo calibrates, people review
+everything and the platform records whether they agreed with the lane it computed. The owner can
+turn on Auto-merge once that agreement is high enough. Your own review history should be what
+convinces you the classifier is any good.
+
+**Nobody approves their own work.** No one, human or agent, approves their own Plan or Change, and
+agents can't approve anything at all. The platform reads policy from the default branch, so a Change
+can't loosen the rules it's judged by.
+
+**Why belongs in git.** Every commit the queue lands gets a signed `refs/notes/why` note: the
+approved intent, who approved it, which agent wrote it and which human is accountable for that
+agent, the lane and its reasons. You can verify it from a plain clone, and editing a single word
+breaks the signature. The note leaves out the author's own summary of its work and keeps the intent
+a human approved.
+
+## Many agents at once
+
+The live demo covers Cloudflare's minimum bar. Six agents start, push and enqueue at the same time and all six land in 270 seconds;
+eight land in 286. Two of them rewrite the same README line on purpose. The second one gets told at
+`start_change` that another agent is already working on that file, and when they meet in the
+queue the resolver agent writes the fix. A resolution that adds lines of its own invalidates the
+human approval and goes back to review.
+
+Several agents can also attempt the same approved Plan. The platform ranks the attempts (finished
+and green first, then lane, tests, red/green, scope drift and diff size) and a human picks one with
+a single tap. The platform closes the others and tells their agents they were superseded, and
+picking from three ranked attempts asks a lot less of me than reading three diffs.
+
+## How it was built
+
+Agents wrote most of the code, which makes this part a bit meta: I worked on it the same way the
+platform works. I approved intent, the agents proved conformance.
+
+Every big piece started as a written spec: the platform, onboarding, the merge queue, integrations,
+docs, GitHub mode. Each spec had a "why this exists" section first, because that is what drives the
+judgment calls, then milestones with an acceptance test each, then a short list of when to stop and
+ask: anything that costs money, anything that would weaken a security rule, anything that would
+change the product rule. For everything else the instruction was "decide, record it in
+`DECISIONS.md`, keep going". That file is now over 3,500 lines of dated decisions, and it's where
+you go when you wonder why something works the way it does.
+
+The working agreements that mattered most:
+
+- **E2E over integration over unit.** Every fix lands with a test that would have caught it, against
+  the real Worker with real bindings. Unit tests are for pure logic.
+- **Docs win over the spec.** A lot of the Cloudflare primitives were in beta. Agents had to check the
+  current docs before coding against them, and record where reality differed from what I wrote.
+- **Fix the platform, not the prompt.** When an agent stumbled during onboarding, the fix went into
+  an error message, a tool description or a template. Every error in the platform carries a `fix`
+  with the call or command to run next.
+
+Then I put gittifacts on gittifacts. I imported the repo into the live platform, an agent opened
+six Changes through it, I reviewed them and the queue landed them. That took five platform fixes, four
+of which were blockers that only a repo of that size could find: forks of a large repository that
+couldn't be cloned, a red default pipeline that could never adopt its own CI config, a queue replay
+missing its blobs and a dropped build that stalled the queue for 90 minutes.
+
+My own interventions were mostly taste. After seeing the first graded pull request on GitHub my
+feedback was "the UI looks very busy". The GitHub integration went from a check run full of tables,
+a review with seven inline comments and a summary comment, to one check run and one comment edited
+in place. A push now posts nothing new.
+"Lane 0" became "Auto-merge" in everything a person reads. And when it came to cost, my answer was
+"alert, then auto-stop": a $5 a day soft alert, a $20 a day hard stop on new paid work, and a strict
+free plan nobody is exempt from.
+
+## GitHub is the way in
+
+Nobody moves their repositories to try a review tool, but people do install an app. So gittifacts
+runs in two modes over the same core. Natively, on Cloudflare Artifacts, it's the full platform. On
+GitHub it runs report-only: it grades every pull request with the same lane, evidence and walkthrough,
+but never blocks or merges anything. A contract suite checks that the same change gets the same lane
+in both modes.
+
+That report-only mode is also where calibration happens. You get to see what would have auto-merged
+on your real pull requests before it is allowed to.
+
+## The catch
+
+Auto-merge still trusts the author's test environment for parts of the evidence: test runs,
+red/green, coverage and mutation. The security audit I ran before making the repo public calls that
+out as the main residual risk. On a big repository evidence is expensive: on gittifacts itself it
+took 13 to 17 minutes per Change, and pre-existing test failures pushed every Change into Full
+review. A fix that only counts new failures is built but not deployed yet. The merge queue simulator still
+misses one of its own gates by under a minute.
+
+And none of this changes that someone has to write a good Plan. If the intent is wrong, proving
+conformance to it gets you the wrong thing faster.
+
+## Closing thoughts
+
+With agents writing most of our code, I want the human checkpoint where a human is needed: deciding
+what we want, and judging the changes the evidence can't vouch for. The rest is the platform's job.
+
+gittifacts is [open source under MIT](https://github.com/JoviDeCroock/gittifacts) and runs locally
+without a Cloudflare account. If you try it, or if you think the rule is wrong, I'd love to hear
+about it.
