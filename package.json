@@ -37,7 +37,7 @@
     "satori": "^0.28.0",
     "sharp": "^0.35.3",
     "typescript": "^5.9.2",
-    "vite": "^8.2.2"
+    "vite": "^8.2.4"
   },
   "husky": {
     "hooks": {
