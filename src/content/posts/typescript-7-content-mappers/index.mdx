@@ -1,0 +1,169 @@
+import Dates from '../../../components/Dates'
+import { documentProps } from './documentProps'
+
+<Dates createdAt={documentProps.createdAt} />
+
+# GraphQL after tsserver plugins
+
+[GraphQLSP](https://github.com/0no-co/GraphQLSP) is a tsserver plugin. It's what gives you
+diagnostics, autocomplete and hover inside your `graphql()` calls when you use
+[gql.tada](https://gql-tada.0no.co). TypeScript 7, the Go port that a lot of us still call tsgo,
+doesn't load tsserver plugins. You can leave `plugins` in your `tsconfig.json`, it gets parsed and
+then nothing happens. The same goes for [tsrs](https://www.npmjs.com/package/tsrs).
+
+So the day you switch to TypeScript 7 your types from gql.tada keep working, they're just
+TypeScript, but every GraphQL error in your editor disappears. Typos in field names, unknown
+fragments, deprecated fields, unused fields, all of it gone without a warning.
+
+TypeScript 7.1 gives us two things to work with. Content mappers, which let a package turn a
+non-TypeScript file into TypeScript, and a programmatic API that talks to a running compiler. This
+post is about how I'm using both, and about the small CSS project I built first to figure out
+whether content mappers were worth the effort.
+
+## What a content mapper is
+
+A content mapper is a process that TypeScript starts and talks to over JSON-RPC. You register it
+in your `tsconfig.json` for one or more extensions:
+
+```jsonc
+{
+  "contentMappers": [
+    {
+      "package": "typed-css-modules-mapper",
+      "extensions": [".module.css"],
+      "options": { "localsConvention": "camelCaseOnly" },
+    },
+  ],
+}
+```
+
+The package says how to start it in its `package.json`:
+
+```json
+{
+  "typescript": {
+    "contentMapper": {
+      "exec": ["node", "./dist/server.mjs"],
+      "compilerOptions": []
+    }
+  }
+}
+```
+
+When TypeScript finds a file with one of those extensions, it sends the contents to the mapper in
+a `transform` request. The mapper answers with TypeScript text, a map from spans in that text back
+to the original file, and any diagnostics it wants to report. From then on the compiler treats the
+file as if it were that TypeScript.
+
+Two rules from the protocol matter for the rest of this post:
+
+1. A mapper can't claim a built-in extension. You can't map `.json`, `.ts` or `.tsx`, TypeScript rejects it.
+2. Mappers are external code, so nothing runs unless you opt in. That's `tsc --runExternalCode` on
+   the command line, and workspace trust plus a setting in the editor.
+
+The first rule is the important one for GraphQL. A mapper can never see the `graphql()` call inside
+your component file, because that file is a `.ts` file.
+
+## Trying it on CSS first
+
+Before touching gql.tada I wanted to know whether this was a real replacement for the plugin
+workflows we have today, or a demo. CSS modules are a good test case. Everybody has written the
+`declare module '*.module.css'` that types every class as `string`, or has a generator in watch
+mode spitting out `.d.ts` files that go stale.
+
+[typed-css-modules-mapper](https://github.com/JoviDeCroock/typed-css-modules-mapper) reads the
+stylesheet and produces the types directly:
+
+```css
+/* button.module.css */
+
+/** The main call to action. */
+.button {
+  color: white;
+}
+
+.button-primary {
+  composes: button;
+  background: rebeccapurple;
+}
+```
+
+```ts
+import styles, { button } from './button.module.css'
+
+styles.button // string
+styles['button-primary'] // string
+styles.buttonSecondary
+//     ~~~~~~~~~~~~~~~ Property 'buttonSecondary' does not exist on type ...
+```
+
+There are no generated files, so there's nothing to keep in sync. Every `tsc` run reads the
+classes from the CSS itself. In VS Code go to definition on `styles.button` jumps to `.button` in
+the stylesheet, hover shows the rule with its doc comment, and completions list every class in the
+file.
+
+Most of the work was matching what bundlers do at runtime.
+
+## `.graphql` files as modules
+
+Since a mapper can't see inside `.ts` files, the gql.tada mapper works on `.graphql` files instead.
+You write your documents in their own files:
+
+```graphql
+# PokemonItem.graphql
+fragment PokemonItem on Pokemon {
+  id
+  name
+}
+```
+
+```graphql
+# Pokemons.graphql
+# import PokemonItem from "./PokemonItem.graphql"
+
+query Pokemons($limit: Int = 10) {
+  pokemons(limit: $limit) {
+    id
+    ...PokemonItem
+  }
+}
+```
+
+And the mapper turns each of them into the `graphql()` call you would have written by hand:
+
+```ts
+import { graphql as $graphql } from '../graphql'
+import { PokemonItem } from './PokemonItem.graphql'
+
+export const Pokemons = $graphql(
+  `query Pokemons($limit: Int = 10) {
+  pokemons(limit: $limit) {
+    id
+    ...PokemonItem
+  }
+}`,
+  [PokemonItem]
+)
+```
+
+Because the output is a normal gql.tada call, the types come from the same place they did before.
+Your components import the document and get the result type, `FragmentOf` and `readFragment` work
+the same. The `# import` comment becomes a real import, so fragment composition goes through module
+resolution like everything else.
+
+The mapper also loads your schema and validates each document against it. Unknown fields, wrong
+variables and syntax errors show up in the `.graphql` file, from `tsc` and in the editor.
+
+## Closing thoughts
+
+Losing tsserver plugins felt like losing GraphQLSP when I first read about it. Content mappers turn
+out to be a nice fit for a lot of what we did with it, `.graphql` files get real module
+semantics and the compiler does the editor work. Inline documents still need a separate checker,
+and the 7.1 API is good enough to build one.
+
+If you'd like to try it, the work is in
+[gql.tada #610](https://github.com/0no-co/gql.tada/pull/610),
+[#614](https://github.com/0no-co/gql.tada/pull/614),
+[#616](https://github.com/0no-co/gql.tada/pull/616) and
+[GraphQLSP #438](https://github.com/0no-co/GraphQLSP/pull/438), and the CSS mapper is
+[on npm](https://www.npmjs.com/package/typed-css-modules-mapper).

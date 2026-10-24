@@ -173,6 +173,11 @@ export const app = defineApp({
         hydration: 'none',
       }),
       route(
+        '/blog/typescript-7-content-mappers',
+        './routes/posts/typescript-7-content-mappers.tsx',
+        { id: 'typescript-7-content-mappers', hydration: 'none' }
+      ),
+      route(
         '/blog/unreliable-vendors',
         './routes/posts/unreliable-vendors.tsx',
         { id: 'unreliable-vendors', hydration: 'none' }
