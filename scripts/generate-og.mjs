@@ -23,15 +23,47 @@ const publicDir = path.join(root, 'public')
 
 const WIDTH = 1200
 const HEIGHT = 630
-const BACKGROUND = '#4287F5'
+const BACKGROUND = '#0b0b0c'
+const ACCENT = '#eb29a9'
+const TEXT = '#fcfcfd'
+const MUTED = '#a1a1aa'
+const MONO = 'JetBrains Mono'
 
-const interDir = path.dirname(require.resolve('@fontsource/inter/package.json'))
-const font = (weight) =>
-  readFile(path.join(interDir, 'files', `inter-latin-${weight}-normal.woff`))
+const { tagBgs } = await import(
+  pathToFileURL(path.join(root, 'src', 'data', 'tags.ts'))
+)
+
+const fontFile = (pkg, file) =>
+  readFile(
+    path.join(
+      path.dirname(require.resolve(`${pkg}/package.json`)),
+      'files',
+      file
+    )
+  )
 
 const fonts = [
-  { name: 'Inter', weight: 400, style: 'normal', data: await font(400) },
-  { name: 'Inter', weight: 600, style: 'normal', data: await font(600) },
+  {
+    name: 'Inter',
+    weight: 400,
+    style: 'normal',
+    data: await fontFile('@fontsource/inter', 'inter-latin-400-normal.woff'),
+  },
+  {
+    name: 'Inter',
+    weight: 600,
+    style: 'normal',
+    data: await fontFile('@fontsource/inter', 'inter-latin-600-normal.woff'),
+  },
+  {
+    name: MONO,
+    weight: 400,
+    style: 'normal',
+    data: await fontFile(
+      '@fontsource/jetbrains-mono',
+      'jetbrains-mono-latin-400-normal.woff'
+    ),
+  },
 ]
 
 const avatar = `data:image/jpeg;base64,${(
@@ -40,7 +72,31 @@ const avatar = `data:image/jpeg;base64,${(
 
 const h = (type, style, children) => ({ type, props: { style, children } })
 
-const template = ({ title, description }) =>
+const formatDate = (date) =>
+  Intl.DateTimeFormat('en', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(date))
+
+// Long titles step down so title and description always fit the card.
+const titleSize = (title) =>
+  title.length > 60 ? 56 : title.length > 36 ? 64 : 76
+
+const tag = (name) =>
+  h('div', { display: 'flex', alignItems: 'center' }, [
+    h('div', {
+      width: 12,
+      height: 12,
+      borderRadius: 3,
+      marginRight: 10,
+      backgroundColor: tagBgs[name] ?? MUTED,
+    }),
+    name,
+  ])
+
+const template = ({ title, description, createdAt, tags = [] }) =>
   h(
     'div',
     {
@@ -50,41 +106,103 @@ const template = ({ title, description }) =>
       flexDirection: 'column',
       justifyContent: 'space-between',
       backgroundColor: BACKGROUND,
-      color: 'white',
+      color: TEXT,
       fontFamily: 'Inter',
-      padding: '40px 24px 10px',
+      padding: '64px 72px',
     },
     [
+      h(
+        'div',
+        {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          fontFamily: MONO,
+          fontSize: 22,
+          color: MUTED,
+        },
+        [
+          h('div', { display: 'flex', alignItems: 'center' }, [
+            h('div', {
+              width: 14,
+              height: 14,
+              borderRadius: 3,
+              marginRight: 14,
+              backgroundColor: ACCENT,
+            }),
+            'jovidecroock.com/blog',
+          ]),
+          createdAt ? formatDate(createdAt) : '',
+        ]
+      ),
       h('div', { display: 'flex', flexDirection: 'column' }, [
-        h('div', { fontSize: 64, fontWeight: 600, lineHeight: 1.2 }, title),
         h(
           'div',
           {
-            fontSize: 34,
-            fontWeight: 400,
+            fontSize: titleSize(title),
+            fontWeight: 600,
+            lineHeight: 1.08,
+            letterSpacing: '-0.035em',
+            maxWidth: 1040,
+          },
+          title
+        ),
+        h(
+          'div',
+          {
+            display: 'block',
+            fontSize: 30,
             lineHeight: 1.4,
-            marginTop: 40,
-            maxWidth: 1100,
+            marginTop: 24,
+            color: '#a6a7a7',
+            maxWidth: 980,
+            lineClamp: 2,
           },
           description
         ),
       ]),
-      h('div', { display: 'flex', alignItems: 'flex-end' }, [
+      h(
+        'div',
         {
-          type: 'img',
-          props: {
-            src: avatar,
-            width: 180,
-            height: 180,
-            style: { borderRadius: '50%', objectFit: 'cover' },
-          },
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingTop: 28,
+          borderTop: '1px solid #26262b',
         },
-        h(
-          'div',
-          { fontSize: 30, fontWeight: 400, marginLeft: 24, marginBottom: 16 },
-          'Jovi De Croock - @JoviDeC'
-        ),
-      ]),
+        [
+          h('div', { display: 'flex', alignItems: 'center' }, [
+            {
+              type: 'img',
+              props: {
+                src: avatar,
+                width: 64,
+                height: 64,
+                style: { borderRadius: '50%', objectFit: 'cover' },
+              },
+            },
+            h(
+              'div',
+              { display: 'flex', flexDirection: 'column', marginLeft: 18 },
+              [
+                h('div', { fontSize: 24, fontWeight: 600 }, 'Jovi De Croock'),
+                h('div', { fontSize: 20, color: MUTED }, '@jovidecroock.com'),
+              ]
+            ),
+          ]),
+          h(
+            'div',
+            {
+              display: 'flex',
+              gap: 24,
+              fontFamily: MONO,
+              fontSize: 20,
+              color: MUTED,
+            },
+            tags.slice(0, 3).map(tag)
+          ),
+        ]
+      ),
     ]
   )
 
@@ -96,7 +214,7 @@ async function generate(slug, { force }) {
   }
 
   const { documentProps } = await import(pathToFileURL(propsPath))
-  const { title, description, image } = documentProps
+  const { title, description, image, createdAt, tags } = documentProps
   if (!image) {
     console.error(`✗ ${slug}: documentProps.image is not set`)
     return false
@@ -111,7 +229,7 @@ async function generate(slug, { force }) {
     return true
   }
 
-  const svg = await satori(template({ title, description }), {
+  const svg = await satori(template({ title, description, createdAt, tags }), {
     width: WIDTH,
     height: HEIGHT,
     fonts,
