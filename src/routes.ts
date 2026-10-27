@@ -187,6 +187,11 @@ export const app = defineApp({
         hydration: 'islands',
       }),
       route(
+        '/blog/what-we-are-becoming',
+        './routes/posts/what-we-are-becoming.tsx',
+        { id: 'what-we-are-becoming', hydration: 'none' }
+      ),
+      route(
         '/blog/why-computed-matters',
         './routes/posts/why-computeds-matter.tsx',
         { id: 'why-computed-matters', hydration: 'none' }

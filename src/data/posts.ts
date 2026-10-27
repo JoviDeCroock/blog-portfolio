@@ -2,6 +2,7 @@
 // the route manifest) can import it from the Vite config without pulling
 // a component graph in.
 
+import { documentProps as whatWeAreBecomingDocumentProps } from '../content/posts/what-we-are-becoming/documentProps'
 import { documentProps as typescript7ContentMappersDocumentProps } from '../content/posts/typescript-7-content-mappers/documentProps'
 import { documentProps as gittifactsDocumentProps } from '../content/posts/gittifacts/documentProps'
 import { documentProps as graphqlMalleableUiDocumentProps } from '../content/posts/graphql-malleable-ui/documentProps'
@@ -54,6 +55,7 @@ export interface Post {
 }
 
 export const posts: Array<Post> = [
+  whatWeAreBecomingDocumentProps,
   typescript7ContentMappersDocumentProps,
   gittifactsDocumentProps,
   graphqlMalleableUiDocumentProps,
