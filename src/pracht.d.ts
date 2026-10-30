@@ -23,6 +23,12 @@ declare module "@pracht/core" {
         search: SearchParamsInput;
         data: RouteLoaderData<typeof import("./routes/blueprint")>;
       };
+      "investing": {
+        path: "/investing";
+        params: Record<never, never>;
+        search: SearchParamsInput;
+        data: RouteLoaderData<typeof import("./routes/investing")>;
+      };
       "browser-timings": {
         path: "/blog/browser-timings";
         params: Record<never, never>;
@@ -65,6 +71,12 @@ declare module "@pracht/core" {
         search: SearchParamsInput;
         data: RouteLoaderData<typeof import("./routes/posts/fragments-in-vdom")>;
       };
+      "gittifacts": {
+        path: "/blog/gittifacts";
+        params: Record<never, never>;
+        search: SearchParamsInput;
+        data: RouteLoaderData<typeof import("./routes/posts/gittifacts")>;
+      };
       "graphql-abstract-types": {
         path: "/blog/graphql-abstract-types";
         params: Record<never, never>;
@@ -88,6 +100,12 @@ declare module "@pracht/core" {
         params: Record<never, never>;
         search: SearchParamsInput;
         data: RouteLoaderData<typeof import("./routes/posts/graphql-myths")>;
+      };
+      "graphql-malleable-ui": {
+        path: "/blog/graphql-malleable-ui";
+        params: Record<never, never>;
+        search: SearchParamsInput;
+        data: RouteLoaderData<typeof import("./routes/posts/graphql-malleable-ui")>;
       };
       "hydration-and-preact": {
         path: "/blog/hydration-and-preact";
@@ -203,6 +221,12 @@ declare module "@pracht/core" {
         search: SearchParamsInput;
         data: RouteLoaderData<typeof import("./routes/posts/tracking-context")>;
       };
+      "typescript-7-content-mappers": {
+        path: "/blog/typescript-7-content-mappers";
+        params: Record<never, never>;
+        search: SearchParamsInput;
+        data: RouteLoaderData<typeof import("./routes/posts/typescript-7-content-mappers")>;
+      };
       "unreliable-vendors": {
         path: "/blog/unreliable-vendors";
         params: Record<never, never>;
@@ -214,6 +238,12 @@ declare module "@pracht/core" {
         params: Record<never, never>;
         search: SearchParamsInput;
         data: RouteLoaderData<typeof import("./routes/posts/vdom-compilers")>;
+      };
+      "what-we-are-becoming": {
+        path: "/blog/what-we-are-becoming";
+        params: Record<never, never>;
+        search: SearchParamsInput;
+        data: RouteLoaderData<typeof import("./routes/posts/what-we-are-becoming")>;
       };
       "why-computed-matters": {
         path: "/blog/why-computed-matters";

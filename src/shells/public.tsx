@@ -14,6 +14,7 @@ const NAV = [
   { route: 'home', href: '/', label: 'Home' },
   { route: 'blog', href: '/blog', label: 'Blog' },
   { route: 'blueprint', href: '/blueprint', label: 'Blueprint' },
+  { route: 'investing', href: '/investing', label: 'Investing' },
 ] as const
 
 const isActive = (pathname: string, href: string) =>
@@ -36,6 +37,7 @@ const Header = () => {
           <Link
             key={item.route}
             route={item.route}
+            aria-current={isActive(pathname, item.href) ? 'page' : undefined}
             class={
               isActive(pathname, item.href)
                 ? `${styles.navLink} ${styles.navLinkActive}`
@@ -79,7 +81,7 @@ const Footer = () => (
       Github
     </a>
     -
-    <a class={styles.footerLink} href="mailto:decroockjovi@gmail.com">
+    <a class={styles.footerLink} href="mailto:jovi@resynapse.dev">
       Contact
     </a>
     -

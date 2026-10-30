@@ -1,0 +1,212 @@
+.page {
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+}
+
+.eyebrow {
+  color: #c4b5fd;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+}
+
+.hero {
+  padding: 1.5rem 0 3.5rem;
+  border-bottom: 1px solid #2d2c2c;
+}
+
+.hero h1 {
+  font-size: clamp(2.1rem, 6vw, 3rem);
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+  margin: 0 0 1.5rem;
+}
+
+.accent {
+  color: #e6b3f5;
+  background: linear-gradient(100deg, #f2b4de, #b4b5fc);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.intro {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  margin: 0 0 1.75rem;
+  max-width: 36rem;
+}
+
+.primaryLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.85rem 1.125rem;
+  border: 1px solid #655075;
+  border-radius: 6px;
+  background: #201725;
+  color: #fcfcfd;
+  font-weight: 500;
+}
+
+.primaryLink:hover {
+  background: #302039;
+  border-color: #c4b5fd;
+  color: #fcfcfd;
+}
+
+.section {
+  padding-top: 3rem;
+}
+
+.section h2,
+.contact h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.65rem, 5vw, 2rem);
+  letter-spacing: -0.035em;
+  line-height: 1.25;
+}
+
+.section > p:not(.eyebrow),
+.contact > p:not(.eyebrow) {
+  margin: 0 0 1.5rem;
+  line-height: 1.75;
+}
+
+.focusList {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0;
+}
+
+.focusItem {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid #2d2c2c;
+}
+
+.number {
+  color: #c4b5fd;
+  font-size: 0.8rem;
+  padding-top: 0.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.focusItem h3,
+.supportGrid h3 {
+  font-size: 1.0625rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem;
+}
+
+.focusItem p,
+.supportGrid p {
+  line-height: 1.75;
+  margin: 0;
+}
+
+.supportGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem 2rem;
+  margin: 2rem 0 1.5rem;
+}
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+}
+
+.investment {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid #2d2c2c;
+  border-bottom: 1px solid #2d2c2c;
+}
+
+.guildMark {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  border: 1px solid #3f3548;
+  border-radius: 8px;
+  background: #201725;
+  color: #e6b3f5;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.investmentName {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.investmentName > span {
+  display: block;
+  color: #a6a7a7;
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.investmentLabel {
+  margin-left: auto;
+  color: #a6a7a7;
+  font-size: 0.8125rem;
+}
+
+.investmentArrow {
+  color: #c4b5fd;
+}
+
+.investment:hover .investmentName {
+  color: #e6b3f5;
+}
+
+.contact {
+  margin-top: 3.5rem;
+  padding: 2rem;
+  border: 1px solid #3f3548;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #1b1420, #101014);
+}
+
+.email {
+  display: block;
+  width: fit-content;
+  padding-top: 1rem;
+  font-size: 0.875rem;
+  color: #a6a7a7;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding-top: 0.5rem;
+  }
+
+  .supportGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact {
+    padding: 1.5rem 1.125rem;
+  }
+
+  .investmentLabel {
+    display: none;
+  }
+
+  .investmentArrow {
+    margin-left: auto;
+  }
+}

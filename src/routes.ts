@@ -26,6 +26,10 @@ export const app = defineApp({
         id: 'blueprint',
         hydration: 'none',
       }),
+      route('/investing', './routes/investing.tsx', {
+        id: 'investing',
+        hydration: 'none',
+      }),
 
       // Blog posts. One route module per post, wrapping its MDX content.
       // Posts that are pure prose declare hydration: 'none' and ship no

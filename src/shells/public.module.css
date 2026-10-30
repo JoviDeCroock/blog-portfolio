@@ -19,7 +19,7 @@
   display: flex;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
   .header {
     flex-direction: column;
     align-items: center;
@@ -36,7 +36,7 @@
   gap: 12px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
   .floating {
     position: relative;
     left: 0;
@@ -68,18 +68,28 @@
   margin-right: auto;
   display: flex;
   justify-content: center;
-  gap: 3rem;
+  gap: 2rem;
   padding: 0.5rem;
   text-transform: uppercase;
   font-weight: 500;
   margin-bottom: 1rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
   .nav {
     margin-right: unset;
     margin-left: unset;
     margin-top: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav {
+    gap: 1rem;
+  }
+
+  .navLink {
+    font-size: 0.75rem;
   }
 }
 
@@ -122,6 +132,8 @@
 .footer {
   align-items: center;
   display: flex;
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
   justify-content: center;
 }
 

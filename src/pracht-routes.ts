@@ -16,6 +16,10 @@ export const routes = [
     path: "/blueprint",
   },
   {
+    id: "investing",
+    path: "/investing",
+  },
+  {
     id: "browser-timings",
     path: "/blog/browser-timings",
   },
@@ -44,6 +48,10 @@ export const routes = [
     path: "/blog/fragments-in-vdom",
   },
   {
+    id: "gittifacts",
+    path: "/blog/gittifacts",
+  },
+  {
     id: "graphql-abstract-types",
     path: "/blog/graphql-abstract-types",
   },
@@ -58,6 +66,10 @@ export const routes = [
   {
     id: "graphql-myths",
     path: "/blog/graphql-myths",
+  },
+  {
+    id: "graphql-malleable-ui",
+    path: "/blog/graphql-malleable-ui",
   },
   {
     id: "hydration-and-preact",
@@ -136,12 +148,20 @@ export const routes = [
     path: "/blog/tracking-context",
   },
   {
+    id: "typescript-7-content-mappers",
+    path: "/blog/typescript-7-content-mappers",
+  },
+  {
     id: "unreliable-vendors",
     path: "/blog/unreliable-vendors",
   },
   {
     id: "vdom-compilers",
     path: "/blog/vdom-compilers",
+  },
+  {
+    id: "what-we-are-becoming",
+    path: "/blog/what-we-are-becoming",
   },
   {
     id: "why-computed-matters",

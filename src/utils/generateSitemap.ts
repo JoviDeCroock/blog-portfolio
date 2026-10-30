@@ -28,6 +28,12 @@ export function generateSitemap(): string {
       changefreq: 'monthly',
       priority: '0.6',
     },
+    {
+      url: '/investing',
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.6',
+    },
   ]
 
   // Generate blog post entries
