@@ -35,7 +35,7 @@
     "lint-staged": "^16.4.0",
     "oxfmt": "^0.46.0",
     "playwright-core": "^1.62.1",
-    "satori": "^0.28.0",
+    "satori": "^0.33.5",
     "sharp": "^0.35.3",
     "typescript": "^5.9.2",
     "vite": "^8.2.2"
