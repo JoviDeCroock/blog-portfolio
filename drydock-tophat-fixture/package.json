@@ -4,6 +4,6 @@
   "private": true,
   "dependencies": {
     "is-number": "7.0.0",
-    "semversyphus": "1.0.5"
+    "semversyphus": "1.0.6"
   }
 }
