@@ -1,5 +1,4 @@
 {
   "name": "drydock-metadata-fixture",
-  "version": "1.0.1",
-  "description": "Metadata-only fixture; no dependency declarations"
+  "version": "1.0.0"
 }
