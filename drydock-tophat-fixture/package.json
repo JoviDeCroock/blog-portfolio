@@ -1,0 +1,9 @@
+{
+  "name": "drydock-tophat-818-fixture",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "is-number": "6.0.0",
+    "semversyphus": "1.0.5"
+  }
+}
