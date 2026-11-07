@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "is-number": "6.0.0",
+    "is-number": "7.0.0",
     "semversyphus": "1.0.5"
   }
 }
