@@ -133,6 +133,16 @@ export default function Home() {
               class={styles.boldLink}
               rel="nofollow"
               target="_blank"
+              href="https://graphql.org/community/ambassadors/"
+            >
+              GraphQL Ambassador, first cohort (2025-2026)
+            </a>
+          </li>
+          <li class={styles.quoteListItem}>
+            <a
+              class={styles.boldLink}
+              rel="nofollow"
+              target="_blank"
               href="https://stellate.co"
             >
               Partial Query Caching GraphQL at Stellate
@@ -167,6 +177,55 @@ export default function Home() {
             >
               The Google Open Source Peer Bonus 2019 Cycle 2
             </a>
+          </li>
+        </ul>
+      </div>
+      <div class={styles.block}>
+        <h2>Podcasts and interviews</h2>
+        <ul class={styles.quoteList}>
+          <li class={styles.quoteListItem}>
+            <a
+              class={styles.boldLink}
+              rel="nofollow"
+              target="_blank"
+              href="https://codetv.dev/series/learn-with-jason/s8/if-youre-frustrated-by-react-try-this"
+            >
+              Learn With Jason
+            </a>{' '}
+            If you’re frustrated by React, try this (2025)
+          </li>
+          <li class={styles.quoteListItem}>
+            <a
+              class={styles.boldLink}
+              rel="nofollow"
+              target="_blank"
+              href="https://codetv.dev/series/learn-with-jason/s2/client-side-graphql-urql"
+            >
+              Learn With Jason
+            </a>{' '}
+            Client-Side GraphQL Using URQL (2019)
+          </li>
+          <li class={styles.quoteListItem}>
+            <a
+              class={styles.boldLink}
+              rel="nofollow"
+              target="_blank"
+              href="https://creators.spotify.com/pod/profile/future-founder-promise/episodes/Meet-The-Team-w-Jovi-De-Croock-Origins-Consultancy-Years-Open-Source-DNA-Joining-Startups-Open-Source-Funding-GraphQL-Ecosystem-Problem-Solving--GraphQLs-Future-and-more--Full-Interview-e23kp8k"
+            >
+              Future Founder Promise
+            </a>{' '}
+            Meet The Team interview (2023)
+          </li>
+          <li class={styles.quoteListItem}>
+            <a
+              class={styles.boldLink}
+              rel="nofollow"
+              target="_blank"
+              href="https://share.transistor.fm/s/2b01287c"
+            >
+              GraphQL Radio
+            </a>{' '}
+            Build In Public with Charles Brown, co-host (2023)
           </li>
         </ul>
       </div>
